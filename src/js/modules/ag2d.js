@@ -3,6 +3,7 @@
  *
  * @desc A 2D game engine
  */
+
 var AG2D = function (canvas, options) {
     'use strict';
 
@@ -16,7 +17,6 @@ var AG2D = function (canvas, options) {
     this.options = options || {};
     this.context = this.canvas.getContext('2d');
     this.fps = this.options.options.fps;
-    this.fpms = 1000 / this.fps;
     this.lastUpdate = window.performance.now();
 
     // Call `init`
@@ -72,8 +72,8 @@ AG2D.prototype.renderLoop = function (timeNow) {
     // Calculate delta time
     var deltaTime = timeNow - this.lastUpdate;
 
-    // If `deltaTime` is higher than `fpms`
-    if (deltaTime > this.fpms) {
+    // If `deltaTime` is higher than 1000 / `fps`
+    if (deltaTime > 1000 / this.fps) {
 
         // Call `update` and pass `deltaTime`
         this.update(deltaTime);

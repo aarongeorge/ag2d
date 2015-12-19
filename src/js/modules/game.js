@@ -1,7 +1,6 @@
 // Require game module
 var AG2D = require('./ag2d');
 var Player = require('./player.js');
-var characterController = require('./characterController.js');
 
 // Create the game
 var game = AG2D(document.querySelector('canvas'), {
@@ -44,7 +43,7 @@ var game = AG2D(document.querySelector('canvas'), {
         'use strict';
 
         // Call `characterController`
-        characterController(this.player, key, evt);
+        this.player.movement(key, evt);
     },
 
     // Key up
@@ -52,6 +51,6 @@ var game = AG2D(document.querySelector('canvas'), {
         'use strict';
 
         // Call `characterController`
-        characterController(this.player, key, evt);
+        this.player.movement(key, evt);
     }
 });
