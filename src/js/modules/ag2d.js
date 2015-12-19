@@ -15,6 +15,9 @@ var AG2D = function (canvas, options) {
     this.canvas = canvas;
     this.options = options || {};
     this.context = this.canvas.getContext('2d');
+    this.fps = this.options.options.fps;
+    this.fpms = 1000 / this.fps;
+    this.lastUpdate = window.performance.now();
 
     // Call `init`
     this.init();
@@ -41,11 +44,11 @@ AG2D.prototype.init = function () {
 };
 
 // Method: update
-AG2D.prototype.update = function () {
+AG2D.prototype.update = function (deltaTime) {
     'use strict';
 
-    // Call `options.update`
-    this.options.update();
+    // Call `options.update` and pass delta time
+    this.options.update(deltaTime);
 };
 
 // Method: draw
@@ -60,17 +63,27 @@ AG2D.prototype.draw = function () {
 };
 
 // Method: renderLoop
-AG2D.prototype.renderLoop = function () {
+AG2D.prototype.renderLoop = function (timeNow) {
     'use strict';
-
-    // Call `update`
-    this.update();
-
-    // Call `draw`
-    this.draw();
 
     // Call `renderLoop` on next tick
     window.requestAnimationFrame(this.renderLoop.bind(this));
+
+    // Calculate delta time
+    var deltaTime = timeNow - this.lastUpdate;
+
+    // If `deltaTime` is higher than `fpms`
+    if (deltaTime > this.fpms) {
+
+        // Call `update` and pass `deltaTime`
+        this.update(deltaTime);
+
+        // Update `lastUpdate`
+        this.lastUpdate = timeNow - (deltaTime % this.fps / 1000);
+    }
+
+    // Call `draw`
+    this.draw();
 };
 
 // Method: clearCanvas

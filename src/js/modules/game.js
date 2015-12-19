@@ -6,25 +6,32 @@ var characterController = require('./characterController.js');
 // Create the game
 var game = AG2D(document.querySelector('canvas'), {
 
+    // Options
+    'options': {
+        'fps': 60
+    },
+
     // Init
     'init': function () {
         'use strict';
 
+        // Init player
         this.player = new Player(this);
     },
 
     // Update
-    'update': function () {
+    'update': function (deltaTime) {
         'use strict';
 
         // Update player
-        this.player.update();
+        this.player.update(deltaTime);
     },
 
     // Draw
     'draw': function () {
         'use strict';
 
+        // Draw black background
         this.context.fillStyle = 'rgb(0, 0, 0)';
         this.context.fillRect(0, 0, this.canvas.offsetWidth, this.canvas.offsetHeight);
 
@@ -36,6 +43,7 @@ var game = AG2D(document.querySelector('canvas'), {
     'keydown': function (key, evt) {
         'use strict';
 
+        // Call `characterController`
         characterController(this.player, key, evt);
     },
 
@@ -43,6 +51,7 @@ var game = AG2D(document.querySelector('canvas'), {
     'keyup': function (key, evt) {
         'use strict';
 
+        // Call `characterController`
         characterController(this.player, key, evt);
     }
 });
