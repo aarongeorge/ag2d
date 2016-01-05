@@ -13,6 +13,7 @@ var Player = function (scope) {
     this.width = 10;
     this.height = 10;
     this.speed = 100;
+    this.speedMultiplier = 1;
     this.mass = 0.0062;
     this.jumpForce = -300;
 };
@@ -36,7 +37,7 @@ Player.prototype.update = function (deltaTime) {
     this.y += this.vy * deltaTime;
     this.vy += (this.gravity / this.mass) * deltaTime / 2;
 
-    this.x += (this.dx * this.speed) * deltaTime;
+    this.x += (this.dx * (this.speed * this.speedMultiplier)) * deltaTime;
 
     if (this.x + this.width > this.context.canvas.offsetWidth) {
         this.x = this.context.canvas.offsetWidth - this.width;
@@ -97,6 +98,12 @@ Player.prototype.movement = function (key, evt) {
                     this.vy = this.jumpForce;
                     break;
                 }
+
+                // Shift
+                case 16: {
+                    this.speedMultiplier = 2;
+                    break;
+                }
             }
             break;
         }
@@ -128,6 +135,12 @@ Player.prototype.movement = function (key, evt) {
                 // S
                 case 83: {
                     this.dy = 0;
+                    break;
+                }
+
+                // Shift
+                case 16: {
+                    this.speedMultiplier = 1;
                     break;
                 }
             }
