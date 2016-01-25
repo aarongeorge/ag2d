@@ -1,5 +1,5 @@
 // Require game module
-var AG2D = require('./ag2d');
+var AG2D = require('./AG2D');
 var Player = require('./player.js');
 
 // Create the game
@@ -7,7 +7,12 @@ var game = AG2D(document.querySelector('canvas'), {
 
     // Options
     'options': {
+        'backgroundColour': '#000000',
         'fps': 60
+        'size': {
+            'height': window.innerHeight,
+            'width': window.innerWidth
+        }
     },
 
     // Init
@@ -52,5 +57,13 @@ var game = AG2D(document.querySelector('canvas'), {
 
         // Call `characterController`
         this.player.movement(key, evt);
+    },
+
+    // Resize
+    'resize': function (e) {
+        'use strict';
+
+        // Resize canvas to fullscreen
+        this.resizeCanvas(window.innerWidth, window.innerHeight);
     }
 });
