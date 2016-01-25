@@ -8,7 +8,7 @@ var game = AG2D(document.querySelector('canvas'), {
     // Options
     'options': {
         'backgroundColour': '#000000',
-        'fps': 60
+        'fps': 60,
         'size': {
             'height': window.innerHeight,
             'width': window.innerWidth
