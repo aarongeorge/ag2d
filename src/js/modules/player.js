@@ -33,12 +33,15 @@ Player.prototype.update = function (deltaTime) {
     // Convert `deltaTime` to a fraction
     deltaTime /= 1000;
 
+    // Update Y
     this.vy += (this.gravity / this.mass) * deltaTime / 2;
     this.y += this.vy * deltaTime;
     this.vy += (this.gravity / this.mass) * deltaTime / 2;
 
-    this.x += (this.dx * (this.speed * this.speedMultiplier)) * deltaTime;
+    // // Update X
+    this.x += this.dx * (this.speed * this.speedMultiplier) * deltaTime;
 
+    // Collision with walls
     if (this.x + this.width > this.context.canvas.offsetWidth) {
         this.x = this.context.canvas.offsetWidth - this.width;
     }
@@ -66,84 +69,67 @@ Player.prototype.movement = function (key, evt) {
         // Key Down
         case 'keydown': {
 
-            // Switch on `key`
-            switch (key) {
-
-                // A
-                case 65: {
-                    this.dx = -1;
-                    break;
-                }
-
-                // W
-                case 87: {
-                    this.dy = -1;
-                    break;
-                }
-
-                // D
-                case 68: {
-                    this.dx = 1;
-                    break;
-                }
-
-                // S
-                case 83: {
-                    this.dy = 1;
-                    break;
-                }
-
-                // Space
-                case 32: {
-                    this.vy = this.jumpForce;
-                    break;
-                }
-
-                // Shift
-                case 16: {
-                    this.speedMultiplier = 2;
-                    break;
-                }
+            // A
+            if (key === 65) {
+                this.dx = -1;
             }
+
+            // W
+            if (key === 87) {
+                this.dy = -1;
+            }
+
+            // D
+            if (key === 68) {
+                this.dx = 1;
+            }
+
+            // S
+            if (key === 83) {
+                this.dy = 1;
+            }
+
+            // Spacebar
+            if (key === 32) {
+                this.vy = this.jumpForce;
+            }
+
+            // Shift
+            if (key === 16) {
+                this.speedMultiplier = 2;
+            }
+
             break;
         }
 
         // Key Up
         case 'keyup': {
 
-            // Switch on `key`
-            switch (key) {
-
-                // A
-                case 65: {
-                    this.dx = 0;
-                    break;
-                }
-
-                // W
-                case 87: {
-                    this.dy = 0;
-                    break;
-                }
-
-                // D
-                case 68: {
-                    this.dx = 0;
-                    break;
-                }
-
-                // S
-                case 83: {
-                    this.dy = 0;
-                    break;
-                }
-
-                // Shift
-                case 16: {
-                    this.speedMultiplier = 1;
-                    break;
-                }
+            // A
+            if (key === 65) {
+                this.dx = 0;
             }
+
+            // W
+            if (key === 87) {
+                this.dy = 0;
+            }
+
+            // D
+            if (key === 68) {
+                this.dx = 0;
+            }
+
+            // S
+            if (key === 83) {
+                this.dy = 0;
+            }
+
+            // Shift
+            if (key === 16) {
+                this.speedMultiplier = 1;
+            }
+
             break;
         }
     }

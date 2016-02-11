@@ -35,10 +35,6 @@ var game = AG2D(document.querySelector('canvas'), {
     'draw': function () {
         'use strict';
 
-        // Draw black background
-        this.context.fillStyle = 'rgb(0, 0, 0)';
-        this.context.fillRect(0, 0, this.canvas.offsetWidth, this.canvas.offsetHeight);
-
         // Draw player
         this.player.draw();
     },
