@@ -1,4 +1,4 @@
-/*
+/**
  * Main
  */
 
@@ -8,5 +8,5 @@ window.addEventListener('DOMContentLoaded', function () {
     console.log('Loaded');
 
     // Require game
-    require('./modules/game');
+    require('./modules/Game');
 });

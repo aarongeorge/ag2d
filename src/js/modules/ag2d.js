@@ -70,7 +70,7 @@ AG2D.prototype.draw = function () {
     this.context.save();
 
     // Scale `context` by `devicePixelRatio`
-    this.context.scale(window.devicePixelRatio, window.devicePixelRatio);
+    this.context.scale(window.devicePixelRatio * this.ratio, window.devicePixelRatio * this.ratio);
 
     // Call `clearCanvas`
     this.clearCanvas();
@@ -117,20 +117,41 @@ AG2D.prototype.clearCanvas = function () {
     'use strict';
 
     // Clear canvas
-    this.context.clearRect(0, 0, this.canvas.offsetWidth, this.canvas.offsetHeight);
+    this.context.clearRect(0, 0, this.size.width, this.size.height);
 
     // If `this.backgroundColour` is not `transparent`
     if (this.backgroundColour !== 'transparent') {
 
         // Set backgroundColour
         this.context.fillStyle = this.backgroundColour;
-        this.context.fillRect(0, 0, this.canvas.offsetWidth, this.canvas.offsetHeight);
+        this.context.fillRect(0, 0, this.size.width, this.size.height);
     }
 };
 
 // Method: resizeCanvas
 AG2D.prototype.resizeCanvas = function (width, height) {
     'use strict';
+
+    // Calculate the ratios
+    var ratio = width / height;
+    var destRatio = this.size.width / this.size.height;
+
+    // `ratio` is larger than `destRatio`
+    if (ratio > destRatio) {
+
+        // Crop width
+        width = Math.floor(height * destRatio);
+    }
+
+    // `ratio` is smaller than `destRatio`
+    else {
+
+        // Crop height
+        height = Math.floor(width / destRatio);
+    }
+
+    // Update `ratio`
+    this.options.ratio = this.ratio = width / this.size.width;
 
     // Set attributes `height` and `width`
     this.canvas.setAttribute('height', Math.round(height * window.devicePixelRatio));
@@ -152,7 +173,7 @@ AG2D.prototype.inject = function () {
     this.options.context = this.context;
 
     // Inject resizeCanvas
-    this.options.resizeCanvas = this.resizeCanvas;
+    this.options.resizeCanvas = this.resizeCanvas.bind(this);
 };
 
 // Method: bindEventListeners
@@ -164,12 +185,12 @@ AG2D.prototype.bindEventListeners = function () {
 
     // Add keydown listener
     window.addEventListener('keydown', function (e) {
-        _this.options.keydown(e.keyCode, e);
+        _this.options.keyDown(e.keyCode, e);
     });
 
     // Add keyup listener
     window.addEventListener('keyup', function (e) {
-        _this.options.keyup(e.keyCode, e);
+        _this.options.keyUp(e.keyCode, e);
     });
 
     // Add resize listener

@@ -1,6 +1,15 @@
-// Require game module
+/**
+ * Game
+ */
+
+// Dependencies
 var AG2D = require('./AG2D');
-var Player = require('./player.js');
+var SceneManager = require('./SceneManager');
+var Player = require('./Player');
+
+// Scenes
+var Cave = require('../scenes/Cave');
+var Outside = require('../scenes/Outside');
 
 // Create the game
 var game = AG2D(document.querySelector('canvas'), {
@@ -10,14 +19,27 @@ var game = AG2D(document.querySelector('canvas'), {
         'backgroundColour': '#000000',
         'fps': 60,
         'size': {
-            'height': window.innerHeight,
-            'width': window.innerWidth
+            'height': 540,
+            'width': 960
         }
     },
 
     // Init
     'init': function () {
         'use strict';
+
+        // Resize to fullscreen
+        this.resizeCanvas(window.innerWidth, window.innerHeight);
+
+        // Create SceneManager
+        this.sceneManager = new SceneManager();
+
+        // Add the Scenes
+        this.sceneManager.add(new Cave(this));
+        this.sceneManager.add(new Outside(this));
+
+        // Go to Cave
+        this.sceneManager.goTo('Cave');
 
         // Init player
         this.player = new Player(this);
@@ -27,36 +49,41 @@ var game = AG2D(document.querySelector('canvas'), {
     'update': function (deltaTime) {
         'use strict';
 
-        // Update player
-        this.player.update(deltaTime);
+        // Update currentScene
+        this.sceneManager.update(deltaTime);
     },
 
     // Draw
     'draw': function () {
         'use strict';
 
-        // Draw player
-        this.player.draw();
+        // Draw currentScene
+        this.sceneManager.draw();
     },
 
     // Key down
-    'keydown': function (key, evt) {
+    'keyDown': function (key, evt) {
         'use strict';
 
-        // Call `characterController`
-        this.player.movement(key, evt);
+        // Send `keyDown` event to `currentScene`
+        this.sceneManager.keyDown(key, evt);
     },
 
     // Key up
-    'keyup': function (key, evt) {
+    'keyUp': function (key, evt) {
         'use strict';
 
-        // Call `characterController`
-        this.player.movement(key, evt);
+        // Enter changes to next scene
+        if (key === 13) {
+            this.sceneManager.next();
+        }
+
+        // Send `keyUp` event to `currentScene`
+        this.sceneManager.keyUp(key, evt);
     },
 
     // Resize
-    'resize': function (e) {
+    'resize': function () {
         'use strict';
 
         // Resize canvas to fullscreen

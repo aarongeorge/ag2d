@@ -1,8 +1,15 @@
-var Player = function (scope) {
+/**
+ * Player
+ */
+
+// Constructor: Player
+var Player = function (root) {
     'use strict';
 
-    this.context = scope.context;
+    this.root = root;
+    this.context = root.context;
 
+    // Defaults
     this.x = 0;
     this.y = 0;
     this.dx = 0;
@@ -22,6 +29,7 @@ var Player = function (scope) {
 Player.prototype.draw = function () {
     'use strict';
 
+    // Draw player
     this.context.fillStyle = 'rgb(255, 255, 255)';
     this.context.fillRect(Math.round(this.x), Math.round(this.y), this.width, this.height);
 };
@@ -38,16 +46,16 @@ Player.prototype.update = function (deltaTime) {
     this.y += this.vy * deltaTime;
     this.vy += (this.gravity / this.mass) * deltaTime / 2;
 
-    // // Update X
+    // Update X
     this.x += this.dx * (this.speed * this.speedMultiplier) * deltaTime;
 
     // Collision with walls
-    if (this.x + this.width > this.context.canvas.offsetWidth) {
-        this.x = this.context.canvas.offsetWidth - this.width;
+    if (this.x + this.width > this.root.options.size.width) {
+        this.x = this.root.options.size.width - this.width;
     }
 
-    if (this.y + this.height > this.context.canvas.offsetHeight) {
-        this.y = this.context.canvas.offsetHeight - this.height;
+    if (this.y + this.height > this.root.options.size.height) {
+        this.y = this.root.options.size.height - this.height;
     }
 
     if (this.x < 0) {
@@ -135,4 +143,5 @@ Player.prototype.movement = function (key, evt) {
     }
 };
 
+// Export `Player`
 module.exports = Player;
