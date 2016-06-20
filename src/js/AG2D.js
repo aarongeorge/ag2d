@@ -4,6 +4,10 @@
  * @desc A 2D game engine
  */
 
+// Dependencies
+var KeyManager = require('./modules/KeyManager');
+var SceneManager = require('./modules/SceneManager');
+
 // Constructor: AG2D
 var AG2D = function (canvas, options) {
     'use strict';
@@ -34,6 +38,12 @@ var AG2D = function (canvas, options) {
 // Method: init
 AG2D.prototype.init = function () {
     'use strict';
+
+    // Create `keyManager`
+    this.keyManager = new KeyManager();
+
+    // Create `sceneManager`
+    this.sceneManager = new SceneManager();
 
     // Call `resizeCanvas`
     this.resizeCanvas(this.size.width, this.size.height);
@@ -160,20 +170,85 @@ AG2D.prototype.resizeCanvas = function (width, height) {
     // Set styles `height` and `width`
     this.canvas.style.height = height + 'px';
     this.canvas.style.width = width + 'px';
+
+    // Set canvasBounds
+    this.options.canvasBounds = this.canvasBounds = this.canvas.getBoundingClientRect();
 };
 
 // Method: inject
 AG2D.prototype.inject = function () {
     'use strict';
 
-    // Inject canvas
+    // Inject `canvas`
     this.options.canvas = this.canvas;
 
-    // Inject context
+    // Inject `context`
     this.options.context = this.context;
 
-    // Inject resizeCanvas
+    // Inject `keyManager`
+    this.options.keyManager = this.keyManager;
+
+    // Inject `sceneManager`
+    this.options.sceneManager = this.sceneManager;
+
+    // Inject `resizeCanvas`
     this.options.resizeCanvas = this.resizeCanvas.bind(this);
+};
+
+// Method: normaliseInput
+AG2D.prototype.normaliseInput = function (e) {
+    'use strict';
+
+    var x = 0;
+    var y = 0;
+
+    // Array to hold touches
+    var touches = [];
+
+    // Number of touches
+    var touchCount = e.targetTouches ? e.targetTouches.length : 1;
+
+    // Iterate over `touchCount`
+    for (var i = 0; i < touchCount; i++) {
+
+        // If there are actual touch events
+        if (e.targetTouches) {
+            x = e.targetTouches[i].clientX - this.canvasBounds.left;
+            y = e.targetTouches[i].clientY - this.canvasBounds.top;
+        }
+
+        // Click event
+        else {
+            x = e.clientX - this.canvasBounds.left;
+            y = e.clientY - this.canvasBounds.top;
+        }
+
+        // Clamp input to `canvasBounds`
+        if (x < 0) {
+            x = 0;
+        }
+
+        if (x > this.canvasBounds.width) {
+            x = this.canvasBounds.width;
+        }
+
+        if (y < 0) {
+            y = 0;
+        }
+
+        if (y > this.canvasBounds.height) {
+            y = this.canvasBounds.height;
+        }
+
+        // Add touch to `touches`
+        touches.push({
+            'x': Math.floor(x / this.ratio),
+            'y': Math.floor(y / this.ratio)
+        });
+    }
+
+    // Return `touches`
+    return touches;
 };
 
 // Method: bindEventListeners
@@ -185,17 +260,27 @@ AG2D.prototype.bindEventListeners = function () {
 
     // Add keydown listener
     window.addEventListener('keydown', function (e) {
-        _this.options.keyDown(e.keyCode, e);
+
+        // Call `keyManager.keyDown`
+        _this.keyManager.keyDown(e);
     });
 
     // Add keyup listener
     window.addEventListener('keyup', function (e) {
-        _this.options.keyUp(e.keyCode, e);
+
+        // Call `keyManager.keyUp`
+        _this.keyManager.keyUp(e);
     });
 
     // Add resize listener
     window.addEventListener('resize', function (e) {
-        _this.options.resize(e);
+
+        // Check for `resize`
+        if (_this.options.resize) {
+
+            // Call `resize`
+            _this.options.resize(e);
+        }
     });
 };
 

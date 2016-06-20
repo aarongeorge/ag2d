@@ -39,8 +39,36 @@ SceneManager.prototype.remove = function (name) {
 SceneManager.prototype.goTo = function (name) {
     'use strict';
 
-    // Set `currentScene` to `scenes[name]`
-    this.currentScene = this.scenes[name];
+    // Check `scenes[name]` exists
+    if (this.scenes[name]) {
+
+        // Check `currentScene` exists and it has `sceneExit`
+        if (this.currentScene && this.currentScene.sceneExit) {
+
+            // Call `sceneExit`
+            this.currentScene.sceneExit();
+        }
+
+        // Set `currentScene`
+        this.currentScene = this.scenes[name];
+
+        // Check `sceneEnter` exists
+        if (this.currentScene.sceneEnter) {
+
+            // Update `currentScene.sceneEntered`
+            this.currentScene.sceneEntered = window.performance.now();
+
+            // Call `sceneEnter`
+            this.currentScene.sceneEnter();
+        }
+    }
+
+    // `scenes[name]` does not exist
+    else {
+
+        // Log error
+        console.log('Scene ' + name + ' does not exist');
+    }
 };
 
 // Method: next
@@ -63,10 +91,10 @@ SceneManager.prototype.previous = function () {
 SceneManager.prototype.draw = function () {
     'use strict';
 
-    // Check `currentScene` exists
-    if (this.currentScene) {
+    // Check there is a current scene and it has `draw`
+    if (this.currentScene && this.currentScene.draw) {
 
-        // Proxy `draw` event to `currentScene`
+        // Call `draw`
         this.currentScene.draw();
     }
 };
@@ -75,35 +103,11 @@ SceneManager.prototype.draw = function () {
 SceneManager.prototype.update = function (deltaTime) {
     'use strict';
 
-    // Check `currentScene` exists
-    if (this.currentScene) {
+    // Check there is a current scene and it has `update`
+    if (this.currentScene && this.currentScene.update) {
 
-        // Proxy `update` event to `currentScene`
+        // Call `update`
         this.currentScene.update(deltaTime);
-    }
-};
-
-// Method: keyUp
-SceneManager.prototype.keyUp = function (key, evt) {
-    'use strict';
-
-    // Check `currentScene` exists
-    if (this.currentScene) {
-
-        // Proxy `keyUp` event to `currentScene`
-        this.currentScene.keyUp(key, evt);
-    }
-};
-
-// Method: keyDown
-SceneManager.prototype.keyDown = function (key, evt) {
-    'use strict';
-
-    // Check `currentScene` exists
-    if (this.currentScene) {
-
-        // Proxy `keyDown` event to `currentScene`
-        this.currentScene.keyDown(key, evt);
     }
 };
 
