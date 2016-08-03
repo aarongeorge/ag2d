@@ -7,6 +7,7 @@
 // Dependencies
 var KeyManager = require('./modules/KeyManager');
 var SceneManager = require('./modules/SceneManager');
+var AssetLoader = require('./modules/AssetLoader');
 
 // Constructor: AG2D
 var AG2D = function (canvas, options) {
@@ -38,6 +39,9 @@ var AG2D = function (canvas, options) {
 // Method: init
 AG2D.prototype.init = function () {
     'use strict';
+
+    // Create `assetLoader`
+    this.assetLoader = new AssetLoader();
 
     // Create `keyManager`
     this.keyManager = new KeyManager();
@@ -184,6 +188,9 @@ AG2D.prototype.inject = function () {
 
     // Inject `context`
     this.options.context = this.context;
+
+    // Inject `assetLoader`
+    this.options.assetLoader = this.assetLoader;
 
     // Inject `keyManager`
     this.options.keyManager = this.keyManager;
