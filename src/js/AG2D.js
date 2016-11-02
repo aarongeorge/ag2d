@@ -23,6 +23,7 @@ var AG2D = function (canvas, options) {
     this.context = this.canvas.getContext('2d');
     this.options = options || {};
     this.fps = this.options.options.fps || 60;
+    this.waitForAssets = this.options.options.waitForAssets || false;
     this.backgroundColour = this.options.options.backgroundColour || 'transparent';
     this.size = this.options.options.size || {
         'height': 150,
@@ -40,6 +41,38 @@ var AG2D = function (canvas, options) {
 AG2D.prototype.init = function () {
     'use strict';
 
+    // Store reference to `this`
+    var _this = this;
+
+    // Call `loadModules`
+    this.loadModules();
+
+    // `waitForAssets` is `true`
+    if (this.waitForAssets && this.options.options.assets) {
+
+        // Add `assets` to `assetLoader`
+        this.assetLoader.addAssets(this.options.options.assets);
+
+        // Load assets
+        this.assetLoader.loadAssets(function () {
+
+            // Call `setUpCanvas`
+            _this.setUpCanvas();
+        });
+    }
+
+    // `waitForAssets` is `false
+    else {
+
+        // Call `setUpCanvas`
+        this.setUpCanvas();
+    }
+};
+
+// Method: loadModules
+AG2D.prototype.loadModules = function () {
+    'use strict';
+
     // Create `assetLoader`
     this.assetLoader = new AssetLoader();
 
@@ -48,6 +81,11 @@ AG2D.prototype.init = function () {
 
     // Create `sceneManager`
     this.sceneManager = new SceneManager();
+};
+
+// Method: setUpCanvas
+AG2D.prototype.setUpCanvas = function () {
+    'use strict';
 
     // Call `resizeCanvas`
     this.resizeCanvas(this.size.width, this.size.height);
@@ -200,62 +238,6 @@ AG2D.prototype.inject = function () {
 
     // Inject `resizeCanvas`
     this.options.resizeCanvas = this.resizeCanvas.bind(this);
-};
-
-// Method: normaliseInput
-AG2D.prototype.normaliseInput = function (e) {
-    'use strict';
-
-    var x = 0;
-    var y = 0;
-
-    // Array to hold touches
-    var touches = [];
-
-    // Number of touches
-    var touchCount = e.targetTouches ? e.targetTouches.length : 1;
-
-    // Iterate over `touchCount`
-    for (var i = 0; i < touchCount; i++) {
-
-        // If there are actual touch events
-        if (e.targetTouches) {
-            x = e.targetTouches[i].clientX - this.canvasBounds.left;
-            y = e.targetTouches[i].clientY - this.canvasBounds.top;
-        }
-
-        // Click event
-        else {
-            x = e.clientX - this.canvasBounds.left;
-            y = e.clientY - this.canvasBounds.top;
-        }
-
-        // Clamp input to `canvasBounds`
-        if (x < 0) {
-            x = 0;
-        }
-
-        if (x > this.canvasBounds.width) {
-            x = this.canvasBounds.width;
-        }
-
-        if (y < 0) {
-            y = 0;
-        }
-
-        if (y > this.canvasBounds.height) {
-            y = this.canvasBounds.height;
-        }
-
-        // Add touch to `touches`
-        touches.push({
-            'x': Math.floor(x / this.ratio),
-            'y': Math.floor(y / this.ratio)
-        });
-    }
-
-    // Return `touches`
-    return touches;
 };
 
 // Method: bindEventListeners
