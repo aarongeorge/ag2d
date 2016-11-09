@@ -5,6 +5,7 @@
  */
 
 // Dependencies
+var SpriteSheetModel = require('../models/SpriteSheet');
 var Animation = require('./Animation');
 
 // Constructor: Animator
@@ -30,7 +31,7 @@ Animator.prototype.addAnimation = function (options) {
     'use strict';
 
     // Create `animation`
-    var animation = new Animation(options);
+    var animation = new Animation(new SpriteSheetModel(options));
 
     // Add `name` to `animations`
     this.animations[animation.name] = animation;
