@@ -1,5 +1,7 @@
 /**
  * Asset loader
+ *
+ * @desc An asset loader
  */
 
 // Constructor: AssetLoader
@@ -11,7 +13,7 @@ var AssetLoader = function () {
     this.assetsLoaded = false;
 };
 
-// Method: addAsset
+// Method: addAssets
 AssetLoader.prototype.addAssets = function (assets) {
     'use strict';
 

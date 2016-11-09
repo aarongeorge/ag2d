@@ -8,6 +8,7 @@
 var KeyManager = require('./modules/KeyManager');
 var SceneManager = require('./modules/SceneManager');
 var AssetLoader = require('./modules/AssetLoader');
+var Animator = require('./modules/Animator');
 
 // Constructor: AG2D
 var AG2D = function (canvas, options) {
@@ -81,6 +82,9 @@ AG2D.prototype.loadModules = function () {
 
     // Create `sceneManager`
     this.sceneManager = new SceneManager();
+
+    // Create `animator`
+    this.animator = new Animator();
 };
 
 // Method: setUpCanvas
@@ -109,6 +113,9 @@ AG2D.prototype.setUpCanvas = function () {
 // Method: update
 AG2D.prototype.update = function (deltaTime) {
     'use strict';
+
+    // Call `update` on `animator`
+    this.animator.update(deltaTime);
 
     // Call `options.update` and pass delta time
     this.options.update(deltaTime);
@@ -141,6 +148,7 @@ AG2D.prototype.renderLoop = function () {
     // Call `renderLoop` on next tick
     window.requestAnimationFrame(this.renderLoop.bind(this));
 
+    // Store reference to current time
     var timeNow = window.performance.now();
 
     // Calculate delta times
@@ -235,6 +243,9 @@ AG2D.prototype.inject = function () {
 
     // Inject `sceneManager`
     this.options.sceneManager = this.sceneManager;
+
+    // Inject `animator`
+    this.options.animator = this.animator;
 
     // Inject `resizeCanvas`
     this.options.resizeCanvas = this.resizeCanvas.bind(this);

@@ -1,5 +1,7 @@
 /**
  * SceneManager
+ *
+ * @desc A scene manager
  */
 
 // Dependencies
@@ -9,18 +11,29 @@ var Utils = require('./Utils');
 var SceneManager = function () {
     'use strict';
 
+    // Call `init`
+    this.init();
+};
+
+// Method: init
+SceneManager.prototype.init = function () {
+    'use strict';
+
     // Object to hold scenes
     this.scenes = {};
+
+    // Array to hold scene names
+    this.sceneNames = [];
 };
 
 // Method: add
 SceneManager.prototype.add = function (scene) {
     'use strict';
 
-    // Add `name` to `this.scenes`
+    // Add `name` to `scenes`
     this.scenes[scene.name] = scene;
 
-    // Update sceneNames
+    // Update `sceneNames`
     this.sceneNames = Object.keys(this.scenes);
 };
 
@@ -28,10 +41,10 @@ SceneManager.prototype.add = function (scene) {
 SceneManager.prototype.remove = function (name) {
     'use strict';
 
-    // Remove `name` from `this.scenes`
+    // Remove `name` from `scenes`
     delete this.scenes[name];
 
-    // Update sceneNames
+    // Update `sceneNames`
     this.sceneNames = Object.keys(this.scenes);
 };
 
@@ -76,7 +89,7 @@ SceneManager.prototype.next = function () {
     'use strict';
 
     // Set `currentScene` to next scene in `scenes`
-    this.currentScene = this.scenes[Utils.cyclicArray(this.sceneNames, this.sceneNames.indexOf(this.currentScene.name) + 1)[0]];
+    this.currentScene = this.scenes[Utils.cyclicArray(this.sceneNames, this.sceneNames.indexOf(this.currentScene.name) + 1).value];
 };
 
 // Method: previous
@@ -84,7 +97,7 @@ SceneManager.prototype.previous = function () {
     'use strict';
 
     // Set `currentScene` to previous scene in `scenes`
-    this.currentScene = this.scenes[Utils.cyclicArray(this.sceneNames, this.sceneNames.indexOf(this.currentScene.name) - 1)[0]];
+    this.currentScene = this.scenes[Utils.cyclicArray(this.sceneNames, this.sceneNames.indexOf(this.currentScene.name) - 1).value];
 };
 
 // Method: draw

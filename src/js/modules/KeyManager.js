@@ -1,3 +1,9 @@
+/**
+ * Key Manager
+ *
+ * @desc A key manager
+ */
+
 // Constructor: KeyManager
 var KeyManager = function () {
     'use strict';

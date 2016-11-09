@@ -10,7 +10,10 @@ var Utils = {
 
         var item = ((index % arr.length) + arr.length) % arr.length;
 
-        return [arr[item], item];
+        return {
+            'index': item,
+            'value': arr[item]
+        };
     }
 };
 
