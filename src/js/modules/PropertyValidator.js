@@ -74,14 +74,14 @@ PropertyValidator.prototype.validateProperties = function (passedProps, propRule
         var currentPropValue = passedProps[currentPropName];
 
         // Required properties weren't passed
-        if (currentPropRules.required && this.isUndefined(currentPropValue)) {
+        if (typeof currentPropRules.required !== 'undefined' && this.isUndefined(currentPropValue)) {
 
             // Throw error
             throw new Error('`' + currentPropName + '` is required');
         }
 
         // Property has a default, but hasn't been set
-        if (currentPropRules.default && this.isUndefined(currentPropValue)) {
+        if (typeof currentPropRules.default !== 'undefined' && this.isUndefined(currentPropValue)) {
 
             // Set the default
             currentPropValue = currentPropRules.default;
