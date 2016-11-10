@@ -1,5 +1,5 @@
 /**
- * Models: Sprite Sheet
+ * Models: SpriteSheet
  */
 
 // Dependencies
@@ -14,28 +14,16 @@ var SpriteSheet = new PropertyValidator({
         'default': 1
     },
 
-    // Context
-    'context': {
-        'type': 'any',
-        'required': true
-    },
-
-    // Fps
-    'fps': {
-        'type': 'number',
-        'default': 60
-    },
-
     // Frame height
     'frameHeight': {
         'type': 'number',
         'required': true
     },
 
-    // Frames
-    'frames': {
-        'type': 'array',
-        'required': true
+    // Frames per row
+    'framesPerRow': {
+        'type': 'number',
+        'default': true
     },
 
     // Frame width
@@ -44,16 +32,20 @@ var SpriteSheet = new PropertyValidator({
         'required': true
     },
 
-    // Frames per row
-    'framesPerRow': {
-        'type': 'number',
-        'required': true
+    // Is retina
+    'isRetina': {
+        'type': 'boolean',
+        'default': false
     },
 
-    // Loop
-    'loop': {
-        'type': 'boolean',
-        'default': true
+    // Image
+    'image': {
+        'type': 'custom',
+        'validateFn': function (val) {
+            'use strict';
+
+            return val.nodeName === 'IMG';
+        }
     },
 
     // Name
@@ -66,28 +58,6 @@ var SpriteSheet = new PropertyValidator({
     'rows': {
         'type': 'number',
         'default': 1
-    },
-
-    // Sprite sheet
-    'spriteSheet': {
-        'type': 'custom',
-        'validateFn': function (val) {
-            'use strict';
-
-            return val.nodeName === 'IMG';
-        }
-    },
-
-    // X
-    'x': {
-        'type': 'number',
-        'default': 0
-    },
-
-    // Y
-    'y': {
-        'type': 'number',
-        'default': 0
     }
 });
 

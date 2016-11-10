@@ -5,8 +5,10 @@
  */
 
 // Dependencies
+var AnimationModel = require('../models/Animation');
 var SpriteSheetModel = require('../models/SpriteSheet');
 var Animation = require('./Animation');
+var SpriteSheet = require('./SpriteSheet');
 
 // Constructor: Animator
 var Animator = function () {
@@ -21,23 +23,23 @@ Animator.prototype.init = function () {
     'use strict';
 
     this.animations = {};
-    this.animationNames = [];
     this.spriteSheets = {};
-    this.spriteSheetNames = [];
+};
+
+// Method: createAnimation
+Animator.prototype.createAnimation = function (options) {
+    'use strict';
+
+    // Return new animation
+    return new Animation(new AnimationModel(options));
 };
 
 // Method: addAnimation
-Animator.prototype.addAnimation = function (options) {
+Animator.prototype.addAnimation = function (animation) {
     'use strict';
-
-    // Create `animation`
-    var animation = new Animation(new SpriteSheetModel(options));
 
     // Add `name` to `animations`
     this.animations[animation.name] = animation;
-
-    // Update `animationNames`
-    this.animationNames = Object.keys(this.animations);
 };
 
 // Method: removeAnimation
@@ -46,9 +48,22 @@ Animator.prototype.removeAnimation = function (name) {
 
     // Remove `name` from `animations`
     delete this.animations[name];
+};
 
-    // Update `animationNames`
-    this.animationNames = Object.keys(this.animations);
+// Method: cloneAnimation
+Animator.prototype.cloneAnimation = function (animation, name) {
+    'use strict';
+
+    // Clone `animation` and give it a name of `name`
+    this.animations[name] = Object.assign(Object.create(animation), animation);
+};
+
+// Method: createSpriteSheet
+Animator.prototype.createSpriteSheet = function (options) {
+    'use strict';
+
+    // Return new sprite sheet
+    return new SpriteSheet(new SpriteSheetModel(options));
 };
 
 // Method: addSpriteSheet
@@ -57,9 +72,6 @@ Animator.prototype.addSpriteSheet = function (spriteSheet) {
 
     // Add `name` to `spriteSheets`
     this.spriteSheets[spriteSheet.name] = spriteSheet;
-
-    // Update `spriteSheetNames`
-    this.spriteSheetNames = Object.keys(this.spriteSheets);
 };
 
 // Method: removeAnimation
@@ -68,20 +80,20 @@ Animator.prototype.removeSpriteSheet = function (name) {
 
     // Remove `name` from `spriteSheets`
     delete this.spriteSheets[name];
-
-    // Update `spriteSheetNames`
-    this.spriteSheetNames = Object.keys(this.spriteSheets);
 };
 
 // Method: update
 Animator.prototype.update = function (deltaTime) {
     'use strict';
 
-    // Iterate over all animationNames
-    for (var i = 0; i < this.animationNames.length; i++) {
+    // Store reference to `animations` keys
+    var animationKeys = Object.keys(this.animations);
 
-        // Call `update` on animation
-        this.animations[this.animationNames[i]].update(deltaTime);
+    // Iterate over `animations`
+    for (var i = 0; i < animationKeys.length; i++) {
+
+        // Call `update` on `animations`
+        this.animations[animationKeys[i]].update(deltaTime);
     }
 };
 
@@ -118,11 +130,11 @@ Animator.prototype.resetAnimation = function (name) {
 };
 
 // Method: drawAnimation
-Animator.prototype.drawAnimation = function (name) {
+Animator.prototype.drawAnimation = function (name, x, y, width, height, cropWidth, cropHeight) {
     'use strict';
 
     // Call `draw` on `name`
-    this.animations[name].draw();
+    this.animations[name].draw(x, y, width, height, cropWidth, cropHeight);
 };
 
 // Export `Animator`

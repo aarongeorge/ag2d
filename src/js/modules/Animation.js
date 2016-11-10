@@ -11,24 +11,20 @@ var Animation = function (options) {
     // Store reference to current time
     var currentTime = window.performance.now();
 
-    this.spriteSheet = options.spriteSheet;
-    this.name = options.name;
+    // Set options
+    this.context = options.context;
     this.fps = options.fps;
-    this.interval = 1000 / options.fps;
     this.frames = options.frames;
-    this.rows = options.rows;
-    this.columns = options.columns;
+    this.loop = options.loop;
+    this.name = options.name;
+    this.spriteSheet = options.spriteSheet;
+
+    // Set defaults
     this.animate = false;
     this.currentFrame = 0;
-    this.loop = options.loop;
+    this.interval = 1000 / options.fps;
     this.lastDraw = currentTime;
     this.lastUpdate = currentTime;
-    this.x = options.x;
-    this.y = options.y;
-    this.frameWidth = options.frameWidth;
-    this.frameHeight = options.frameHeight;
-    this.framesPerRow = options.framesPerRow;
-    this.context = options.context;
 };
 
 // Method: update
@@ -130,15 +126,18 @@ Animation.prototype.reset = function () {
 };
 
 // Method: draw
-Animation.prototype.draw = function () {
+Animation.prototype.draw = function (x, y, width, height, cropWidth, cropHeight) {
     'use strict';
 
+    cropWidth = typeof cropWidth === 'undefined' ? this.spriteSheet.frameWidth : cropWidth;
+    cropHeight = typeof cropHeight === 'undefined' ? this.spriteSheet.frameHeight : cropHeight;
+
     // Get `row` and `col` for `currentFrame`
-    var row = Math.floor(this.frames[this.currentFrame] / this.framesPerRow);
-    var col = Math.floor(this.frames[this.currentFrame] % this.framesPerRow);
+    var row = Math.floor(this.frames[this.currentFrame] / this.spriteSheet.framesPerRow);
+    var col = Math.floor(this.frames[this.currentFrame] % this.spriteSheet.framesPerRow);
 
     // Draw `spriteSheet`
-    this.context.drawImage(this.spriteSheet, col * this.frameWidth, row * this.frameHeight, this.frameWidth, this.frameHeight, this.x, this.y, this.frameWidth, this.frameHeight);
+    this.context.drawImage(this.spriteSheet.image, col * this.spriteSheet.frameWidth, row * this.spriteSheet.frameHeight, cropWidth * (this.spriteSheet.isRetina ? 2 : 1), cropHeight * (this.spriteSheet.isRetina ? 2 : 1), x, y, cropWidth, cropHeight);
 };
 
 // Export `Animation`
