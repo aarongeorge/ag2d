@@ -32,10 +32,33 @@ var Animation = new PropertyValidator({
         'default': true
     },
 
+    // Loop Type
+    'loopType': {
+        'type': 'string',
+        'default': 'normal',
+        'validateFn': function (val) {
+            'use strict';
+
+            if (val === 'normal' || val === 'wrap') {
+                return true;
+            }
+
+            else {
+                return false;
+            }
+        }
+    },
+
     // Name
     'name': {
         'type': 'string',
         'required': true
+    },
+
+    // Reverse
+    'reverse': {
+        'type': 'boolean',
+        'default': false
     },
 
     // Sprite sheet

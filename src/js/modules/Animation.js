@@ -16,7 +16,9 @@ var Animation = function (options) {
     this.fps = options.fps;
     this.frames = options.frames;
     this.loop = options.loop;
+    this.loopType = options.loopType;
     this.name = options.name;
+    this.reverse = options.reverse;
     this.spriteSheet = options.spriteSheet;
 
     // Set defaults
@@ -64,14 +66,21 @@ Animation.prototype.getFrame = function () {
 Animation.prototype.nextFrame = function () {
     'use strict';
 
-    // If `currentFrame` is the last frame of `frames`
-    if (this.frames.indexOf(this.currentFrame) === this.frames.length - 1) {
+    // `currentFrame` is `endFrame`
+    if (this.frames.indexOf(this.currentFrame) === this.getEndFrame()) {
 
         // If `loop` is set
         if (this.loop) {
 
-            // Go to first frame
-            this.currentFrame = 0;
+            // `loopType` is `wrap`
+            if (this.loopType === 'wrap') {
+
+                // Flip `reverse`
+                this.reverse = !this.reverse;
+            }
+
+            // Call `reset`
+            this.reset();
         }
 
         // `loop` isn't set
@@ -82,11 +91,11 @@ Animation.prototype.nextFrame = function () {
         }
     }
 
-    // `currentFrame` is not the last frame
+    // `currentFrame` is not `endFrame`
     else {
 
-        // Increment `currentFrame`
-        this.currentFrame++;
+        // Increment/Decrement `currentFrame`
+        this.currentFrame = this.reverse ? this.currentFrame - 1 : this.currentFrame + 1;
     }
 };
 
@@ -110,8 +119,8 @@ Animation.prototype.stop = function () {
 Animation.prototype.restart = function () {
     'use strict';
 
-    // Set `currentFrame` to first frame
-    this.currentFrame = this.frames[0];
+    // Set `currentFrame` to start frame
+    this.currentFrame = this.getStartFrame();
 
     // Set `animate` to `true`
     this.animate = true;
@@ -121,8 +130,24 @@ Animation.prototype.restart = function () {
 Animation.prototype.reset = function () {
     'use strict';
 
-    // Set `currentFrame` to first frame
-    this.currentFrame = this.frames[0];
+    // Set `currentFrame` to start frame
+    this.currentFrame = this.getStartFrame();
+};
+
+// Method: getStartFrame
+Animation.prototype.getStartFrame = function () {
+    'use strict';
+
+    // If `reverse` return the last item in `frames` else return the first item in `frames`
+    return this.reverse ? this.frames[this.frames.length - 1] : this.frames[0];
+};
+
+// Method: getEndFrame
+Animation.prototype.getEndFrame = function () {
+    'use strict';
+
+    // If `reverse` return the first item in `frames` else return the last item in `frames`
+    return this.reverse ? this.frames[0] : this.frames[this.frames.length - 1];
 };
 
 // Method: draw
