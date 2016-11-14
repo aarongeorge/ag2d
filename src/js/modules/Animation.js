@@ -18,8 +18,12 @@ var Animation = function (options) {
     this.loop = options.loop;
     this.loopType = options.loopType;
     this.name = options.name;
+    this.resetCb = options.resetCb;
+    this.restartCb = options.restartCb;
     this.reverse = options.reverse;
     this.spriteSheet = options.spriteSheet;
+    this.startCb = options.startCb;
+    this.stopCb = options.stopCb;
 
     // Set defaults
     this.animate = false;
@@ -105,6 +109,9 @@ Animation.prototype.start = function () {
 
     // Set `animate` to `true`
     this.animate = true;
+
+    // Call `startCb`
+    this.startCb();
 };
 
 // Method: stop
@@ -113,6 +120,9 @@ Animation.prototype.stop = function () {
 
     // Set `animate` to `false`
     this.animate = false;
+
+    // Call `stopCb`
+    this.stopCb();
 };
 
 // Method: restart
@@ -124,6 +134,9 @@ Animation.prototype.restart = function () {
 
     // Set `animate` to `true`
     this.animate = true;
+
+    // Call `restartCb`
+    this.restartCb();
 };
 
 // Method: reset
@@ -132,6 +145,9 @@ Animation.prototype.reset = function () {
 
     // Set `currentFrame` to start frame
     this.currentFrame = this.getStartFrame();
+
+    // Call `resetCb`
+    this.resetCb();
 };
 
 // Method: getStartFrame

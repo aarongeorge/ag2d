@@ -55,6 +55,18 @@ var Animation = new PropertyValidator({
         'required': true
     },
 
+    // Reset Callback
+    'resetCb': {
+        'type': 'function',
+        'default': function () {}
+    },
+
+    // Restart Callback
+    'restartCb': {
+        'type': 'function',
+        'default': function () {}
+    },
+
     // Reverse
     'reverse': {
         'type': 'boolean',
@@ -65,6 +77,18 @@ var Animation = new PropertyValidator({
     'spriteSheet': {
         'type': 'object',
         'required': true
+    },
+
+    // Start Callback
+    'startCb': {
+        'type': 'function',
+        'default': function () {}
+    },
+
+    // Stop Callback
+    'stopCb': {
+        'type': 'function',
+        'default': function () {}
     }
 });
 
