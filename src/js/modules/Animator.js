@@ -50,6 +50,21 @@ Animator.prototype.removeAnimation = function (name) {
     delete this.animations[name];
 };
 
+// Method: removeAnimations
+Animator.prototype.removeAnimations = function () {
+    'use strict';
+
+    // Store reference to `animations` keys
+    var animationKeys = Object.keys(this.animations);
+
+    // Iterate over `animations`
+    for (var i = animationKeys.length - 1; i >= 0; i--) {
+
+        // Remove `animation`
+        this.removeAnimation(this.animations[animationKeys[i]].name);
+    }
+};
+
 // Method: cloneAnimation
 Animator.prototype.cloneAnimation = function (animation, name) {
     'use strict';

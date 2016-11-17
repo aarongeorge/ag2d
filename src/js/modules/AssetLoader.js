@@ -116,6 +116,9 @@ AssetLoader.prototype.loadAssets = function (callback) {
     // There are no more assets
     else {
 
+        // Set `assetsLoaded` to `true`
+        this.assetsLoaded = true;
+
         // Call `callback`
         callback();
     }

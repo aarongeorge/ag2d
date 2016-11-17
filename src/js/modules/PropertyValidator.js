@@ -7,7 +7,7 @@
  *
  * new PropertyValidator({
  *     'propertyName': {
- *         'type': array|boolean|custom|date|function|number|object|string|undefined,
+ *         'type': array|boolean|custom|date|element|function|number|object|string|undefined,
  *         'required': true|false,
  *         'default': default value for property,
  *         'validateFn': a function that takes one param and returns true or false. Only works if `type` is `custom`
@@ -150,6 +150,13 @@ PropertyValidator.prototype.isDate = function (date) {
     'use strict';
 
     return Object.prototype.toString.call(date) === '[object Date]';
+};
+
+// Method: isElement
+PropertyValidator.prototype.isElement = function (el) {
+    'use strict';
+
+    return el instanceof HTMLElement;
 };
 
 // Method: isFunction
