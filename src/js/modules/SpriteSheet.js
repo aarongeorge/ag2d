@@ -13,7 +13,7 @@ var SpriteSheet = function (options) {
     this.framesPerRow = options.framesPerRow;
     this.frameWidth = options.frameWidth;
     this.image = options.image;
-    this.isRetina = options.isRetina;
+    this.retinaSize = options.retinaSize;
     this.name = options.name;
     this.rows = options.rows;
 };

@@ -178,7 +178,7 @@ Animation.prototype.draw = function (x, y, width, height, cropWidth, cropHeight)
     var col = Math.floor(this.frames[this.currentFrame] % this.spriteSheet.framesPerRow);
 
     // Draw `spriteSheet`
-    this.context.drawImage(this.spriteSheet.image, col * this.spriteSheet.frameWidth, row * this.spriteSheet.frameHeight, cropWidth * (this.spriteSheet.isRetina ? 2 : 1), cropHeight * (this.spriteSheet.isRetina ? 2 : 1), x, y, cropWidth, cropHeight);
+    this.context.drawImage(this.spriteSheet.image, col * this.spriteSheet.frameWidth, row * this.spriteSheet.frameHeight, cropWidth * (this.spriteSheet.isRetina ? window.devicePixelRatio : 1), cropHeight * (this.spriteSheet.isRetina ? window.devicePixelRatio : 1), x, y, cropWidth, cropHeight);
 };
 
 // Export `Animation`
