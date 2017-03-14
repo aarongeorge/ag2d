@@ -20,12 +20,6 @@ var SpriteSheet = new PropertyValidator({
         'required': true
     },
 
-    // Frames per row
-    'framesPerRow': {
-        'type': 'number',
-        'default': true
-    },
-
     // Frame width
     'frameWidth': {
         'type': 'number',

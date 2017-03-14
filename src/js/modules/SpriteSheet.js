@@ -10,7 +10,6 @@ var SpriteSheet = function (options) {
 
     this.columns = options.columns;
     this.frameHeight = options.frameHeight;
-    this.framesPerRow = options.framesPerRow;
     this.frameWidth = options.frameWidth;
     this.image = options.image;
     this.retinaSize = options.retinaSize;

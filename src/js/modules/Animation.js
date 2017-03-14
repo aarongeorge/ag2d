@@ -174,8 +174,8 @@ Animation.prototype.draw = function (x, y, width, height, cropWidth, cropHeight)
     cropHeight = typeof cropHeight === 'undefined' ? this.spriteSheet.frameHeight : cropHeight;
 
     // Get `row` and `col` for `currentFrame`
-    var row = Math.floor(this.frames[this.currentFrame] / this.spriteSheet.framesPerRow);
-    var col = Math.floor(this.frames[this.currentFrame] % this.spriteSheet.framesPerRow);
+    var row = Math.floor(this.frames[this.currentFrame] / this.spriteSheet.columns);
+    var col = Math.floor(this.frames[this.currentFrame] % this.spriteSheet.columns);
 
     // Draw `spriteSheet`
     this.context.drawImage(this.spriteSheet.image, col * this.spriteSheet.frameWidth, row * this.spriteSheet.frameHeight, cropWidth * (this.spriteSheet.isRetina ? window.devicePixelRatio : 1), cropHeight * (this.spriteSheet.isRetina ? window.devicePixelRatio : 1), x, y, cropWidth, cropHeight);
