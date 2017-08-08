@@ -5,124 +5,112 @@
  */
 
 // Dependencies
-var Utils = require('./Utils');
+import {cyclicArray} from './Utils';
 
-// Constructor: SceneManager
-var SceneManager = function () {
-    'use strict';
+// Class: SceneManager
+const SceneManager = class {
 
-    // Call `init`
-    this.init();
-};
+    // Constructor
+    constructor () {
 
-// Method: init
-SceneManager.prototype.init = function () {
-    'use strict';
+        // Object to hold scenes
+        this.scenes = {};
 
-    // Object to hold scenes
-    this.scenes = {};
+        // Array to hold the scene names
+        this.sceneNames = [];
+    }
 
-    // Array to hold scene names
-    this.sceneNames = [];
-};
+    // Method: add
+    add (scene) {
 
-// Method: add
-SceneManager.prototype.add = function (scene) {
-    'use strict';
+        // Add `name` to `scenes`
+        this.scenes[scene.name] = scene;
 
-    // Add `name` to `scenes`
-    this.scenes[scene.name] = scene;
+        // Update `sceneNames`
+        this.sceneNames = Object.keys(this.scenes);
+    }
 
-    // Update `sceneNames`
-    this.sceneNames = Object.keys(this.scenes);
-};
+    // Method: goTo
+    goTo (name) {
 
-// Method: remove
-SceneManager.prototype.remove = function (name) {
-    'use strict';
+        // Check `scenes[name]` exists
+        if (this.scenes[name]) {
 
-    // Remove `name` from `scenes`
-    delete this.scenes[name];
+            // Check `currentScene` exists and it has `sceneExit`
+            if (this.currentScene && this.currentScene.sceneExit) {
 
-    // Update `sceneNames`
-    this.sceneNames = Object.keys(this.scenes);
-};
+                // Call `sceneExit`
+                this.currentScene.sceneExit();
+            }
 
-// Method: goTo
-SceneManager.prototype.goTo = function (name) {
-    'use strict';
+            // Set `currentScene`
+            this.currentScene = this.scenes[name];
 
-    // Check `scenes[name]` exists
-    if (this.scenes[name]) {
+            // Check `sceneEnter` exists
+            if (this.currentScene.sceneEnter) {
 
-        // Check `currentScene` exists and it has `sceneExit`
-        if (this.currentScene && this.currentScene.sceneExit) {
+                // Update `currentScene.sceneEntered`
+                this.currentScene.sceneEntered = window.performance.now();
 
-            // Call `sceneExit`
-            this.currentScene.sceneExit();
+                // Call `sceneEnter`
+                this.currentScene.sceneEnter();
+            }
         }
 
-        // Set `currentScene`
-        this.currentScene = this.scenes[name];
+        // `scenes[name]` does not exist
+        else {
 
-        // Check `sceneEnter` exists
-        if (this.currentScene.sceneEnter) {
-
-            // Update `currentScene.sceneEntered`
-            this.currentScene.sceneEntered = window.performance.now();
-
-            // Call `sceneEnter`
-            this.currentScene.sceneEnter();
+            // Log error
+            throw new Error(`Scene ${name} does not exist`);
         }
     }
 
-    // `scenes[name]` does not exist
-    else {
+    // Method: next
+    next () {
 
-        // Log error
-        console.log('Scene ' + name + ' does not exist');
+        // Go to next scene
+        this.goTo(this.scenes[cyclicArray(this.sceneNames, this.sceneNames.indexOf(this.currentScene.name) + 1).value].name);
     }
-};
 
-// Method: next
-SceneManager.prototype.next = function () {
-    'use strict';
+    // Method: previous
+    previous () {
 
-    // Set `currentScene` to next scene in `scenes`
-    this.currentScene = this.scenes[Utils.cyclicArray(this.sceneNames, this.sceneNames.indexOf(this.currentScene.name) + 1).value];
-};
-
-// Method: previous
-SceneManager.prototype.previous = function () {
-    'use strict';
-
-    // Set `currentScene` to previous scene in `scenes`
-    this.currentScene = this.scenes[Utils.cyclicArray(this.sceneNames, this.sceneNames.indexOf(this.currentScene.name) - 1).value];
-};
-
-// Method: draw
-SceneManager.prototype.draw = function () {
-    'use strict';
-
-    // Check there is a current scene and it has `draw`
-    if (this.currentScene && this.currentScene.draw) {
-
-        // Call `draw`
-        this.currentScene.draw();
+        // Go to previous scene
+        this.goTo(this.scenes[cyclicArray(this.sceneNames, this.sceneNames.indexOf(this.currentScene.name) - 1).value].name);
     }
-};
 
-// Method: update
-SceneManager.prototype.update = function (deltaTime) {
-    'use strict';
+    // Method: remove
+    remove (name) {
 
-    // Check there is a current scene and it has `update`
-    if (this.currentScene && this.currentScene.update) {
+        // Remove `name` from `scenes`
+        delete this.scenes[name];
 
-        // Call `update`
-        this.currentScene.update(deltaTime);
+        // Update `sceneNames`
+        this.sceneNames = Object.keys(this.scenes);
+    }
+
+    // Method: render
+    render () {
+
+        // Check there is a current scene and it has `render`
+        if (this.currentScene && this.currentScene.render) {
+
+            // Call `render`
+            this.currentScene.render();
+        }
+    }
+
+    // Method: update
+    update (deltaTime) {
+
+        // Check there is a current scene and it has `update`
+        if (this.currentScene && this.currentScene.update) {
+
+            // Call `update`
+            this.currentScene.update(deltaTime);
+        }
     }
 };
 
 // Export `SceneManager`
-module.exports = SceneManager;
+export default SceneManager;

@@ -1,296 +1,375 @@
 /**
- * Asset loader
+ * AssetLoader
  *
  * @desc An asset loader
  */
 
-// Constructor: AssetLoader
-const AssetLoader = function () {
+// Depencencies
+import {getAudioArrayBuffer, getVideoBlob, noOp} from './Utils';
 
-    this.assets = {};
-    this.assetsToLoad = [];
-    this.assetsLoaded = false;
-};
+// Class: AssetLoader
+const AssetLoader = class {
 
-// Method: addAssets
-AssetLoader.prototype.addAssets = function (assets) {
-
-    // `assets` is not an array
-    if (Object.prototype.toString.call(assets) !== '[object Array]') {
-
-        // Throw error
-        throw new Error('`addAssets` must be passed an array');
+    // Constructor
+    constructor () {
+        this.assets = {};
+        this.assetsToLoad = [];
+        this.assetsLoaded = false;
     }
 
-    // `assets` is an array
-    else {
+    // Method: addAssets
+    addAssets (assets) {
 
-        // Iterate over `assets`
-        for (let i = 0; i < assets.length; i++) {
+        // `assets` is not an array
+        if (Object.prototype.toString.call(assets) !== '[object Array]') {
 
-            // Asset doesn't have a type
-            if (assets[i].type) {
+            // Throw error
+            throw new Error('`addAssets` must be passed an array');
+        }
 
-                // Switch over `type`
-                switch (assets[i].type) {
+        // `assets` is an array
+        else {
 
-                    // Image
-                case 'image': {
+            // Iterate over `assets`
+            assets.forEach((asset) => {
 
-                    // Asset doesn't have a path
-                    if (!assets[i].path) {
+                // Asset has a type
+                if (asset.type) {
 
-                        // Throw error
-                        throw new Error('Asset does not have a path', assets[i]);
-                    }
+                    // Switch over `type`
+                    switch (asset.type) {
 
-                    // Asset does have a path
-                    else {
+                        // Audio
+                        case 'audio': {
 
-                        // Asset doesn't have a name
-                        if (!assets[i].name) {
+                            // Asset doesn't have a path
+                            if (!asset.path) {
+
+                                // Throw error
+                                throw new Error(`Asset does not have a path ${asset}`);
+                            }
+
+                            // Asset doesn't have a name
+                            else if (!asset.name) {
+
+                                // Throw error
+                                throw new Error(`Asset does not have a name ${asset}`);
+                            }
+
+                            // Asset has everything we need
+                            else {
+
+                                // Add asset to `assetsToLoad`
+                                this.assetsToLoad.push(asset);
+                            }
+
+                            break;
+                        }
+
+                        // Image
+                        case 'image': {
+
+                            // Asset doesn't have a path
+                            if (!asset.path) {
+
+                                // Throw error
+                                throw new Error(`Asset does not have a path ${asset}`);
+                            }
+
+                            // Asset doesn't have a name
+                            else if (!asset.name) {
+
+                                // Throw error
+                                throw new Error(`Asset does not have a name ${asset}`);
+                            }
+
+                            // Asset has everything we need
+                            else {
+
+                                // Add asset to `assetsToLoad`
+                                this.assetsToLoad.push(asset);
+                            }
+
+                            break;
+                        }
+
+                        // Video
+                        case 'video': {
+
+                            // Asset doesn't have sources
+                            if (!asset.sources) {
+
+                                // Throw error
+                                throw new Error(`Asset does not have sources ${asset}`);
+                            }
+
+                            // Asset doesn't have a name
+                            else if (!asset.name) {
+
+                                // Throw error
+                                throw new Error(`Asset does not have a name ${assets}`);
+                            }
+
+                            // Asset has everything we need
+                            else {
+
+                                // Add asset to `assetsToLoad`
+                                this.assetsToLoad.push(asset);
+                            }
+
+                            break;
+                        }
+
+                        // Subtitle
+                        case 'subtitle': {
+
+                            // Asset doesn't have a path
+                            if (!asset.path) {
+
+                                // Throw error
+                                throw new Error(`Asset does not have a path ${asset}`);
+                            }
+
+                            // Asset doesn't have a name
+                            else if (!asset.name) {
+
+                                // Throw error
+                                throw new Error(`Asset does not have a name ${assets}`);
+                            }
+
+                            // Asset has everything we need
+                            else {
+
+                                // Add asset to `assetsToLoad`
+                                this.assetsToLoad.push(asset);
+                            }
+
+                            break;
+                        }
+
+                        // Invalid type
+                        default: {
 
                             // Throw error
-                            throw new Error('Asset does not have a name', assets[i]);
-                        }
-
-                        // Asset has everything we need
-                        else {
-
-                            // Add asset to `assetsToLoad`
-                            this.assetsToLoad.push(assets[i]);
+                            throw new Error('Asset is not a valid type');
                         }
                     }
-
-                    break;
                 }
 
-                case 'video': {
+                // Asset doesn have a type
+                else {
 
-                    // Asset doesn't have a path
-                    if (!assets[i].path) {
-
-                        // Throw error
-                        throw new Error('Asset does not have a path', assets[i]);
-                    }
-
-                    // Asset does have a path
-                    else {
-
-                        // Asset doesn't have a name
-                        if (!assets[i].name) {
-
-                            // Throw error
-                            throw new Error('Asset does not have a name', assets[i]);
-                        }
-
-                        // Asset has everything we need
-                        else {
-
-                            // Add asset to `assetsToLoad`
-                            this.assetsToLoad.push(assets[i]);
-                        }
-                    }
-
-                    break;
+                    // Throw error
+                    throw new Error('Asset does not have a type', asset);
                 }
+            });
+        }
+    }
 
-                // Invalid type
-                default: {
+    // Method: loadAssets
+    loadAssets (callback = noOp) {
 
-                            // Throw error
-                    throw new Error('Asset is not a valid type');
-                }
-                }
+        // Make sure there are still assets to load
+        if (this.assetsToLoad.length > 0) {
+
+            // Set `assetsLoaded` to `false`
+            this.assetsLoaded = false;
+
+            // Load the asset
+            this.loadAsset(this.assetsToLoad[0], () => {
+
+                // Add the asset to `assets`
+                [this.assets[this.assetsToLoad[0].name]] = this.assetsToLoad;
+
+                // Move to next asset
+                this.assetsToLoad.shift();
+
+                // Start loading next asset
+                this.loadAssets(callback);
+            });
+        }
+
+        // There are no more assets
+        else {
+
+            // Set `assetsLoaded` to `true`
+            this.assetsLoaded = true;
+
+            // Call `callback`
+            return callback();
+        }
+    }
+
+    // Method: loadAsset
+    loadAsset (asset, callback) {
+
+        // Switch on `type`
+        switch (asset.type) {
+
+            // Audio
+            case 'audio': {
+
+                // Call `loadAudio`
+                this.loadAudio(asset, callback);
+
+                break;
             }
 
-            // Asset doesn have a type
-            else {
+            // Image
+            case 'image': {
 
-                // Throw error
-                throw new Error('Asset does not have a type', assets[i]);
+                // Call `loadImage`
+                this.loadImage(asset, callback);
+
+                break;
+            }
+
+            case 'video': {
+
+                // Call `loadVideo`
+                this.loadVideo(asset, callback);
+
+                break;
+            }
+
+            case 'subtitle': {
+
+                // Call `loadSubtitle`
+                this.loadSubtitle(asset, callback);
+
+                break;
+            }
+
+            // Default
+            default: {
+                throw new Error('Asset has no type');
             }
         }
     }
-};
 
-// Method: loadAssets
-AssetLoader.prototype.loadAssets = function (callback) {
+    // Method: loadAudio
+    loadAudio (asset, callback) {
 
+        // Call `getAudioArrayBuffer`
+        getAudioArrayBuffer(asset.path, (buffer) => {
 
-    // Store reference to `this`
-    const _this = this;
+            // Set buffer
+            asset.buffer = buffer;
 
-    // Make sure there are still assets to load
-    if (this.assetsToLoad.length > 0) {
-
-        // Set `assetsLoaded` to `false`
-        this.assetsLoaded = false;
-
-        // Load the asset
-        this.loadAsset(this.assetsToLoad[0], () => {
-
-            // Add the asset to `assets`
-            _this.assets[_this.assetsToLoad[0].name] = _this.assetsToLoad[0];
-
-            // Move to next asset
-            _this.assetsToLoad.shift();
-
-            // Start loading next asset
-            _this.loadAssets(callback);
+            // Call `callback`
+            callback();
         });
     }
 
-    // There are no more assets
-    else {
+    // Method: loadImage
+    loadImage (asset, callback) {
 
-        // Set `assetsLoaded` to `true`
-        this.assetsLoaded = true;
+        // Create new image
+        const img = new Image();
 
-        // Call `callback`
-        callback();
-    }
-};
+        // On load of image
+        img.addEventListener('load', () => {
 
-// Method: loadAsset
-AssetLoader.prototype.loadAsset = function (asset, callback) {
+            asset.loaded = true;
 
+            // Add element
+            asset.element = img;
 
-    // Switch on `type`
-    switch (asset.type) {
-
-        // Image
-    case 'image': {
-
-        // Call `loadImage`
-        this.loadImage(asset, callback);
-
-        break;
-    }
-
-    case 'video': {
-
-        // Call `loadVideo`
-        this.loadVideo(asset, callback);
-
-        break;
-    }
-
-    // Default
-    default: {
-        throw new Error('Asset has no type');
-    }
-    }
-};
-
-// Method: loadImage
-AssetLoader.prototype.loadImage = function (asset, callback) {
-
-
-    // Create new image
-    const img = new Image();
-
-    // On load of image
-    img.addEventListener('load', () => {
-
-        // Add element
-        asset.element = this;
-
-        // Call `callback`
-        callback();
-    });
-
-    // On error of image
-    img.addEventListener('error', (e) => {
-
-        // Throw error
-        throw new Error(e);
-    });
-
-    // Set `crossOrigin` to `anonymous`
-    img.crossOrigin = 'anonymous';
-
-    // Set `img.src`
-    img.src = asset.path;
-};
-
-// Method: createVideo
-AssetLoader.prototype.loadVideo = function (asset, callback) {
-
-    // Create new video
-    const video = document.createElement('video');
-
-    // Create source
-    const sourceEl = document.createElement('source');
-
-    asset.element = video;
-    asset.volume = typeof asset.volume === 'undefined' ? 1 : asset.volume;
-    asset.loaded = 0;
-
-    video.autoplay = typeof asset.autoplay === 'undefined' ? true : asset.autoplay;
-    video.loop = typeof asset.loop === 'undefined' ? true : asset.loop;
-    video.muted = typeof asset.muted === 'undefined' ? false : asset.muted;
-
-    asset.play = function (currentTime) {
-        if (typeof currentTime !== 'undefined') {
-            video.currentTime = currentTime;
-        }
-        video.play();
-        if (asset.onStart) {
-            asset.onStart();
-        }
-    };
-
-    asset.pause = function () {
-        video.pause();
-    };
-
-    asset.resume = function () {
-        video.play();
-    };
-
-    asset.stop = function () {
-        video.pause();
-        video.currentTime = 0;
-    };
-
-    video.addEventListener('canplaythrough', () => {
-        if (!asset.ready) {
-            asset.ready = true;
+            // Call `callback`
             return callback();
-        }
-    });
+        });
 
-    video.addEventListener('loadeddata', () => {
+        // On error of image
+        img.addEventListener('error', (e) => {
 
-        // First frame loaded
-        asset.width = this.videoWidth;
-        asset.height = this.videoHeight;
-        asset.duration = this.duration;
-    });
+            // Throw error
+            throw new Error(e);
+        });
 
-    video.addEventListener('ended', () => {
-        if (asset.onEnd) {
-            asset.onEnd();
-        }
-    });
+        // Set `crossOrigin` to `anonymous`
+        img.crossOrigin = 'anonymous';
 
-    // On error of video
-    video.addEventListener('error', (e) => {
+        // Set `img.src`
+        img.src = asset.path;
+    }
 
-        // Throw error
-        throw new Error(e);
-    });
+    // Method: loadVideo
+    loadVideo (asset, callback) {
 
-    // Add type
-    sourceEl.type = `video/${asset.path.match(/\.[0-9a-z]+$/i)[0].substring(1)}`;
+        // Create new video
+        const video = document.createElement('video');
 
-    // Add source
-    sourceEl.src = asset.path;
+        // Set `element`
+        asset.element = video;
 
-    // Append `sourceEl` to `video`
-    video.appendChild(sourceEl);
+        // On error of video
+        video.addEventListener('error', (e) => {
+
+            // Throw error
+            throw new Error(e);
+        });
+
+        // Call `getVideoBlob`
+        getVideoBlob(asset.sources, (blob, supportedVideoType) => {
+
+            // Create source element
+            const sourceEl = document.createElement('source');
+
+            // Add type
+            sourceEl.type = supportedVideoType.type;
+
+            // Add source
+            sourceEl.src = blob;
+
+            // Append `sourceEl` to `video`
+            video.appendChild(sourceEl);
+
+            // Set `loaded` to `true`
+            asset.loaded = true;
+
+            // Call `callback`
+            return callback();
+        });
+    }
+
+    // Method: loadSubtitle
+    loadSubtitle (asset, callback) {
+
+        // Promise for XHR to get the subtitles
+        const subPromise = new Promise((resolve, reject) => {
+
+            // Initialize XHR
+            const xhr = new XMLHttpRequest();
+
+            // Get request for the subtitle
+            xhr.open('GET', asset.path);
+
+            // Process string received into JSON
+            xhr.onload = () => {
+                resolve(xhr.responseText);
+            };
+
+            // Uh oh
+            xhr.onerror = () => {
+                reject(xhr.statusText);
+            };
+
+            xhr.send();
+        });
+
+        // Once resolved
+        subPromise.then((jsonfile) => {
+
+            // Put loaded JSON into the asset
+            asset.content = jsonfile;
+            asset.loaded = true;
+            return callback();
+
+        }).catch((reason) => {
+            throw new Error(`Request for asset ${asset.name} failed, server returned code ${reason}`);
+        });
+    }
 };
 
 // Export `AssetLoader`
-module.exports = AssetLoader;
+export default AssetLoader;
