@@ -5,7 +5,7 @@
  */
 
 // Class: EventEmitter
-const EventEmitter = class {
+class EventEmitter {
 
     // Constructor
     constructor () {
@@ -82,7 +82,7 @@ const EventEmitter = class {
             });
         }
     }
-};
+}
 
 // Export `EventEmitter`
 export default EventEmitter;

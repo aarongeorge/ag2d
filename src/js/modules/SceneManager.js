@@ -8,7 +8,7 @@
 import {cyclicArray} from './Utils';
 
 // Class: SceneManager
-const SceneManager = class {
+class SceneManager {
 
     // Constructor
     constructor () {
@@ -110,7 +110,7 @@ const SceneManager = class {
             this.currentScene.update(deltaTime);
         }
     }
-};
+}
 
 // Export `SceneManager`
 export default SceneManager;

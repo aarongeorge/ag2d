@@ -5,7 +5,7 @@
  */
 
 // Class: SpriteSheet
-const SpriteSheet = class {
+class SpriteSheet {
 
     // Constructor
     constructor (options) {
@@ -16,7 +16,7 @@ const SpriteSheet = class {
         this.name = options.name;
         this.rows = options.rows;
     }
-};
+}
 
 // Export `SpriteSheet`
 export default SpriteSheet;

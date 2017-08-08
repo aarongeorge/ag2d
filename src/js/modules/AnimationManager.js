@@ -5,7 +5,7 @@
  */
 
 // Constructor: AnimationManager
-const AnimationManager = class {
+class AnimationManager {
 
     // Constructor
     constructor () {
@@ -69,7 +69,7 @@ const AnimationManager = class {
             this.animations[animation].update(deltaTime);
         });
     }
-};
+}
 
 // Export `AnimationManager`
 export default AnimationManager;

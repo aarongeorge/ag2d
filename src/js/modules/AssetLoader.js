@@ -8,7 +8,7 @@
 import {getAudioArrayBuffer, getVideoBlob, noOp} from './Utils';
 
 // Class: AssetLoader
-const AssetLoader = class {
+class AssetLoader {
 
     // Constructor
     constructor () {
@@ -369,7 +369,7 @@ const AssetLoader = class {
             throw new Error(`Request for asset ${asset.name} failed, server returned code ${reason}`);
         });
     }
-};
+}
 
 // Export `AssetLoader`
 export default AssetLoader;

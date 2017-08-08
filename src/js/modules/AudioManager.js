@@ -9,7 +9,7 @@ import {createAudioContext} from './Utils';
 import EventHandler from './EventHandler';
 
 // Constructor: AudioManager
-const AudioManager = class {
+class AudioManager {
 
     // Constructor
     constructor () {
@@ -116,7 +116,7 @@ const AudioManager = class {
             delete this.audioClips[name].element;
         }
     }
-};
+}
 
 // Export `AudioManager`
 export default AudioManager;

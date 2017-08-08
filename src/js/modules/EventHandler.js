@@ -3,7 +3,7 @@
  */
 
 // Constructor: EventHandler
-const EventHandler = class {
+class EventHandler {
     'use strict';
 
     // Constructor
@@ -95,7 +95,7 @@ const EventHandler = class {
             this.removeEvent(customEvent.name);
         });
     }
-};
+}
 
 // Export `EventHandler`
 export default EventHandler;

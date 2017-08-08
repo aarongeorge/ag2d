@@ -5,7 +5,7 @@
  */
 
 // Class: Animation
-const Animation = class {
+class Animation {
 
     // Constructor
     constructor (options) {
@@ -185,7 +185,7 @@ const Animation = class {
         // Draw `spriteSheet`
         context.drawImage(this.spriteSheet.image, col * this.spriteSheet.frameWidth, row * this.spriteSheet.frameHeight, cropWidth, cropHeight, x, y, cropWidth, cropHeight);
     }
-};
+}
 
 // Export `Animation`
 export default Animation;

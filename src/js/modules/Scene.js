@@ -3,7 +3,7 @@
  */
 
 // Class: Scene
-const Scene = class {
+class Scene {
 
     // Constructor
     constructor (name = 'Default') {
@@ -33,7 +33,7 @@ const Scene = class {
     update () {
         console.log(`Update: ${this.name}`);
     }
-};
+}
 
 // Export `Scene`
 export default Scene;

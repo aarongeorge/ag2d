@@ -13,7 +13,7 @@ import SceneManager from './modules/SceneManager';
 import {noOp} from './modules/Utils';
 
 // Class: AG2D
-const AG2D = class {
+class AG2D {
 
     // Constructor
     constructor (canvas = document.createElement('CANVAS')) {
@@ -226,7 +226,7 @@ const AG2D = class {
         this.canvas.style.height = `${destHeight}px`;
         this.canvas.style.width = `${destWidth}px`;
     }
-};
+}
 
 // Export `AG2D`
 export default AG2D;
