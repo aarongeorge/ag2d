@@ -140,7 +140,34 @@ const getVideoBlob = (sources, callback) => {
 };
 
 // Get Audio Array Buffer
-const getAudioArrayBuffer = (path, callback) => {
+const getAudioArrayBuffer = (sources, callback) => {
+
+    // Create `testAudio`
+    const testAudio = document.createElement('audio');
+
+    // Variable to hold the supported audio type
+    let supportedAudioType = undefined;
+
+    // Array of audio types in order of preference
+    const supportedAudioTypes = [
+        'audio/ogg; codecs="vorbis"',
+        'audio/mpeg; codec="mp3"',
+        'audio/mp4; codecs="mp4a.40.5"'
+    ];
+
+    // Iterate over `supportedAudioTypes`
+    for (let i = 0; i < supportedAudioTypes.length; i++) {
+
+        // Browser can play `supportedAudioTypes[i]`
+        if (testAudio.canPlayType(supportedAudioTypes[i])) {
+
+            // Get the source from `sources`
+            [supportedAudioType] = sources.filter((audioSource) => {
+                return audioSource.type === supportedAudioTypes[i].match(/[^;]*/gi)[0];
+            });
+            break;
+        }
+    }
 
     // Sort out prefix
     window.AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -148,11 +175,14 @@ const getAudioArrayBuffer = (path, callback) => {
     // Create `audioContext`
     const audioContext = new AudioContext();
 
+    // Close `audioContext`
+    audioContext.close();
+
     // Create `request`
     const request = new XMLHttpRequest();
 
     // Open `request`
-    request.open('GET', path, true);
+    request.open('GET', supportedAudioType.path, true);
 
     // Set `responseType` to `arraybuffer`
     request.responseType = 'arraybuffer';
