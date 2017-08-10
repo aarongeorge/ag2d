@@ -11,6 +11,10 @@ class Scene {
         // Set `name`
         this.name = name;
 
+        // Set `enteredCount` and `exitedCount`
+        this.enterCount = 0;
+        this.exitCount = 0;
+
         console.log(`Init: ${this.name}`);
     }
 

@@ -41,6 +41,9 @@ class SceneManager {
 
                 // Call `sceneExit`
                 this.currentScene.sceneExit();
+
+                // Increment `exitCount`
+                this.currentScene.exitCount += 1;
             }
 
             // Set `currentScene`
@@ -54,6 +57,9 @@ class SceneManager {
 
                 // Call `sceneEnter`
                 this.currentScene.sceneEnter();
+
+                // Increment `enterCount`
+                this.currentScene.enterCount += 1;
             }
         }
 

@@ -4,7 +4,6 @@
 
 // Constructor: EventHandler
 class EventHandler {
-    'use strict';
 
     // Constructor
     constructor () {

@@ -39,8 +39,8 @@ class AG2D {
         // Call `resizeCanvas`
         this.resizeCanvas(this.bounds.width, this.bounds.height);
 
-        // Call `setUpMiddleware`
-        this.setUpMiddleware();
+        // Call `setUpHooks`
+        this.setUpHooks();
     }
 
     // Method: clearCanvas
@@ -80,22 +80,6 @@ class AG2D {
         }
     }
 
-    // Method: setUpMiddleware
-    setUpMiddleware () {
-        this.middleware = {
-            'update': noOp,
-            'render': noOp,
-            'stop': noOp,
-            'start': noOp,
-            'add': (name, func) => {
-                this.middleware[name] = func;
-            },
-            'remove': (name) => {
-                delete this.middleware[name];
-            }
-        };
-    }
-
     // Method: render
     render () {
 
@@ -108,8 +92,8 @@ class AG2D {
         // Call `clearCanvas`
         this.clearCanvas();
 
-        // Call `render` on `middleware`
-        this.middleware.render();
+        // Call `render` on `hooks`
+        this.hooks.render();
 
         // Restore `context`
         this.context.restore();
@@ -146,6 +130,22 @@ class AG2D {
         }
     }
 
+    // Method: setUpHooks
+    setUpHooks () {
+        this.hooks = {
+            'update': noOp,
+            'render': noOp,
+            'stop': noOp,
+            'start': noOp,
+            'bind': (name, func) => {
+                this.hooks[name] = func;
+            },
+            'unbind': (name) => {
+                delete this.hooks[name];
+            }
+        };
+    }
+
     // Method: start
     start () {
 
@@ -158,8 +158,8 @@ class AG2D {
         this.lastUpdate = now;
         this.lastRender = now;
 
-        // Call `start` on `middleware`
-        this.middleware.start();
+        // Call `start` on `hooks`
+        this.hooks.start();
 
         // Call `renderLoop`
         this.renderLoop();
@@ -171,15 +171,15 @@ class AG2D {
         // Set `isRunning` to `false`
         this.isRunning = false;
 
-        // Call `stop` on `middleware`
-        this.middleware.stop();
+        // Call `stop` on `hooks`
+        this.hooks.stop();
     }
 
     // Method: update
     update (deltaTime) {
 
-        // Call `update` on `middleware`
-        this.middleware.update(deltaTime);
+        // Call `update` on `hooks`
+        this.hooks.update(deltaTime);
 
         // Update `lastUpdate`
         this.lastUpdate = window.performance.now();
@@ -234,14 +234,17 @@ export default AG2D;
 // Export `animationManager`
 export const animationManager = new AnimationManager();
 
-// Export `assetLoader`
+// Export `sssetLoader`
 export const assetLoader = new AssetLoader();
 
 // Export `audioManager`
 export const audioManager = new AudioManager();
 
-// Export `sceneManager`
-export const sceneManager = new SceneManager();
-
 // Export `eventEmitter`
 export const eventEmitter = new EventEmitter();
+
+// Export `Scene`
+export {default as Scene} from './modules/Scene';
+
+// Export `SceneManager`
+export const sceneManager = new SceneManager();

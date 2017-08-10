@@ -5,7 +5,7 @@
  */
 
 // Dependencies
-import {createAudioContext} from './Utils';
+import {createAudioContext, noOp} from './Utils';
 import EventHandler from './EventHandler';
 
 // Constructor: AudioManager
@@ -16,36 +16,6 @@ class AudioManager {
 
         // Create `eventHandler`
         this.eventHandler = new EventHandler();
-
-        // Function to create an audio context
-        const createContext = () => {
-
-            // Create new `audioContextPatch`
-            this.context = createAudioContext();
-
-            // Remove event handlers
-            this.eventHandler.removeEvent('iOSTouchStartAudioContext');
-            this.eventHandler.removeEvent('iOSTouchEndAudioContext');
-        };
-
-        // Handle audio context for iOS 6-8
-        this.eventHandler.addEvent({
-            'name': 'iOSTouchStartAudioContext',
-            'element': document,
-            'type': 'touchstart',
-            'function': createContext.bind(this)
-        });
-
-        // Handle audio context for iOS 9-10
-        this.eventHandler.addEvent({
-            'name': 'iOSTouchEndAudioContext',
-            'element': document,
-            'type': 'touchend',
-            'function': createContext.bind(this)
-        });
-
-        // Create `context`
-        this.context = createAudioContext();
 
         // Object to hold audioClips
         this.audioClips = {};
@@ -75,6 +45,69 @@ class AudioManager {
         }
     }
 
+    // Method: init
+    init (cb = noOp) {
+
+        // Function to create an audio context
+        const createContext = () => {
+
+            // Create new `audioContextPatch`
+            this.context = createAudioContext();
+
+            // Remove event handlers
+            this.eventHandler.removeEvent('iOSTouchStartAudioContext');
+            this.eventHandler.removeEvent('iOSTouchEndAudioContext');
+
+            // Call `cb`
+            return cb();
+        };
+
+        // Regular expression that matches iOS devices
+        const iOSRegex = new RegExp('iPhone|iPad|iPod', 'i');
+
+        // Is iOS
+        if (iOSRegex.test(navigator.userAgent) && !window.MSStream) {
+
+            // Handle audio context for iOS 6-8
+            this.eventHandler.addEvent({
+                'name': 'iOSTouchStartAudioContext',
+                'element': document,
+                'type': 'touchstart',
+                'function': createContext.bind(this)
+            });
+
+            // Handle audio context for iOS 9-10
+            this.eventHandler.addEvent({
+                'name': 'iOSTouchEndAudioContext',
+                'element': document,
+                'type': 'touchend',
+                'function': createContext.bind(this)
+            });
+        }
+
+        // Is not iOS
+        else {
+
+            // Create `context`
+            this.context = createAudioContext();
+
+            // Call `cb`
+            return cb();
+        }
+    }
+
+    // Method: play
+    play (name) {
+
+        if (!this.audioClips[name].element) {
+            this.audioClips[name].element = this.context.createBufferSource();
+            this.audioClips[name].element.buffer = this.audioClips[name].buffer;
+            this.audioClips[name].element.connect(this.context.destination);
+        }
+
+        this.audioClips[name].element.start(0);
+    }
+
     // Method: remove
     remove (name) {
 
@@ -94,18 +127,6 @@ class AudioManager {
             // Throw error
             throw new Error(`No audioClip with the name \`${name}\` exists`);
         }
-    }
-
-    // Method: play
-    play (name) {
-
-        if (!this.audioClips[name].element) {
-            this.audioClips[name].element = this.context.createBufferSource();
-            this.audioClips[name].element.buffer = this.audioClips[name].buffer;
-            this.audioClips[name].element.connect(this.context.destination);
-        }
-
-        this.audioClips[name].element.start(0);
     }
 
     // Method: stop

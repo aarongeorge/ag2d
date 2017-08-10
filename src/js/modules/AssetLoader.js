@@ -17,6 +17,113 @@ class AssetLoader {
         this.assetsLoaded = false;
     }
 
+    // Method: addAsset
+    addAsset (asset) {
+
+        // Asset has a type
+        if (asset.type) {
+
+            // Switch over `type`
+            switch (asset.type) {
+
+                // Audio
+                case 'audio': {
+
+                    // Asset doesn't have a path
+                    if (!asset.path) {
+
+                        // Throw error
+                        throw new Error(`Asset does not have a path ${asset}`);
+                    }
+
+                    // Asset doesn't have a name
+                    else if (!asset.name) {
+
+                        // Throw error
+                        throw new Error(`Asset does not have a name ${asset}`);
+                    }
+
+                    // Asset has everything we need
+                    else {
+
+                        // Add asset to `assetsToLoad`
+                        this.assetsToLoad.push(asset);
+                    }
+
+                    break;
+                }
+
+                // Image
+                case 'image': {
+
+                    // Asset doesn't have a path
+                    if (!asset.path) {
+
+                        // Throw error
+                        throw new Error(`Asset does not have a path ${asset}`);
+                    }
+
+                    // Asset doesn't have a name
+                    else if (!asset.name) {
+
+                        // Throw error
+                        throw new Error(`Asset does not have a name ${asset}`);
+                    }
+
+                    // Asset has everything we need
+                    else {
+
+                        // Add asset to `assetsToLoad`
+                        this.assetsToLoad.push(asset);
+                    }
+
+                    break;
+                }
+
+                // Video
+                case 'video': {
+
+                    // Asset doesn't have sources
+                    if (!asset.sources) {
+
+                        // Throw error
+                        throw new Error(`Asset does not have sources ${asset}`);
+                    }
+
+                    // Asset doesn't have a name
+                    else if (!asset.name) {
+
+                        // Throw error
+                        throw new Error(`Asset does not have a name ${asset}`);
+                    }
+
+                    // Asset has everything we need
+                    else {
+
+                        // Add asset to `assetsToLoad`
+                        this.assetsToLoad.push(asset);
+                    }
+
+                    break;
+                }
+
+                // Invalid type
+                default: {
+
+                    // Throw error
+                    throw new Error('Asset is not a valid type');
+                }
+            }
+        }
+
+        // Asset doesn have a type
+        else {
+
+            // Throw error
+            throw new Error('Asset does not have a type', asset);
+        }
+    }
+
     // Method: addAssets
     addAssets (assets) {
 
@@ -33,135 +140,8 @@ class AssetLoader {
             // Iterate over `assets`
             assets.forEach((asset) => {
 
-                // Asset has a type
-                if (asset.type) {
-
-                    // Switch over `type`
-                    switch (asset.type) {
-
-                        // Audio
-                        case 'audio': {
-
-                            // Asset doesn't have a path
-                            if (!asset.path) {
-
-                                // Throw error
-                                throw new Error(`Asset does not have a path ${asset}`);
-                            }
-
-                            // Asset doesn't have a name
-                            else if (!asset.name) {
-
-                                // Throw error
-                                throw new Error(`Asset does not have a name ${asset}`);
-                            }
-
-                            // Asset has everything we need
-                            else {
-
-                                // Add asset to `assetsToLoad`
-                                this.assetsToLoad.push(asset);
-                            }
-
-                            break;
-                        }
-
-                        // Image
-                        case 'image': {
-
-                            // Asset doesn't have a path
-                            if (!asset.path) {
-
-                                // Throw error
-                                throw new Error(`Asset does not have a path ${asset}`);
-                            }
-
-                            // Asset doesn't have a name
-                            else if (!asset.name) {
-
-                                // Throw error
-                                throw new Error(`Asset does not have a name ${asset}`);
-                            }
-
-                            // Asset has everything we need
-                            else {
-
-                                // Add asset to `assetsToLoad`
-                                this.assetsToLoad.push(asset);
-                            }
-
-                            break;
-                        }
-
-                        // Video
-                        case 'video': {
-
-                            // Asset doesn't have sources
-                            if (!asset.sources) {
-
-                                // Throw error
-                                throw new Error(`Asset does not have sources ${asset}`);
-                            }
-
-                            // Asset doesn't have a name
-                            else if (!asset.name) {
-
-                                // Throw error
-                                throw new Error(`Asset does not have a name ${assets}`);
-                            }
-
-                            // Asset has everything we need
-                            else {
-
-                                // Add asset to `assetsToLoad`
-                                this.assetsToLoad.push(asset);
-                            }
-
-                            break;
-                        }
-
-                        // Subtitle
-                        case 'subtitle': {
-
-                            // Asset doesn't have a path
-                            if (!asset.path) {
-
-                                // Throw error
-                                throw new Error(`Asset does not have a path ${asset}`);
-                            }
-
-                            // Asset doesn't have a name
-                            else if (!asset.name) {
-
-                                // Throw error
-                                throw new Error(`Asset does not have a name ${assets}`);
-                            }
-
-                            // Asset has everything we need
-                            else {
-
-                                // Add asset to `assetsToLoad`
-                                this.assetsToLoad.push(asset);
-                            }
-
-                            break;
-                        }
-
-                        // Invalid type
-                        default: {
-
-                            // Throw error
-                            throw new Error('Asset is not a valid type');
-                        }
-                    }
-                }
-
-                // Asset doesn have a type
-                else {
-
-                    // Throw error
-                    throw new Error('Asset does not have a type', asset);
-                }
+                // Call `addAsset`
+                this.addAsset(asset);
             });
         }
     }
