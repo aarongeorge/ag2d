@@ -212,14 +212,6 @@ class AssetLoader {
                 break;
             }
 
-            case 'subtitle': {
-
-                // Call `loadSubtitle`
-                this.loadSubtitle(asset, callback);
-
-                break;
-            }
-
             // Default
             default: {
                 throw new Error('Asset has no type');
@@ -309,44 +301,6 @@ class AssetLoader {
 
             // Call `callback`
             return callback();
-        });
-    }
-
-    // Method: loadSubtitle
-    loadSubtitle (asset, callback) {
-
-        // Promise for XHR to get the subtitles
-        const subPromise = new Promise((resolve, reject) => {
-
-            // Initialize XHR
-            const xhr = new XMLHttpRequest();
-
-            // Get request for the subtitle
-            xhr.open('GET', asset.path);
-
-            // Process string received into JSON
-            xhr.onload = () => {
-                resolve(xhr.responseText);
-            };
-
-            // Uh oh
-            xhr.onerror = () => {
-                reject(xhr.statusText);
-            };
-
-            xhr.send();
-        });
-
-        // Once resolved
-        subPromise.then((jsonfile) => {
-
-            // Put loaded JSON into the asset
-            asset.content = jsonfile;
-            asset.loaded = true;
-            return callback();
-
-        }).catch((reason) => {
-            throw new Error(`Request for asset ${asset.name} failed, server returned code ${reason}`);
         });
     }
 }
