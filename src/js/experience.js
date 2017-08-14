@@ -3,7 +3,7 @@
  */
 
 // Dependencies
-import AG2D, {animationManager, sceneManager} from './libs/ag2d';
+import AG2D, {animationManager, sceneManager} from 'ag2d';
 
 // Create instance of `AG2D`
 const experience = new AG2D(document.querySelector('canvas'));

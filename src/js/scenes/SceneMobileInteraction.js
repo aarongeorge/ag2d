@@ -4,7 +4,7 @@
 
 // Dependencies
 import experience from '../experience';
-import {audioManager, eventEmitter, Scene, sceneManager} from '../libs/ag2d';
+import {audioManager, eventEmitter, Scene, sceneManager} from 'ag2d';
 
 // Create the Mobile Interaction Scene
 class SceneMobileInteraction extends Scene {

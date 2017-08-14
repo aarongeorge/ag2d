@@ -4,7 +4,7 @@
 
 // Dependencies
 import experience from '../experience';
-import {eventHandler, Scene, sceneManager} from '../libs/ag2d';
+import {eventHandler, Scene, sceneManager} from 'ag2d';
 
 // Create the start Scene
 class SceneStart extends Scene {
