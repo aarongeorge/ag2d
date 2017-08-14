@@ -5,5 +5,14 @@
   "main": "./src/js/index.js",
   "repository": "https://aarongeorge@github.com/aarongeorge/ag2d.git",
   "author": "Aaron George <aaron.dean.george@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "browserify": {
+    "transform": [
+        [
+            "babelify", {
+                "presets": ["es2015"]
+            }
+        ]
+    ]
+  }
 }
