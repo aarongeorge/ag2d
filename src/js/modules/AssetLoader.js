@@ -29,11 +29,11 @@ class AssetLoader {
                 // Audio
                 case 'audio': {
 
-                    // Asset doesn't have a path
-                    if (!asset.path) {
+                    // Asset doesn't have sources
+                    if (!asset.sources) {
 
                         // Throw error
-                        throw new Error(`Asset does not have a path ${asset}`);
+                        throw new Error(`Asset does not have sources ${asset}`);
                     }
 
                     // Asset doesn't have a name
@@ -204,6 +204,7 @@ class AssetLoader {
                 break;
             }
 
+            // Video
             case 'video': {
 
                 // Call `loadVideo`
@@ -223,7 +224,7 @@ class AssetLoader {
     loadAudio (asset, callback) {
 
         // Call `getAudioArrayBuffer`
-        getAudioArrayBuffer(asset.path, (buffer) => {
+        getAudioArrayBuffer(asset.sources, (buffer) => {
 
             // Set buffer
             asset.buffer = buffer;

@@ -151,8 +151,7 @@ const getAudioArrayBuffer = (sources, callback) => {
     // Array of audio types in order of preference
     const supportedAudioTypes = [
         'audio/ogg; codecs="vorbis"',
-        'audio/mpeg; codec="mp3"',
-        'audio/mp4; codecs="mp4a.40.5"'
+        'audio/mpeg; codec="mp3"'
     ];
 
     // Iterate over `supportedAudioTypes`
@@ -173,7 +172,7 @@ const getAudioArrayBuffer = (sources, callback) => {
     window.AudioContext = window.AudioContext || window.webkitAudioContext;
 
     // Create `audioContext`
-    const audioContext = new AudioContext();
+    const audioContext = createAudioContext();
 
     // Close `audioContext`
     audioContext.close();

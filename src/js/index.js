@@ -9,6 +9,7 @@ import AnimationManager from './modules/AnimationManager';
 import AssetLoader from './modules/AssetLoader';
 import AudioManager from './modules/AudioManager';
 import EventEmitter from './modules/EventEmitter';
+import EventHandler from './modules/EventHandler';
 import SceneManager from './modules/SceneManager';
 import {noOp} from './modules/Utils';
 
@@ -242,6 +243,9 @@ export const audioManager = new AudioManager();
 
 // Export `eventEmitter`
 export const eventEmitter = new EventEmitter();
+
+// Export `eventHandler`
+export const eventHandler = new EventHandler();
 
 // Export `Scene`
 export {default as Scene} from './modules/Scene';
