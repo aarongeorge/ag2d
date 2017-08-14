@@ -92,9 +92,9 @@ const getVideoBlob = (sources, callback) => {
 
     // Array of video types in order of preference
     const supportedVideoTypes = [
-        'video/webm; codecs="vp8.0, vorbis"',
-        'video/ogg; codecs="theora, vorbis"',
-        'video/mp4; codecs="avc1.4D401E, mp4a.40.2"'
+        'video/ogg; codecs="theora"',
+        'video/webm; codecs="vp8, vorbis"',
+        'video/mp4; codecs="avc1.42E01E"'
     ];
 
     // Iterate over `supportedVideoTypes`

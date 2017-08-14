@@ -29,11 +29,11 @@ class AssetLoader {
                 // Audio
                 case 'audio': {
 
-                    // Asset doesn't have a path
-                    if (!asset.path) {
+                    // Asset doesn't have sources
+                    if (!asset.sources) {
 
                         // Throw error
-                        throw new Error(`Asset does not have a path ${asset}`);
+                        throw new Error(`Asset does not have sources ${asset}`);
                     }
 
                     // Asset doesn't have a name
@@ -231,7 +231,7 @@ class AssetLoader {
     loadAudio (asset, callback) {
 
         // Call `getAudioArrayBuffer`
-        getAudioArrayBuffer(asset.path, (buffer) => {
+        getAudioArrayBuffer(asset.sources, (buffer) => {
 
             // Set buffer
             asset.buffer = buffer;
@@ -309,44 +309,6 @@ class AssetLoader {
 
             // Call `callback`
             return callback();
-        });
-    }
-
-    // Method: loadSubtitle
-    loadSubtitle (asset, callback) {
-
-        // Promise for XHR to get the subtitles
-        const subPromise = new Promise((resolve, reject) => {
-
-            // Initialize XHR
-            const xhr = new XMLHttpRequest();
-
-            // Get request for the subtitle
-            xhr.open('GET', asset.path);
-
-            // Process string received into JSON
-            xhr.onload = () => {
-                resolve(xhr.responseText);
-            };
-
-            // Uh oh
-            xhr.onerror = () => {
-                reject(xhr.statusText);
-            };
-
-            xhr.send();
-        });
-
-        // Once resolved
-        subPromise.then((jsonfile) => {
-
-            // Put loaded JSON into the asset
-            asset.content = jsonfile;
-            asset.loaded = true;
-            return callback();
-
-        }).catch((reason) => {
-            throw new Error(`Request for asset ${asset.name} failed, server returned code ${reason}`);
         });
     }
 }
