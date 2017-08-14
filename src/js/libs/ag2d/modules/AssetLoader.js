@@ -204,18 +204,11 @@ class AssetLoader {
                 break;
             }
 
+            // Video
             case 'video': {
 
                 // Call `loadVideo`
                 this.loadVideo(asset, callback);
-
-                break;
-            }
-
-            case 'subtitle': {
-
-                // Call `loadSubtitle`
-                this.loadSubtitle(asset, callback);
 
                 break;
             }
