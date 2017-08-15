@@ -26,8 +26,13 @@ class SceneStart extends Scene {
         // Scene name
         experience.context.textAlign = 'center';
         experience.context.textBaseline = 'middle';
-        experience.context.fillStyle = '#000000';
-        experience.context.fillText(this.name, experience.size.width / 2, experience.size.height / 2);
+        experience.context.font = '40px sans-serif';
+        experience.context.strokeStyle = 'black';
+        experience.context.lineWidth = 4;
+        experience.context.lineJoin = 'round';
+        experience.context.strokeText('Click to start', experience.size.width / 2, experience.size.height / 2);
+        experience.context.fillStyle = 'white';
+        experience.context.fillText('Click to start', experience.size.width / 2, experience.size.height / 2);
     }
 
     // Method: sceneEnter

@@ -1969,8 +1969,13 @@ var SceneLoading = function (_Scene) {
             // Scene name
             _experience2.default.context.textAlign = 'center';
             _experience2.default.context.textBaseline = 'middle';
-            _experience2.default.context.fillStyle = '#000000';
-            _experience2.default.context.fillText(this.name, _experience2.default.size.width / 2, _experience2.default.size.height / 2);
+            _experience2.default.context.font = '40px sans-serif';
+            _experience2.default.context.strokeStyle = 'black';
+            _experience2.default.context.lineWidth = 4;
+            _experience2.default.context.lineJoin = 'round';
+            _experience2.default.context.strokeText('Please wait, we are loading...', _experience2.default.size.width / 2, _experience2.default.size.height / 2);
+            _experience2.default.context.fillStyle = 'white';
+            _experience2.default.context.fillText('Please wait, we are loading...', _experience2.default.size.width / 2, _experience2.default.size.height / 2);
         }
 
         // Method: sceneEnter
@@ -2105,8 +2110,13 @@ var SceneMobileInteraction = function (_Scene) {
             // Scene name
             _experience2.default.context.textAlign = 'center';
             _experience2.default.context.textBaseline = 'middle';
-            _experience2.default.context.fillStyle = '#000000';
-            _experience2.default.context.fillText(this.name, _experience2.default.size.width / 2, _experience2.default.size.height / 2);
+            _experience2.default.context.font = '40px sans-serif';
+            _experience2.default.context.strokeStyle = 'black';
+            _experience2.default.context.lineWidth = 4;
+            _experience2.default.context.lineJoin = 'round';
+            _experience2.default.context.strokeText('Tap to start', _experience2.default.size.width / 2, _experience2.default.size.height / 2);
+            _experience2.default.context.fillStyle = 'white';
+            _experience2.default.context.fillText('Tap to start', _experience2.default.size.width / 2, _experience2.default.size.height / 2);
         }
 
         // Method: sceneEnter
@@ -2121,12 +2131,20 @@ var SceneMobileInteraction = function (_Scene) {
                 // Listener for `audioManager` context ready
                 _ag2d.eventEmitter.addListener('audioManager:context ready', function () {
 
+                    /**
+                     * Bind DOM events
+                     */
                     document.querySelector('#start').addEventListener('click', function () {
                         _experience2.default.start();
                     });
 
                     document.querySelector('#stop').addEventListener('click', function () {
                         _experience2.default.stop();
+                    });
+
+                    document.querySelector('#restart').addEventListener('click', function () {
+                        _ag2d.sceneManager.goTo('SceneStart');
+                        _experience2.default.start();
                     });
 
                     // Go to `SceneLoading`
@@ -2214,7 +2232,12 @@ var SceneOne = function (_Scene) {
             // Scene name
             _experience2.default.context.textAlign = 'center';
             _experience2.default.context.textBaseline = 'middle';
-            _experience2.default.context.fillStyle = '#000000';
+            _experience2.default.context.font = '40px sans-serif';
+            _experience2.default.context.strokeStyle = 'black';
+            _experience2.default.context.lineWidth = 4;
+            _experience2.default.context.lineJoin = 'round';
+            _experience2.default.context.strokeText(this.name, _experience2.default.size.width / 2, _experience2.default.size.height / 2);
+            _experience2.default.context.fillStyle = 'white';
             _experience2.default.context.fillText(this.name, _experience2.default.size.width / 2, _experience2.default.size.height / 2);
         }
 
@@ -2322,8 +2345,13 @@ var SceneStart = function (_Scene) {
             // Scene name
             _experience2.default.context.textAlign = 'center';
             _experience2.default.context.textBaseline = 'middle';
-            _experience2.default.context.fillStyle = '#000000';
-            _experience2.default.context.fillText(this.name, _experience2.default.size.width / 2, _experience2.default.size.height / 2);
+            _experience2.default.context.font = '40px sans-serif';
+            _experience2.default.context.strokeStyle = 'black';
+            _experience2.default.context.lineWidth = 4;
+            _experience2.default.context.lineJoin = 'round';
+            _experience2.default.context.strokeText('Click to start', _experience2.default.size.width / 2, _experience2.default.size.height / 2);
+            _experience2.default.context.fillStyle = 'white';
+            _experience2.default.context.fillText('Click to start', _experience2.default.size.width / 2, _experience2.default.size.height / 2);
         }
 
         // Method: sceneEnter
@@ -2425,7 +2453,12 @@ var SceneThree = function (_Scene) {
             // Scene name
             _experience2.default.context.textAlign = 'center';
             _experience2.default.context.textBaseline = 'middle';
-            _experience2.default.context.fillStyle = '#000000';
+            _experience2.default.context.font = '40px sans-serif';
+            _experience2.default.context.strokeStyle = 'black';
+            _experience2.default.context.lineWidth = 4;
+            _experience2.default.context.lineJoin = 'round';
+            _experience2.default.context.strokeText(this.name, _experience2.default.size.width / 2, _experience2.default.size.height / 2);
+            _experience2.default.context.fillStyle = 'white';
             _experience2.default.context.fillText(this.name, _experience2.default.size.width / 2, _experience2.default.size.height / 2);
         }
 
@@ -2533,7 +2566,12 @@ var SceneTwo = function (_Scene) {
             // Scene name
             _experience2.default.context.textAlign = 'center';
             _experience2.default.context.textBaseline = 'middle';
-            _experience2.default.context.fillStyle = '#000000';
+            _experience2.default.context.font = '40px sans-serif';
+            _experience2.default.context.strokeStyle = 'black';
+            _experience2.default.context.lineWidth = 4;
+            _experience2.default.context.lineJoin = 'round';
+            _experience2.default.context.strokeText(this.name, _experience2.default.size.width / 2, _experience2.default.size.height / 2);
+            _experience2.default.context.fillStyle = 'white';
             _experience2.default.context.fillText(this.name, _experience2.default.size.width / 2, _experience2.default.size.height / 2);
         }
 

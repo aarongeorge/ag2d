@@ -26,8 +26,13 @@ class SceneMobileInteraction extends Scene {
         // Scene name
         experience.context.textAlign = 'center';
         experience.context.textBaseline = 'middle';
-        experience.context.fillStyle = '#000000';
-        experience.context.fillText(this.name, experience.size.width / 2, experience.size.height / 2);
+        experience.context.font = '40px sans-serif';
+        experience.context.strokeStyle = 'black';
+        experience.context.lineWidth = 4;
+        experience.context.lineJoin = 'round';
+        experience.context.strokeText('Tap to start', experience.size.width / 2, experience.size.height / 2);
+        experience.context.fillStyle = 'white';
+        experience.context.fillText('Tap to start', experience.size.width / 2, experience.size.height / 2);
     }
 
     // Method: sceneEnter
@@ -39,12 +44,20 @@ class SceneMobileInteraction extends Scene {
             // Listener for `audioManager` context ready
             eventEmitter.addListener('audioManager:context ready', () => {
 
+                /**
+                 * Bind DOM events
+                 */
                 document.querySelector('#start').addEventListener('click', () => {
                     experience.start();
                 });
 
                 document.querySelector('#stop').addEventListener('click', () => {
                     experience.stop();
+                });
+
+                document.querySelector('#restart').addEventListener('click', () => {
+                    sceneManager.goTo('SceneStart');
+                    experience.start();
                 });
 
                 // Go to `SceneLoading`
