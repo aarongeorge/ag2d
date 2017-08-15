@@ -976,7 +976,13 @@ var AudioManager = function () {
     }, {
         key: 'resume',
         value: function resume() {
-            this.context.resume();
+
+            // `context` exists
+            if (this.context) {
+
+                // Call `resume`
+                this.context.resume();
+            }
         }
 
         // Method: stop
@@ -996,7 +1002,13 @@ var AudioManager = function () {
     }, {
         key: 'suspend',
         value: function suspend() {
-            this.context.suspend();
+
+            // `context` exists
+            if (this.context) {
+
+                // Call `suspend`
+                this.context.suspend();
+            }
         }
     }]);
 
@@ -1303,20 +1315,36 @@ var Scene = function () {
             console.log('Render: ' + this.name);
         }
 
-        // Method: sceneEnter
+        // Method: enter
 
     }, {
-        key: 'sceneEnter',
-        value: function sceneEnter() {
-            console.log('Scene Enter: ' + this.name);
+        key: 'enter',
+        value: function enter() {
+            console.log('Enter: ' + this.name);
         }
 
-        // Method: sceneExit
+        // Method: exit
 
     }, {
-        key: 'sceneExit',
-        value: function sceneExit() {
-            console.log('Scene Exit: ' + this.name);
+        key: 'exit',
+        value: function exit() {
+            console.log('Exit: ' + this.name);
+        }
+
+        // Method: pause
+
+    }, {
+        key: 'pause',
+        value: function pause() {
+            console.log('Pause: ' + this.name);
+        }
+
+        // Method: play
+
+    }, {
+        key: 'play',
+        value: function play() {
+            console.log('Play: ' + this.name);
         }
 
         // Method: update
@@ -1393,11 +1421,11 @@ var SceneManager = function () {
             // Check `scenes[name]` exists
             if (this.scenes[name]) {
 
-                // Check `currentScene` exists and it has `sceneExit`
-                if (this.currentScene && this.currentScene.sceneExit) {
+                // Check `currentScene` exists and it has `exit`
+                if (this.currentScene && this.currentScene.exit) {
 
-                    // Call `sceneExit`
-                    this.currentScene.sceneExit();
+                    // Call `exit`
+                    this.currentScene.exit();
 
                     // Increment `exitCount`
                     this.currentScene.exitCount += 1;
@@ -1406,14 +1434,14 @@ var SceneManager = function () {
                 // Set `currentScene`
                 this.currentScene = this.scenes[name];
 
-                // Check `sceneEnter` exists
-                if (this.currentScene.sceneEnter) {
+                // Check `enter` exists
+                if (this.currentScene.enter) {
 
                     // Update `currentScene.sceneEntered`
                     this.currentScene.sceneEntered = window.performance.now();
 
-                    // Call `sceneEnter`
-                    this.currentScene.sceneEnter();
+                    // Call `enter`
+                    this.currentScene.enter();
 
                     // Increment `enterCount`
                     this.currentScene.enterCount += 1;
@@ -1436,6 +1464,34 @@ var SceneManager = function () {
 
             // Go to next scene
             this.goTo(this.scenes[(0, _Utils.cyclicArray)(this.sceneNames, this.sceneNames.indexOf(this.currentScene.name) + 1).value].name);
+        }
+
+        // Method: pause
+
+    }, {
+        key: 'pause',
+        value: function pause() {
+
+            // Check there is a current scene and it has `pause`
+            if (this.currentScene && this.currentScene.pause) {
+
+                // Call `pause`
+                this.currentScene.pause();
+            }
+        }
+
+        // Method: play
+
+    }, {
+        key: 'play',
+        value: function play() {
+
+            // Check there is a current scene and it has `play`
+            if (this.currentScene && this.currentScene.play) {
+
+                // Call `play`
+                this.currentScene.play();
+            }
         }
 
         // Method: previous
@@ -1797,11 +1853,13 @@ var render = function render() {
 // Stop
 var stop = function stop() {
     _ag2d.audioManager.suspend();
+    _ag2d.sceneManager.pause();
 };
 
 // Start
 var start = function start() {
     _ag2d.audioManager.resume();
+    _ag2d.sceneManager.play();
 };
 
 // Bind the hooks
@@ -1978,11 +2036,11 @@ var SceneLoading = function (_Scene) {
             _experience2.default.context.fillText('Please wait, we are loading...', _experience2.default.size.width / 2, _experience2.default.size.height / 2);
         }
 
-        // Method: sceneEnter
+        // Method: enter
 
     }, {
-        key: 'sceneEnter',
-        value: function sceneEnter() {
+        key: 'enter',
+        value: function enter() {
 
             // Scene hasn't been entered before
             if (this.enterCount === 0) {
@@ -2119,11 +2177,11 @@ var SceneMobileInteraction = function (_Scene) {
             _experience2.default.context.fillText('Tap to start', _experience2.default.size.width / 2, _experience2.default.size.height / 2);
         }
 
-        // Method: sceneEnter
+        // Method: enter
 
     }, {
-        key: 'sceneEnter',
-        value: function sceneEnter() {
+        key: 'enter',
+        value: function enter() {
 
             // Scene hasn't been entered before
             if (this.enterCount === 0) {
@@ -2241,17 +2299,11 @@ var SceneOne = function (_Scene) {
             _experience2.default.context.fillText(this.name, _experience2.default.size.width / 2, _experience2.default.size.height / 2);
         }
 
-        // Method: sceneEnter
+        // Method: enter
 
     }, {
-        key: 'sceneEnter',
-        value: function sceneEnter() {
-
-            // Set `currentTime` to `0`
-            this.video.element.currentTime = 0;
-
-            // Play `video`
-            this.video.element.play();
+        key: 'enter',
+        value: function enter() {
 
             // Store reference to `this`
             var _this = this;
@@ -2262,15 +2314,21 @@ var SceneOne = function (_Scene) {
                 _ag2d.sceneManager.next();
             });
 
+            // Set `currentTime` to `0`
+            this.video.element.currentTime = 0;
+
+            // Play `video`
+            this.video.element.play();
+
             // Play `TestAudio`
             _ag2d.audioManager.play('TestAudio');
         }
 
-        // Method: sceneExit
+        // Method: exit
 
     }, {
-        key: 'sceneExit',
-        value: function sceneExit() {
+        key: 'exit',
+        value: function exit() {
 
             // Pause `video`
             this.video.element.pause();
@@ -2280,6 +2338,26 @@ var SceneOne = function (_Scene) {
 
             // Stop `TestAudio`
             _ag2d.audioManager.stop('TestAudio');
+        }
+
+        // Method: play
+
+    }, {
+        key: 'play',
+        value: function play() {
+
+            // Play `video`
+            this.video.element.play();
+        }
+
+        // Method: pause
+
+    }, {
+        key: 'pause',
+        value: function pause() {
+
+            // Pause `video`
+            this.video.element.pause();
         }
     }]);
 
@@ -2354,11 +2432,11 @@ var SceneStart = function (_Scene) {
             _experience2.default.context.fillText('Click to start', _experience2.default.size.width / 2, _experience2.default.size.height / 2);
         }
 
-        // Method: sceneEnter
+        // Method: enter
 
     }, {
-        key: 'sceneEnter',
-        value: function sceneEnter() {
+        key: 'enter',
+        value: function enter() {
 
             // Bind `click` interaction
             _ag2d.eventHandler.addEvent({
@@ -2371,11 +2449,11 @@ var SceneStart = function (_Scene) {
             });
         }
 
-        // Method: sceneExit
+        // Method: exit
 
     }, {
-        key: 'sceneExit',
-        value: function sceneExit() {
+        key: 'exit',
+        value: function exit() {
 
             // Unbind `click` interaction
             _ag2d.eventHandler.removeEvent('SceneStartInteraction');
@@ -2462,11 +2540,11 @@ var SceneThree = function (_Scene) {
             _experience2.default.context.fillText(this.name, _experience2.default.size.width / 2, _experience2.default.size.height / 2);
         }
 
-        // Method: sceneEnter
+        // Method: enter
 
     }, {
-        key: 'sceneEnter',
-        value: function sceneEnter() {
+        key: 'enter',
+        value: function enter() {
 
             // Set `currentTime` to `0`
             this.video.element.currentTime = 0;
@@ -2478,11 +2556,11 @@ var SceneThree = function (_Scene) {
             _ag2d.audioManager.play('TestAudio');
         }
 
-        // Method: sceneExit
+        // Method: exit
 
     }, {
-        key: 'sceneExit',
-        value: function sceneExit() {
+        key: 'exit',
+        value: function exit() {
 
             // Pause `video`
             this.video.element.pause();
@@ -2492,6 +2570,26 @@ var SceneThree = function (_Scene) {
 
             // Stop `TestAudio`
             _ag2d.audioManager.stop('TestAudio');
+        }
+
+        // Method: play
+
+    }, {
+        key: 'play',
+        value: function play() {
+
+            // Play `video`
+            this.video.element.play();
+        }
+
+        // Method: pause
+
+    }, {
+        key: 'pause',
+        value: function pause() {
+
+            // Pause `video`
+            this.video.element.pause();
         }
     }]);
 
@@ -2575,17 +2673,11 @@ var SceneTwo = function (_Scene) {
             _experience2.default.context.fillText(this.name, _experience2.default.size.width / 2, _experience2.default.size.height / 2);
         }
 
-        // Method: sceneEnter
+        // Method: enter
 
     }, {
-        key: 'sceneEnter',
-        value: function sceneEnter() {
-
-            // Set `currentTime` to `0`
-            this.video.element.currentTime = 0;
-
-            // Play `video`
-            this.video.element.play();
+        key: 'enter',
+        value: function enter() {
 
             // Store reference to `this`
             var _this = this;
@@ -2596,15 +2688,21 @@ var SceneTwo = function (_Scene) {
                 _ag2d.sceneManager.next();
             });
 
+            // Set `currentTime` to `0`
+            this.video.element.currentTime = 0;
+
+            // Play `video`
+            this.video.element.play();
+
             // Play `TestAudio`
             _ag2d.audioManager.play('TestAudio');
         }
 
-        // Method: sceneExit
+        // Method: exit
 
     }, {
-        key: 'sceneExit',
-        value: function sceneExit() {
+        key: 'exit',
+        value: function exit() {
 
             // Pause `video`
             this.video.element.pause();
@@ -2614,6 +2712,26 @@ var SceneTwo = function (_Scene) {
 
             // Stop `TestAudio`
             _ag2d.audioManager.stop('TestAudio');
+        }
+
+        // Method: play
+
+    }, {
+        key: 'play',
+        value: function play() {
+
+            // Play `video`
+            this.video.element.play();
+        }
+
+        // Method: pause
+
+    }, {
+        key: 'pause',
+        value: function pause() {
+
+            // Pause `video`
+            this.video.element.pause();
         }
     }]);
 

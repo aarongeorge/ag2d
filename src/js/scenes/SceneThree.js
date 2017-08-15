@@ -41,8 +41,8 @@ class SceneThree extends Scene {
         experience.context.fillText(this.name, experience.size.width / 2, experience.size.height / 2);
     }
 
-    // Method: sceneEnter
-    sceneEnter () {
+    // Method: enter
+    enter () {
 
         // Set `currentTime` to `0`
         this.video.element.currentTime = 0;
@@ -54,8 +54,8 @@ class SceneThree extends Scene {
         audioManager.play('TestAudio');
     }
 
-    // Method: sceneExit
-    sceneExit () {
+    // Method: exit
+    exit () {
 
         // Pause `video`
         this.video.element.pause();
@@ -65,6 +65,20 @@ class SceneThree extends Scene {
 
         // Stop `TestAudio`
         audioManager.stop('TestAudio');
+    }
+
+    // Method: play
+    play () {
+
+        // Play `video`
+        this.video.element.play();
+    }
+
+    // Method: pause
+    pause () {
+
+        // Pause `video`
+        this.video.element.pause();
     }
 }
 

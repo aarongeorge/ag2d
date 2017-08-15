@@ -35,8 +35,8 @@ class SceneStart extends Scene {
         experience.context.fillText('Click to start', experience.size.width / 2, experience.size.height / 2);
     }
 
-    // Method: sceneEnter
-    sceneEnter () {
+    // Method: enter
+    enter () {
 
         // Bind `click` interaction
         eventHandler.addEvent({
@@ -49,8 +49,8 @@ class SceneStart extends Scene {
         });
     }
 
-    // Method: sceneExit
-    sceneExit () {
+    // Method: exit
+    exit () {
 
         // Unbind `click` interaction
         eventHandler.removeEvent('SceneStartInteraction');

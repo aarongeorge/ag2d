@@ -35,8 +35,8 @@ class SceneMobileInteraction extends Scene {
         experience.context.fillText('Tap to start', experience.size.width / 2, experience.size.height / 2);
     }
 
-    // Method: sceneEnter
-    sceneEnter () {
+    // Method: enter
+    enter () {
 
         // Scene hasn't been entered before
         if (this.enterCount === 0) {

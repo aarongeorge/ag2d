@@ -41,14 +41,8 @@ class SceneOne extends Scene {
         experience.context.fillText(this.name, experience.size.width / 2, experience.size.height / 2);
     }
 
-    // Method: sceneEnter
-    sceneEnter () {
-
-        // Set `currentTime` to `0`
-        this.video.element.currentTime = 0;
-
-        // Play `video`
-        this.video.element.play();
+    // Method: enter
+    enter () {
 
         // Store reference to `this`
         const _this = this;
@@ -59,12 +53,18 @@ class SceneOne extends Scene {
             sceneManager.next();
         });
 
+        // Set `currentTime` to `0`
+        this.video.element.currentTime = 0;
+
+        // Play `video`
+        this.video.element.play();
+
         // Play `TestAudio`
         audioManager.play('TestAudio');
     }
 
-    // Method: sceneExit
-    sceneExit () {
+    // Method: exit
+    exit () {
 
         // Pause `video`
         this.video.element.pause();
@@ -74,6 +74,20 @@ class SceneOne extends Scene {
 
         // Stop `TestAudio`
         audioManager.stop('TestAudio');
+    }
+
+    // Method: play
+    play () {
+
+        // Play `video`
+        this.video.element.play();
+    }
+
+    // Method: pause
+    pause () {
+
+        // Pause `video`
+        this.video.element.pause();
     }
 }
 

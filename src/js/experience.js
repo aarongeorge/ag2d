@@ -32,11 +32,13 @@ const render = () => {
 // Stop
 const stop = () => {
     audioManager.suspend();
+    sceneManager.pause();
 };
 
 // Start
 const start = () => {
     audioManager.resume();
+    sceneManager.play();
 };
 
 // Bind the hooks
