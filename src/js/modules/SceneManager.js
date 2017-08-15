@@ -92,11 +92,11 @@ class SceneManager {
     // Method: play
     play () {
 
-        // Check there is a current scene and it has `pause`
-        if (this.currentScene && this.currentScene.pause) {
+        // Check there is a current scene and it has `play`
+        if (this.currentScene && this.currentScene.play) {
 
             // Call `play`
-            this.currentScene.pause();
+            this.currentScene.play();
         }
     }
 
