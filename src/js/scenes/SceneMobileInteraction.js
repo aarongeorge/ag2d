@@ -39,6 +39,14 @@ class SceneMobileInteraction extends Scene {
             // Listener for `audioManager` context ready
             eventEmitter.addListener('audioManager:context ready', () => {
 
+                document.querySelector('#start').addEventListener('click', () => {
+                    experience.start();
+                });
+
+                document.querySelector('#stop').addEventListener('click', () => {
+                    experience.stop();
+                });
+
                 // Go to `SceneLoading`
                 sceneManager.goTo('SceneLoading');
             }, 1);

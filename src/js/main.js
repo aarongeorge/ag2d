@@ -4,7 +4,7 @@
 
 // Dependencies
 import experience from './experience';
-import {assetLoader, audioManager, sceneManager} from 'ag2d';
+import {assetLoader, sceneManager} from 'ag2d';
 
 // Scenes
 import SceneMobileInteraction from './scenes/SceneMobileInteraction';
@@ -72,8 +72,6 @@ window.addEventListener('resize', () => {
 
 // Go to `SceneMobileInteraction`
 sceneManager.goTo('SceneMobileInteraction');
-
-window.audioManager = audioManager;
 
 // Call `start`
 experience.start();

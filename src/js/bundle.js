@@ -971,6 +971,14 @@ var AudioManager = function () {
                 }
         }
 
+        // Method: resume
+
+    }, {
+        key: 'resume',
+        value: function resume() {
+            this.context.resume();
+        }
+
         // Method: stop
 
     }, {
@@ -981,6 +989,14 @@ var AudioManager = function () {
                 this.audioClips[name].element.disconnect(this.context.destination);
                 delete this.audioClips[name].element;
             }
+        }
+
+        // Method: suspend
+
+    }, {
+        key: 'suspend',
+        value: function suspend() {
+            this.context.suspend();
         }
     }]);
 
@@ -1780,12 +1796,12 @@ var render = function render() {
 
 // Stop
 var stop = function stop() {
-    console.log('Stop called');
+    _ag2d.audioManager.suspend();
 };
 
 // Start
 var start = function start() {
-    console.log('Start called');
+    _ag2d.audioManager.resume();
 };
 
 // Bind the hooks
@@ -1876,8 +1892,6 @@ window.addEventListener('resize', function () {
 
 // Go to `SceneMobileInteraction`
 _ag2d.sceneManager.goTo('SceneMobileInteraction');
-
-window.audioManager = _ag2d.audioManager;
 
 // Call `start`
 _experience2.default.start();
@@ -1970,6 +1984,27 @@ var SceneLoading = function (_Scene) {
 
                 // Listener for `assetLoader` loaded
                 _ag2d.eventEmitter.addListener('assetLoader:loaded', function () {
+
+                    /**
+                     * Set videos to play inline
+                     */
+
+                    // Iterate over `assetLoader.assets`
+                    Object.keys(_ag2d.assetLoader.assets).forEach(function (asset) {
+
+                        // Store reference to `currentAsset`
+                        var currentAsset = _ag2d.assetLoader.assets[asset];
+
+                        // `type` is `video`
+                        if (currentAsset.type === 'video') {
+
+                            // Add playsinline
+                            currentAsset.element.setAttribute('playsinline', true);
+
+                            // Add webkit-playsinline
+                            currentAsset.element.setAttribute('webkit-playsinline', true);
+                        }
+                    });
 
                     /**
                      * Audio Manager setup
@@ -2085,6 +2120,14 @@ var SceneMobileInteraction = function (_Scene) {
 
                 // Listener for `audioManager` context ready
                 _ag2d.eventEmitter.addListener('audioManager:context ready', function () {
+
+                    document.querySelector('#start').addEventListener('click', function () {
+                        _experience2.default.start();
+                    });
+
+                    document.querySelector('#stop').addEventListener('click', function () {
+                        _experience2.default.stop();
+                    });
 
                     // Go to `SceneLoading`
                     _ag2d.sceneManager.goTo('SceneLoading');

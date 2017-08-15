@@ -46,6 +46,27 @@ class SceneLoading extends Scene {
             eventEmitter.addListener('assetLoader:loaded', () => {
 
                 /**
+                 * Set videos to play inline
+                 */
+
+                // Iterate over `assetLoader.assets`
+                Object.keys(assetLoader.assets).forEach((asset) => {
+
+                    // Store reference to `currentAsset`
+                    const currentAsset = assetLoader.assets[asset];
+
+                    // `type` is `video`
+                    if (currentAsset.type === 'video') {
+
+                        // Add playsinline
+                        currentAsset.element.setAttribute('playsinline', true);
+
+                        // Add webkit-playsinline
+                        currentAsset.element.setAttribute('webkit-playsinline', true);
+                    }
+                });
+
+                /**
                  * Audio Manager setup
                  */
 

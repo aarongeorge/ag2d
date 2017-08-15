@@ -3,7 +3,7 @@
  */
 
 // Dependencies
-import AG2D, {animationManager, sceneManager} from 'ag2d';
+import AG2D, {animationManager, audioManager, sceneManager} from 'ag2d';
 
 // Create instance of `AG2D`
 const experience = new AG2D(document.querySelector('canvas'));
@@ -31,12 +31,12 @@ const render = () => {
 
 // Stop
 const stop = () => {
-    console.log('Stop called');
+    audioManager.suspend();
 };
 
 // Start
 const start = () => {
-    console.log('Start called');
+    audioManager.resume();
 };
 
 // Bind the hooks
