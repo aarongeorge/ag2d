@@ -129,6 +129,11 @@ class AudioManager {
         }
     }
 
+    // Method: resume
+    resume () {
+        this.context.resume();
+    }
+
     // Method: stop
     stop (name) {
 
@@ -136,6 +141,11 @@ class AudioManager {
             this.audioClips[name].element.disconnect(this.context.destination);
             delete this.audioClips[name].element;
         }
+    }
+
+    // Method: suspend
+    suspend () {
+        this.context.suspend();
     }
 }
 
