@@ -23,14 +23,24 @@ class Scene {
         console.log(`Render: ${this.name}`);
     }
 
-    // Method: sceneEnter
-    sceneEnter () {
-        console.log(`Scene Enter: ${this.name}`);
+    // Method: enter
+    enter () {
+        console.log(`Enter: ${this.name}`);
     }
 
-    // Method: sceneExit
-    sceneExit () {
-        console.log(`Scene Exit: ${this.name}`);
+    // Method: exit
+    exit () {
+        console.log(`Exit: ${this.name}`);
+    }
+
+    // Method: pause
+    pause () {
+        console.log(`Pause: ${this.name}`);
+    }
+
+    // Method: play
+    play () {
+        console.log(`Play: ${this.name}`);
     }
 
     // Method: update

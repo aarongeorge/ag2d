@@ -131,7 +131,13 @@ class AudioManager {
 
     // Method: resume
     resume () {
-        this.context.resume();
+
+        // `context` exists
+        if (this.context) {
+
+            // Call `resume`
+            this.context.resume();
+        }
     }
 
     // Method: stop
@@ -145,7 +151,13 @@ class AudioManager {
 
     // Method: suspend
     suspend () {
-        this.context.suspend();
+
+        // `context` exists
+        if (this.context) {
+
+            // Call `suspend`
+            this.context.suspend();
+        }
     }
 }
 

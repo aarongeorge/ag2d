@@ -36,11 +36,11 @@ class SceneManager {
         // Check `scenes[name]` exists
         if (this.scenes[name]) {
 
-            // Check `currentScene` exists and it has `sceneExit`
-            if (this.currentScene && this.currentScene.sceneExit) {
+            // Check `currentScene` exists and it has `exit`
+            if (this.currentScene && this.currentScene.exit) {
 
-                // Call `sceneExit`
-                this.currentScene.sceneExit();
+                // Call `exit`
+                this.currentScene.exit();
 
                 // Increment `exitCount`
                 this.currentScene.exitCount += 1;
@@ -49,14 +49,14 @@ class SceneManager {
             // Set `currentScene`
             this.currentScene = this.scenes[name];
 
-            // Check `sceneEnter` exists
-            if (this.currentScene.sceneEnter) {
+            // Check `enter` exists
+            if (this.currentScene.enter) {
 
                 // Update `currentScene.sceneEntered`
                 this.currentScene.sceneEntered = window.performance.now();
 
-                // Call `sceneEnter`
-                this.currentScene.sceneEnter();
+                // Call `enter`
+                this.currentScene.enter();
 
                 // Increment `enterCount`
                 this.currentScene.enterCount += 1;
@@ -76,6 +76,28 @@ class SceneManager {
 
         // Go to next scene
         this.goTo(this.scenes[cyclicArray(this.sceneNames, this.sceneNames.indexOf(this.currentScene.name) + 1).value].name);
+    }
+
+    // Method: pause
+    pause () {
+
+        // Check there is a current scene and it has `pause`
+        if (this.currentScene && this.currentScene.pause) {
+
+            // Call `pause`
+            this.currentScene.pause();
+        }
+    }
+
+    // Method: play
+    play () {
+
+        // Check there is a current scene and it has `pause`
+        if (this.currentScene && this.currentScene.pause) {
+
+            // Call `play`
+            this.currentScene.pause();
+        }
     }
 
     // Method: previous
