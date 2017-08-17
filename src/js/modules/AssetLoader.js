@@ -15,6 +15,7 @@ class AssetLoader {
         this.assets = {};
         this.assetsToLoad = [];
         this.assetsLoaded = false;
+        this.customAssetTypes = {};
     }
 
     // Method: addAsset
@@ -107,16 +108,31 @@ class AssetLoader {
                     break;
                 }
 
-                // Invalid type
+                // Type is not a default
                 default: {
 
-                    // Throw error
-                    throw new Error('Asset is not a valid type');
+                    // Type has been defined in `customAssetTypes`
+                    if (this.customAssetTypes[asset.type]) {
+
+                        // Asset passed validation
+                        if (this.customAssetTypes[asset.type].validationFn(asset)) {
+
+                            // Add `asset` to `assetsToLoad`
+                            this.assetsToLoad.push(asset);
+                        }
+                    }
+
+                    // Type does not exist in `customAssetTypes`
+                    else {
+
+                        // Throw error
+                        throw new Error('Asset is not a valid type');
+                    }
                 }
             }
         }
 
-        // Asset doesn have a type
+        // Asset doesn't have a type
         else {
 
             // Throw error
@@ -143,6 +159,25 @@ class AssetLoader {
                 // Call `addAsset`
                 this.addAsset(asset);
             });
+        }
+    }
+
+    // Method: addAssetType
+    addAssetType (type, validationFn, loadFn) {
+
+        // `type` doesn't exist in `customAssetTypes`
+        if (type in this.customAssetTypes === false) {
+
+            this.customAssetTypes[type] = {};
+            this.customAssetTypes[type].validationFn = validationFn;
+            this.customAssetTypes[type].loadFn = loadFn;
+        }
+
+        // `type` does exist in `customAssetTypes`
+        else {
+
+            // Throw error
+            throw new Error(`An asset type with the type of ${type} already exists`);
         }
     }
 
@@ -213,9 +248,22 @@ class AssetLoader {
                 break;
             }
 
-            // Default
+            // Type is not a default
             default: {
-                throw new Error('Asset has no type');
+
+                // Type has been defined in `customAssetTypes`
+                if (this.customAssetTypes[asset.type]) {
+
+                    // Call `loadFn`
+                    this.customAssetTypes[asset.type].loadFn(asset, callback);
+                }
+
+                // Type does not exist in `customAssetTypes`
+                else {
+
+                    // Throw error
+                    throw new Error('Asset has no type');
+                }
             }
         }
     }
