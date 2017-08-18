@@ -10,7 +10,7 @@
     "serve": "cd ./src && http-server"
   },
   "dependencies": {
-    "ag2d": "^1.1.1"
+    "ag2d": "^1.1.2"
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",
