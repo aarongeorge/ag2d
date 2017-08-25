@@ -5,12 +5,6 @@
  */
 
 // Dependencies
-import AnimationManager from './modules/AnimationManager';
-import AssetLoader from './modules/AssetLoader';
-import AudioManager from './modules/AudioManager';
-import EventEmitter from './modules/EventEmitter';
-import EventHandler from './modules/EventHandler';
-import SceneManager from './modules/SceneManager';
 import {noOp} from './modules/Utils';
 
 // Class: AG2D
@@ -232,23 +226,11 @@ class AG2D {
 // Export `AG2D`
 export default AG2D;
 
-// Export `animationManager`
-export const animationManager = new AnimationManager();
-
-// Export `sssetLoader`
-export const assetLoader = new AssetLoader();
-
-// Export `audioManager`
-export const audioManager = new AudioManager();
-
-// Export `eventEmitter`
-export const eventEmitter = new EventEmitter();
-
-// Export `eventHandler`
-export const eventHandler = new EventHandler();
-
-// Export `Scene`
+// Export modules
+export {default as AnimationManager} from './modules/AnimationManager';
+export {default as AssetLoader} from './modules/AssetLoader';
+export {default as AudioManager} from './modules/AudioManager';
+export {default as EventEmitter} from './modules/EventEmitter';
+export {default as EventHandler} from './modules/EventHandler';
 export {default as Scene} from './modules/Scene';
-
-// Export `SceneManager`
-export const sceneManager = new SceneManager();
+export {default as SceneManager} from './modules/SceneManager';
