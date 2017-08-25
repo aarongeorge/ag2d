@@ -3,8 +3,8 @@
  */
 
 // Dependencies
-import experience from '../experience';
-import {assetLoader, audioManager, eventEmitter, Scene, sceneManager} from 'ag2d';
+import experience, {assetLoader, audioManager, eventEmitter, sceneManager} from '../experience';
+import {Scene} from 'ag2d';
 
 // Scenes
 import SceneStart from './SceneStart';

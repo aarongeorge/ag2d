@@ -3,8 +3,8 @@
  */
 
 // Dependencies
-import experience from '../experience';
-import {assetLoader, audioManager, Scene, sceneManager} from 'ag2d';
+import experience, {assetLoader, audioManager, sceneManager} from '../experience';
+import {Scene} from 'ag2d';
 
 // Class: SceneOne
 class SceneOne extends Scene {

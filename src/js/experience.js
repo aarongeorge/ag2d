@@ -3,7 +3,7 @@
  */
 
 // Dependencies
-import AG2D, {animationManager, audioManager, sceneManager} from 'ag2d';
+import AG2D, {AnimationManager, AssetLoader, AudioManager, EventEmitter, EventHandler, SceneManager} from 'ag2d';
 
 // Create instance of `AG2D`
 const experience = new AG2D(document.querySelector('canvas'));
@@ -17,6 +17,14 @@ experience.configure({
         'width': 1280
     }
 });
+
+// Instantiate Modules
+const animationManager = new AnimationManager();
+const assetLoader = new AssetLoader();
+const audioManager = new AudioManager();
+const eventEmitter = new EventEmitter();
+const eventHandler = new EventHandler();
+const sceneManager = new SceneManager();
 
 // Update
 const update = (deltaTime) => {
@@ -49,3 +57,6 @@ experience.hooks.bind('start', start);
 
 // Export `experience`
 export default experience;
+
+// Export modules
+export {animationManager, assetLoader, audioManager, eventEmitter, eventHandler, sceneManager};

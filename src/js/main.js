@@ -3,8 +3,7 @@
  */
 
 // Dependencies
-import experience from './experience';
-import {assetLoader, sceneManager} from 'ag2d';
+import experience, {assetLoader, sceneManager} from './experience';
 
 // Scenes
 import SceneMobileInteraction from './scenes/SceneMobileInteraction';

@@ -3,8 +3,8 @@
  */
 
 // Dependencies
-import experience from '../experience';
-import {eventHandler, Scene, sceneManager} from 'ag2d';
+import experience, {eventHandler, sceneManager} from '../experience';
+import {Scene} from 'ag2d';
 
 // Create the start Scene
 class SceneStart extends Scene {
