@@ -58,6 +58,19 @@ sceneManager.add(new SceneMobileInteraction());
 sceneManager.add(new SceneLoading());
 
 /**
+ * Configure experience
+ */
+experience.configure({
+    'canvas': document.querySelector('canvas'),
+    'fps': 60,
+    'backgroundColour': '#FF00FF',
+    'size': {
+        'height': 720,
+        'width': 1280
+    }
+});
+
+/**
  * Start experience
  */
 

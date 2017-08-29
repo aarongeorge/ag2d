@@ -8,16 +8,6 @@ import AG2D, {AnimationManager, AssetLoader, AudioManager, EventEmitter, EventHa
 // Create instance of `AG2D`
 const experience = new AG2D(document.querySelector('canvas'));
 
-// Configure `experience`
-experience.configure({
-    'fps': 60,
-    'backgroundColour': '#FF00FF',
-    'size': {
-        'height': 720,
-        'width': 1280
-    }
-});
-
 // Instantiate Modules
 const animationManager = new AnimationManager();
 const assetLoader = new AssetLoader();
