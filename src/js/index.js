@@ -11,7 +11,17 @@ import {noOp} from './modules/Utils';
 class AG2D {
 
     // Constructor
-    constructor (canvas = document.createElement('CANVAS')) {
+    constructor () {
+
+        // Set `hasInitialised`
+        this.hasInitialised = false;
+
+        // Call `setUpHooks`
+        this.setUpHooks();
+    }
+
+    // Method: init
+    init (canvas = document.createElement('CANVAS')) {
 
         // `canvas` param was not a canvas
         if (canvas.tagName.toLowerCase() !== 'canvas') {
@@ -34,8 +44,8 @@ class AG2D {
         // Call `resizeCanvas`
         this.resizeCanvas(this.bounds.width, this.bounds.height);
 
-        // Call `setUpHooks`
-        this.setUpHooks();
+        // Set `hasInitialised`
+        this.hasInitialised = true;
     }
 
     // Method: clearCanvas
@@ -55,6 +65,11 @@ class AG2D {
 
     // Method: configure
     configure (options) {
+
+        if (!this.hasInitialised) {
+            this.init(options.canvas);
+        }
+
         this.fps = options.fps;
         this.interval = 1000 / this.fps;
         this.backgroundColour = options.backgroundColour || 'transparent';
