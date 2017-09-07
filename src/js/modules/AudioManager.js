@@ -51,8 +51,11 @@ class AudioManager {
         // Function to create an audio context
         const createContext = () => {
 
-            // Create new `audioContextPatch`
+            // Create `context`
             this.context = createAudioContext();
+
+            // Create `streamDestination`
+            this.streamDestination = this.context.createMediaStreamDestination();
 
             // Remove event handlers
             this.eventHandler.removeEvent('iOSTouchStartAudioContext');
@@ -91,6 +94,9 @@ class AudioManager {
             // Create `context`
             this.context = createAudioContext();
 
+            // Create `streamDestination`
+            this.streamDestination = this.context.createMediaStreamDestination();
+
             // Call `cb`
             return cb();
         }
@@ -103,6 +109,7 @@ class AudioManager {
             this.audioClips[name].element = this.context.createBufferSource();
             this.audioClips[name].element.buffer = this.audioClips[name].buffer;
             this.audioClips[name].element.connect(this.context.destination);
+            this.audioClips[name].element.connect(this.streamDestination);
         }
 
         this.audioClips[name].element.start(0);
@@ -145,6 +152,7 @@ class AudioManager {
 
         if (this.audioClips[name].element) {
             this.audioClips[name].element.disconnect(this.context.destination);
+            this.audioClips[name].element.disconnect(this.streamDestination);
             delete this.audioClips[name].element;
         }
     }
