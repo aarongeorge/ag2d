@@ -1,6 +1,6 @@
 {
     "name": "ag2d",
-    "version": "2.0.0",
+    "version": "2.0.1",
     "description": "A 2d renderer engine with multiple modules to help with common tasks",
     "main": "./src/js/index.js",
     "repository": "https://aarongeorge@github.com/aarongeorge/ag2d.git",
