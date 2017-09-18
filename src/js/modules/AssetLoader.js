@@ -28,58 +28,7 @@ class AssetLoader {
             switch (asset.type) {
 
                 // Audio
-                case 'audio': {
-
-                    // Asset doesn't have sources
-                    if (!asset.sources) {
-
-                        // Throw error
-                        throw new Error(`Asset does not have sources ${asset}`);
-                    }
-
-                    // Asset doesn't have a name
-                    else if (!asset.name) {
-
-                        // Throw error
-                        throw new Error(`Asset does not have a name ${asset}`);
-                    }
-
-                    // Asset has everything we need
-                    else {
-
-                        // Add asset to `assetsToLoad`
-                        this.assetsToLoad.push(asset);
-                    }
-
-                    break;
-                }
-
-                // Image
-                case 'image': {
-
-                    // Asset doesn't have a path
-                    if (!asset.path) {
-
-                        // Throw error
-                        throw new Error(`Asset does not have a path ${asset}`);
-                    }
-
-                    // Asset doesn't have a name
-                    else if (!asset.name) {
-
-                        // Throw error
-                        throw new Error(`Asset does not have a name ${asset}`);
-                    }
-
-                    // Asset has everything we need
-                    else {
-
-                        // Add asset to `assetsToLoad`
-                        this.assetsToLoad.push(asset);
-                    }
-
-                    break;
-                }
+                case 'audio':
 
                 // Video
                 case 'video': {
@@ -92,18 +41,40 @@ class AssetLoader {
                     }
 
                     // Asset doesn't have a name
-                    else if (!asset.name) {
+                    if (!asset.name) {
 
                         // Throw error
                         throw new Error(`Asset does not have a name ${asset}`);
                     }
 
-                    // Asset has everything we need
-                    else {
+                    // Add asset to `assetsToLoad`
+                    this.assetsToLoad.push(asset);
 
-                        // Add asset to `assetsToLoad`
-                        this.assetsToLoad.push(asset);
+                    break;
+                }
+
+                // Image
+                case 'image':
+
+                // Font
+                case 'font': {
+
+                    // Asset doesn't have a path
+                    if (!asset.path) {
+
+                        // Throw error
+                        throw new Error(`Asset does not have a path ${asset}`);
                     }
+
+                    // Asset doesn't have a name
+                    if (!asset.name) {
+
+                        // Throw error
+                        throw new Error(`Asset does not have a name ${asset}`);
+                    }
+
+                    // Add asset to `assetsToLoad`
+                    this.assetsToLoad.push(asset);
 
                     break;
                 }
@@ -144,7 +115,7 @@ class AssetLoader {
     addAssets (assets) {
 
         // `assets` is not an array
-        if (Object.prototype.toString.call(assets) !== '[object Array]') {
+        if (!Object.prototype.toString.call(assets) === '[object Array]') {
 
             // Throw error
             throw new Error('`addAssets` must be passed an array');
@@ -246,6 +217,13 @@ class AssetLoader {
                 this.loadVideo(asset, callback);
 
                 break;
+            }
+
+            // Font
+            case 'font': {
+
+                // Call `loadFont`
+                this.loadFont(asset, callback);
             }
 
             // Type is not a default
@@ -351,6 +329,13 @@ class AssetLoader {
             // Call `callback`
             return callback();
         });
+    }
+
+    // Method: loadFont
+    loadFont (asset, callback) {
+
+        // Load font and call `callback`
+        document.fonts.load(`16px "${asset.name}"`).then(callback);
     }
 }
 

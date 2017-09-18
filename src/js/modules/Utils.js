@@ -73,7 +73,7 @@ const createAudioContext = (desiredSampleRate = 44100) => {
 // Cyclic Array
 const cyclicArray = (arr, index) => {
 
-    const item = (index % arr.length + arr.length) % arr.length;
+    const item = ((index % arr.length) + arr.length) % arr.length;
 
     return {
         'index': item,
@@ -88,7 +88,7 @@ const getVideoBlob = (sources, callback) => {
     const testVideo = document.createElement('video');
 
     // Variable to hold the supported video type
-    let supportedVideoType = undefined;
+    let supportedVideoType = void 0;
 
     // Array of video types in order of preference
     const supportedVideoTypes = [
@@ -146,7 +146,7 @@ const getAudioArrayBuffer = (sources, callback) => {
     const testAudio = document.createElement('audio');
 
     // Variable to hold the supported audio type
-    let supportedAudioType = undefined;
+    let supportedAudioType = void 0;
 
     // Array of audio types in order of preference
     const supportedAudioTypes = [
