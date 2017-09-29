@@ -317,6 +317,9 @@ class AssetLoader {
             // Add type
             sourceEl.type = supportedVideoType.type;
 
+            // Set `crossOrigin` to `anonymous`
+            sourceEl.crossOrigin = 'anonymous';
+
             // Add source
             sourceEl.src = blob;
 

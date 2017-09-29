@@ -16,7 +16,7 @@ class EventHandler {
     addEvent (name, type, el, fn) {
 
         // `evt` will hold the final object
-        let evt = undefined;
+        let evt = void 0;
 
         // Passed individual params and not an object
         if (arguments.length > 1) {
