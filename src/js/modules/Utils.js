@@ -87,8 +87,8 @@ const getVideoBlob = (sources, callback) => {
     // Create `testVideo`
     const testVideo = document.createElement('video');
 
-    // Variable to hold the supported video type
-    let supportedVideoType = void 0;
+    // Variable to hold the video to load
+    let videoToLoad = void 0;
 
     // Array of video types in order of preference
     const supportedVideoTypes = [
@@ -100,14 +100,24 @@ const getVideoBlob = (sources, callback) => {
     // Iterate over `supportedVideoTypes`
     for (let i = 0; i < supportedVideoTypes.length; i++) {
 
-        // Browser can play `supportedVideoTypes[i]`
-        if (testVideo.canPlayType(supportedVideoTypes[i])) {
+        // Store reference to `currentVideoType`
+        const currentVideoType = supportedVideoTypes[i];
 
-            // Get the source from `sources`
-            [supportedVideoType] = sources.filter((videoSource) => {
-                return videoSource.type === supportedVideoTypes[i].match(/[^;]*/gi)[0];
+        // Browser can play `currentVideoType`
+        if (testVideo.canPlayType(currentVideoType)) {
+
+            // Check to see if `source.type` is `currentVideoType`
+            const matchedSource = sources.find((source) => {
+                return source.type === currentVideoType.match(/[^;]*/gi)[0];
             });
-            break;
+
+            // `matchedSource` exists
+            if (matchedSource) {
+
+                // Set `videoToLoad`
+                videoToLoad = matchedSource;
+                break;
+            }
         }
     }
 
@@ -119,7 +129,7 @@ const getVideoBlob = (sources, callback) => {
         const source = URL.createObjectURL(req.response);
 
         // Call `callback` and pass `source`
-        return callback(source, supportedVideoType);
+        return callback(source, videoToLoad);
     };
 
     // On Error
@@ -130,7 +140,7 @@ const getVideoBlob = (sources, callback) => {
     };
 
     // Open `req`
-    req.open('get', supportedVideoType.path);
+    req.open('get', videoToLoad.path);
 
     // Set `responseType` to `blob`
     req.responseType = 'blob';
