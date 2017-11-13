@@ -81,14 +81,14 @@ const cyclicArray = (arr, index) => {
     };
 };
 
-// Get Video Blob
-const getVideoBlob = (sources, callback) => {
+// Get Supported Video Source
+const getSupportedVideoSource = (sources, callback) => {
 
     // Create `testVideo`
     const testVideo = document.createElement('video');
 
-    // Variable to hold the video to load
-    let videoToLoad = void 0;
+    // Supported video source
+    let supportedVideoSource = void 0;
 
     // Array of video types in order of preference
     const supportedVideoTypes = [
@@ -114,49 +114,76 @@ const getVideoBlob = (sources, callback) => {
             // `matchedSource` exists
             if (matchedSource) {
 
-                // Set `videoToLoad`
-                videoToLoad = matchedSource;
+                // Set `supportedVideoSource`
+                supportedVideoSource = matchedSource;
                 break;
             }
         }
     }
 
-    // Create `req`
-    const req = new XMLHttpRequest();
+    // There is a supported video source
+    if (supportedVideoSource) {
 
-    // On load
-    req.onload = () => {
-        const source = URL.createObjectURL(req.response);
+        // Return the supported source
+        return callback(supportedVideoSource);
+    }
 
-        // Call `callback` and pass `source`
-        return callback(source, videoToLoad);
+    // There is no supported video source, Throw error
+    throw new Error(`This browser does not support any of the sources provided in ${sources}`);
+};
+
+// Get Video Blob
+const getVideoBlob = (url, callback, progressCallback) => {
+
+    // Create `request`
+    const request = new XMLHttpRequest();
+
+    // Progress
+    request.onprogress = (e) => {
+
+        // Filesize can be determined
+        if (e.lengthComputable) {
+
+            // Call `progressCallback` and pass the progress
+            return progressCallback(e.loaded);
+        }
     };
 
-    // On Error
-    req.onerror = (e) => {
+    // Loaded
+    request.onload = () => {
+
+        // Create `blob`
+        const blob = URL.createObjectURL(request.response);
+
+        // Call `callback` and pass `blob`
+        return callback(blob);
+    };
+
+    // Error
+    request.onerror = (e) => {
 
         // Throw error
         throw new Error(e);
     };
 
-    // Open `req`
-    req.open('get', videoToLoad.path);
+    // Open `request`
+    request.open('get', url, true);
 
     // Set `responseType` to `blob`
-    req.responseType = 'blob';
+    request.responseType = 'blob';
 
-    // Send `req`
-    req.send();
+    // Send `request`
+    request.send();
 };
 
-// Get Audio Array Buffer
-const getAudioArrayBuffer = (sources, callback) => {
+// Get Supported Audio Source
+const getSupportedAudioSource = (sources, callback) => {
 
     // Create `testAudio`
     const testAudio = document.createElement('audio');
 
     // Variable to hold the supported audio type
-    let supportedAudioType = void 0;
+    let supportedAudioSource = void 0;
 
     // Array of audio types in order of preference
     const supportedAudioTypes = [
@@ -167,16 +194,41 @@ const getAudioArrayBuffer = (sources, callback) => {
     // Iterate over `supportedAudioTypes`
     for (let i = 0; i < supportedAudioTypes.length; i++) {
 
-        // Browser can play `supportedAudioTypes[i]`
-        if (testAudio.canPlayType(supportedAudioTypes[i])) {
+        // Store reference to `currentAudioType`
+        const currentAudioType = supportedAudioTypes[i];
 
-            // Get the source from `sources`
-            [supportedAudioType] = sources.filter((audioSource) => {
-                return audioSource.type === supportedAudioTypes[i].match(/[^;]*/gi)[0];
+        // Browser can play `currentAudioType`
+        if (testAudio.canPlayType(currentAudioType)) {
+
+            // Check to see if `source.type` is `currentAudioType`
+            const matchedSource = sources.find((source) => {
+                return source.type === currentAudioType.match(/[^;]*/gi)[0];
             });
+
+            // `matchedSource` exists
+            if (matchedSource) {
+
+                // Set `supportedVideoSource`
+                supportedAudioSource = matchedSource;
+                break;
+            }
             break;
         }
     }
+
+    // There is a supported audio source
+    if (supportedAudioSource) {
+
+        // Return the supported source
+        return callback(supportedAudioSource);
+    }
+
+    // There is no supported audio source. Throw error
+    throw new Error(`This browser does not support any of the sources provided in ${sources}`);
+};
+
+// Get Audio Array Buffer
+const getAudioArrayBuffer = (url, callback, progressCallback) => {
 
     // Sort out prefix
     window.AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -191,10 +243,21 @@ const getAudioArrayBuffer = (sources, callback) => {
     const request = new XMLHttpRequest();
 
     // Open `request`
-    request.open('GET', supportedAudioType.path, true);
+    request.open('GET', url, true);
 
     // Set `responseType` to `arraybuffer`
     request.responseType = 'arraybuffer';
+
+    // Progress
+    request.onprogress = (e) => {
+
+        // Filesize can be determined
+        if (e.lengthComputable) {
+
+            // Call `progressCallback` and pass the progress
+            return progressCallback(e.loaded);
+        }
+    };
 
     // Loaded
     request.onload = () => {
@@ -225,8 +288,37 @@ const getAudioArrayBuffer = (sources, callback) => {
     request.send();
 };
 
+// Get Filesize
+const getFilesize = (url, callback) => {
+
+    // Create `request`
+    const request = new XMLHttpRequest();
+
+    // Open `request`
+    request.open('HEAD', url, true);
+
+    // State change
+    request.onreadystatechange = () => {
+
+        // Request is done
+        if (request.readyState === 4) {
+
+            // Call `callback` and return `filesize`
+            return callback(parseInt(request.getResponseHeader('Content-Length'), 10));
+        }
+    };
+
+    // Error
+    request.onerror = (e) => {
+        throw new Error(e);
+    };
+
+    // Send `request`
+    request.send();
+};
+
 // No Op
 const noOp = () => {};
 
 // Export Utilities
-export {createAudioContext, cyclicArray, getAudioArrayBuffer, getVideoBlob, noOp};
+export {createAudioContext, cyclicArray, getAudioArrayBuffer, getFilesize, getSupportedAudioSource, getSupportedVideoSource, getVideoBlob, noOp};

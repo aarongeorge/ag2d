@@ -5,7 +5,7 @@
  */
 
 // Depencencies
-import {getAudioArrayBuffer, getVideoBlob, noOp} from './Utils';
+import {getAudioArrayBuffer, getFilesize, getSupportedAudioSource, getSupportedVideoSource, getVideoBlob, noOp} from './Utils';
 
 // Class: AssetLoader
 class AssetLoader {
@@ -15,7 +15,28 @@ class AssetLoader {
         this.assets = {};
         this.assetsToLoad = [];
         this.assetsLoaded = false;
+        this.assetsWaitingForFilesize = 0;
         this.customAssetTypes = {};
+        this.filesize = {
+            'loaded': 0,
+            'toLoad': 0
+        };
+
+        // Call `setUpHooks`
+        this.setUpHooks();
+    }
+
+    // Method: setUpHooks
+    setUpHooks () {
+        this.hooks = {
+            'progress': noOp,
+            'bind': (name, func) => {
+                this.hooks[name] = func;
+            },
+            'unbind': (name) => {
+                delete this.hooks[name];
+            }
+        };
     }
 
     // Method: addAsset
@@ -28,7 +49,53 @@ class AssetLoader {
             switch (asset.type) {
 
                 // Audio
-                case 'audio':
+                case 'audio': {
+
+                    // Asset doesn't have sources
+                    if (!asset.sources) {
+
+                        // Throw error
+                        throw new Error(`Asset does not have sources ${asset}`);
+                    }
+
+                    // Asset doesn't have a name
+                    if (!asset.name) {
+
+                        // Throw error
+                        throw new Error(`Asset does not have a name ${asset}`);
+                    }
+
+                    // Call `getSupportedAudioSource`
+                    getSupportedAudioSource(asset.sources, (supportedAudioSource) => {
+
+                        // Increment `assetsWaitingForFilesize`
+                        this.assetsWaitingForFilesize += 1;
+
+                        // Call `getFilesize`
+                        getFilesize(supportedAudioSource.path, (filesize) => {
+
+                            // Decrement `assetsWaitingForFilesize`
+                            this.assetsWaitingForFilesize -= 1;
+
+                            // Set `filesize`
+                            supportedAudioSource.filesize = filesize;
+
+                            // Add `filesize` to `toLoad`
+                            this.filesize.toLoad += filesize;
+
+                            // Set source
+                            asset.source = supportedAudioSource;
+
+                            // Delete `sources`
+                            delete asset.sources;
+
+                            // Add asset to `assetsToLoad`
+                            this.assetsToLoad.push(asset);
+                        });
+                    });
+
+                    break;
+                }
 
                 // Video
                 case 'video': {
@@ -47,8 +114,34 @@ class AssetLoader {
                         throw new Error(`Asset does not have a name ${asset}`);
                     }
 
-                    // Add asset to `assetsToLoad`
-                    this.assetsToLoad.push(asset);
+                    // Call `getSupportedVideoSource`
+                    getSupportedVideoSource(asset.sources, (supportedVideoSource) => {
+
+                        // Increment `assetsWaitingForFilesize`
+                        this.assetsWaitingForFilesize += 1;
+
+                        // Call `getFilesize`
+                        getFilesize(supportedVideoSource.path, (filesize) => {
+
+                            // Decrement `assetsWaitingForFilesize`
+                            this.assetsWaitingForFilesize -= 1;
+
+                            // Set `filesize`
+                            supportedVideoSource.filesize = filesize;
+
+                            // Add `filesize` to `toLoad`
+                            this.filesize.toLoad += filesize;
+
+                            // Set source
+                            asset.source = supportedVideoSource;
+
+                            // Delete `sources`
+                            delete asset.sources;
+
+                            // Add asset to `assetsToLoad`
+                            this.assetsToLoad.push(asset);
+                        });
+                    });
 
                     break;
                 }
@@ -134,26 +227,40 @@ class AssetLoader {
     }
 
     // Method: addAssetType
-    addAssetType (type, validationFn, loadFn) {
+    addAssetType (assetType, validationFn, loadFn) {
 
-        // `type` doesn't exist in `customAssetTypes`
-        if (type in this.customAssetTypes === false) {
+        // `assetType` doesn't exist in `customAssetTypes`
+        if (assetType in this.customAssetTypes === false) {
 
-            this.customAssetTypes[type] = {};
-            this.customAssetTypes[type].validationFn = validationFn;
-            this.customAssetTypes[type].loadFn = loadFn;
+            this.customAssetTypes[assetType] = {};
+            this.customAssetTypes[assetType].validationFn = validationFn;
+            this.customAssetTypes[assetType].loadFn = loadFn;
         }
 
-        // `type` does exist in `customAssetTypes`
+        // `assetType` does exist in `customAssetTypes`
         else {
 
             // Throw error
-            throw new Error(`An asset type with the type of ${type} already exists`);
+            throw new Error(`An asset type with the type of ${assetType} already exists`);
         }
     }
 
     // Method: loadAssets
     loadAssets (callback = noOp) {
+
+        // We're still waiting for filesizes to be obtained
+        if (this.assetsWaitingForFilesize > 0) {
+
+            // Call `loadAssets` on next animation frame
+            window.requestAnimationFrame(() => {
+
+                // Call `loadAssets`
+                this.loadAssets(callback);
+            });
+
+            // Return
+            return;
+        }
 
         // Make sure there are still assets to load
         if (this.assetsToLoad.length > 0) {
@@ -161,17 +268,29 @@ class AssetLoader {
             // Set `assetsLoaded` to `false`
             this.assetsLoaded = false;
 
+            const filesizeLoaded = this.filesize.loaded;
+
             // Load the asset
-            this.loadAsset(this.assetsToLoad[0], () => {
+            this.loadAsset(this.assetsToLoad[0], (asset) => {
 
                 // Add the asset to `assets`
-                [this.assets[this.assetsToLoad[0].name]] = this.assetsToLoad;
+                this.assets[asset.name] = asset;
 
                 // Move to next asset
                 this.assetsToLoad.shift();
 
                 // Start loading next asset
                 this.loadAssets(callback);
+            },
+
+            // Progress callback
+            (progress) => {
+
+                // Update `filesize.loaded`
+                this.filesize.loaded = filesizeLoaded + progress;
+
+                // Call `progress`
+                this.hooks.progress(this.filesize.loaded / this.filesize.toLoad);
             });
         }
 
@@ -187,7 +306,7 @@ class AssetLoader {
     }
 
     // Method: loadAsset
-    loadAsset (asset, callback) {
+    loadAsset (asset, callback, progressCallback) {
 
         // Switch on `type`
         switch (asset.type) {
@@ -196,7 +315,7 @@ class AssetLoader {
             case 'audio': {
 
                 // Call `loadAudio`
-                this.loadAudio(asset, callback);
+                this.loadAudio(asset, callback, progressCallback);
 
                 break;
             }
@@ -205,7 +324,7 @@ class AssetLoader {
             case 'image': {
 
                 // Call `loadImage`
-                this.loadImage(asset, callback);
+                this.loadImage(asset, callback, progressCallback);
 
                 break;
             }
@@ -214,7 +333,7 @@ class AssetLoader {
             case 'video': {
 
                 // Call `loadVideo`
-                this.loadVideo(asset, callback);
+                this.loadVideo(asset, callback, progressCallback);
 
                 break;
             }
@@ -223,7 +342,9 @@ class AssetLoader {
             case 'font': {
 
                 // Call `loadFont`
-                this.loadFont(asset, callback);
+                this.loadFont(asset, callback, progressCallback);
+
+                break;
             }
 
             // Type is not a default
@@ -233,7 +354,7 @@ class AssetLoader {
                 if (this.customAssetTypes[asset.type]) {
 
                     // Call `loadFn`
-                    this.customAssetTypes[asset.type].loadFn(asset, callback);
+                    this.customAssetTypes[asset.type].loadFn(asset, callback, progressCallback);
                 }
 
                 // Type does not exist in `customAssetTypes`
@@ -247,21 +368,22 @@ class AssetLoader {
     }
 
     // Method: loadAudio
-    loadAudio (asset, callback) {
+    loadAudio (asset, callback, progressCallback) {
 
         // Call `getAudioArrayBuffer`
-        getAudioArrayBuffer(asset.sources, (buffer) => {
+        getAudioArrayBuffer(asset.source.path, (buffer) => {
 
-            // Set buffer
+            // Set `buffer`
             asset.buffer = buffer;
 
             // Call `callback`
-            callback();
-        });
+            callback(asset);
+
+        }, progressCallback);
     }
 
     // Method: loadImage
-    loadImage (asset, callback) {
+    loadImage (asset, callback, progressCallback) {
 
         // Create new image
         const img = new Image();
@@ -269,13 +391,22 @@ class AssetLoader {
         // On load of image
         img.addEventListener('load', () => {
 
-            asset.loaded = true;
-
-            // Add element
+            // Set `element`
             asset.element = img;
 
             // Call `callback`
-            return callback();
+            return callback(asset);
+        });
+
+        // On progress of image
+        img.addEventListener('progress', (e) => {
+
+            // Filesize can be determined
+            if (e.lengthComputable) {
+
+                // Call `progressCallback` and pass the progress
+                return progressCallback(e.loaded);
+            }
         });
 
         // On error of image
@@ -293,7 +424,7 @@ class AssetLoader {
     }
 
     // Method: loadVideo
-    loadVideo (asset, callback) {
+    loadVideo (asset, callback, progressCallback) {
 
         // Create new video
         const video = document.createElement('video');
@@ -309,36 +440,38 @@ class AssetLoader {
         });
 
         // Call `getVideoBlob`
-        getVideoBlob(asset.sources, (blob, supportedVideoType) => {
+        getVideoBlob(asset.source.path, (blob) => {
 
             // Create source element
             const sourceEl = document.createElement('source');
 
-            // Add type
-            sourceEl.type = supportedVideoType.type;
+            // Set `type`
+            sourceEl.type = asset.source.type;
 
             // Set `crossOrigin` to `anonymous`
             sourceEl.crossOrigin = 'anonymous';
 
-            // Add source
+            // Set `src`
             sourceEl.src = blob;
 
             // Append `sourceEl` to `video`
             video.appendChild(sourceEl);
 
-            // Set `loaded` to `true`
-            asset.loaded = true;
-
             // Call `callback`
-            return callback();
-        });
+            return callback(asset);
+
+        }, progressCallback);
     }
 
     // Method: loadFont
     loadFont (asset, callback) {
 
         // Load font and call `callback`
-        document.fonts.load(`16px "${asset.name}"`).then(callback);
+        document.fonts.load(`16px "${asset.name}"`).then(() => {
+
+            // Call `callback`
+            return callback(asset);
+        });
     }
 }
 

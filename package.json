@@ -12,7 +12,8 @@
                 "babelify",
                 {
                     "presets": [
-                        "env"
+                        "env",
+                        "stage-2"
                     ]
                 }
             ]
