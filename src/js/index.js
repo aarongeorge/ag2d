@@ -31,6 +31,7 @@ class AG2D {
         this.canvas = canvas;
         this.context = this.canvas.getContext('2d');
         this.isRunning = false;
+        this.context.imageSmoothingEnabled = true;
         this.interval = 1000 / 60;
         this.size = {
             'height': this.canvas.getBoundingClientRect().height,
@@ -73,6 +74,7 @@ class AG2D {
         this.fps = options.fps;
         this.interval = 1000 / this.fps;
         this.backgroundColour = options.backgroundColour || 'transparent';
+        this.imageSmoothing = typeof options.imageSmoothing === 'boolean' ? options.imageSmoothing : true;
 
         // Check if `size` was passed
         if (options.size) {
@@ -95,6 +97,9 @@ class AG2D {
 
         // Save `context`
         this.context.save();
+
+        // Set imageSmoothing each render (see: https://bugs.chromium.org/p/chromium/issues/detail?id=791270)
+        this.context.imageSmoothingEnabled = this.imageSmoothing;
 
         // Scale `context` by `devicePixelRatio`
         this.context.scale(window.devicePixelRatio * this.ratio, window.devicePixelRatio * this.ratio);
