@@ -4,6 +4,9 @@
  * @desc Animation for AnimatorManager
  */
 
+// Dependencies
+import {noOp} from './Utils';
+
 // Class: Animation
 class Animation {
 
@@ -16,16 +19,16 @@ class Animation {
         // Set options
         this.fps = options.fps;
         this.frames = options.frames;
-        this.loop = options.loop;
-        this.loopType = options.loopType;
+        this.loop = options.loop || true;
+        this.loopType = options.loopType || 'normal';
         this.name = options.name;
-        this.pauseCb = options.pauseCb;
-        this.resetCb = options.resetCb;
-        this.restartCb = options.restartCb;
-        this.reverse = options.reverse;
+        this.pauseCb = options.pauseCb || noOp;
+        this.resetCb = options.resetCb || noOp;
+        this.restartCb = options.restartCb || noOp;
+        this.reverse = options.reverse || false;
         this.spriteSheet = options.spriteSheet;
-        this.startCb = options.startCb;
-        this.stopCb = options.stopCb;
+        this.startCb = options.startCb || noOp;
+        this.stopCb = options.stopCb || noOp;
 
         // Set defaults
         this.animate = false;
@@ -176,14 +179,14 @@ class Animation {
     }
 
     // Method: render
-    render (context, x, y, width, height, cropWidth = this.spriteSheet.frameWidth, cropHeight = this.spriteSheet.frameHeight) {
+    render (context, x, y, width = this.spriteSheet.frameWidth, height = this.spriteSheet.frameHeight, cropWidth = this.spriteSheet.frameWidth, cropHeight = this.spriteSheet.frameHeight) {
 
         // Get `row` and `col` for `currentFrame`
         const row = Math.floor(this.frames[this.currentFrame] / this.spriteSheet.columns);
         const col = Math.floor(this.frames[this.currentFrame] % this.spriteSheet.columns);
 
         // Draw `spriteSheet`
-        context.drawImage(this.spriteSheet.image, col * this.spriteSheet.frameWidth, row * this.spriteSheet.frameHeight, cropWidth, cropHeight, x, y, cropWidth, cropHeight);
+        context.drawImage(this.spriteSheet.image, col * this.spriteSheet.frameWidth, row * this.spriteSheet.frameHeight, width, height, x, y, cropWidth, cropHeight);
     }
 }
 

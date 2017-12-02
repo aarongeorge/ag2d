@@ -143,10 +143,10 @@ class AG2D {
     // Method: setUpHooks
     setUpHooks () {
         this.hooks = {
-            'update': noOp,
             'render': noOp,
-            'stop': noOp,
             'start': noOp,
+            'stop': noOp,
+            'update': noOp,
             'bind': (name, func) => {
                 this.hooks[name] = func;
             },
@@ -243,9 +243,12 @@ export default AG2D;
 
 // Export modules
 export {default as AnimationManager} from './modules/AnimationManager';
+export {default as Animation} from './modules/Animation';
 export {default as AssetLoader} from './modules/AssetLoader';
 export {default as AudioManager} from './modules/AudioManager';
 export {default as EventEmitter} from './modules/EventEmitter';
 export {default as EventHandler} from './modules/EventHandler';
-export {default as Scene} from './modules/Scene';
+export {default as KeyManager} from './modules/KeyManager';
 export {default as SceneManager} from './modules/SceneManager';
+export {default as Scene} from './modules/Scene';
+export {default as SpriteSheet} from './modules/SpriteSheet';
