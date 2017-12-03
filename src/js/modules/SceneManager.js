@@ -36,8 +36,8 @@ class SceneManager {
         // Check `scenes[name]` exists
         if (this.scenes[name]) {
 
-            // Check `currentScene` exists and it has `exit`
-            if (this.currentScene && this.currentScene.exit) {
+            // Check `currentScene` exists
+            if (this.currentScene) {
 
                 // Call `exit`
                 this.currentScene.exit();
@@ -49,18 +49,14 @@ class SceneManager {
             // Set `currentScene`
             this.currentScene = this.scenes[name];
 
-            // Check `enter` exists
-            if (this.currentScene.enter) {
+            // Update `currentScene.sceneEntered`
+            this.currentScene.sceneEntered = window.performance.now();
 
-                // Update `currentScene.sceneEntered`
-                this.currentScene.sceneEntered = window.performance.now();
+            // Call `enter`
+            this.currentScene.enter();
 
-                // Call `enter`
-                this.currentScene.enter();
-
-                // Increment `enterCount`
-                this.currentScene.enterCount += 1;
-            }
+            // Increment `enterCount`
+            this.currentScene.enterCount += 1;
         }
 
         // `scenes[name]` does not exist
@@ -81,8 +77,8 @@ class SceneManager {
     // Method: pause
     pause () {
 
-        // Check there is a current scene and it has `pause`
-        if (this.currentScene && this.currentScene.pause) {
+        // Check `currentScene` exists
+        if (this.currentScene) {
 
             // Call `pause`
             this.currentScene.pause();
@@ -92,8 +88,8 @@ class SceneManager {
     // Method: play
     play () {
 
-        // Check there is a current scene and it has `play`
-        if (this.currentScene && this.currentScene.play) {
+        // Check `currentScene` exists
+        if (this.currentScene) {
 
             // Call `play`
             this.currentScene.play();
@@ -120,8 +116,8 @@ class SceneManager {
     // Method: render
     render () {
 
-        // Check there is a current scene and it has `render`
-        if (this.currentScene && this.currentScene.render) {
+        // Check `currentScene` exists
+        if (this.currentScene) {
 
             // Call `render`
             this.currentScene.render();
@@ -131,8 +127,8 @@ class SceneManager {
     // Method: update
     update (deltaTime) {
 
-        // Check there is a current scene and it has `update`
-        if (this.currentScene && this.currentScene.update) {
+        // Check `currentScene` exists
+        if (this.currentScene) {
 
             // Call `update`
             this.currentScene.update(deltaTime);

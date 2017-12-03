@@ -22,8 +22,11 @@ class KeyManager {
     // Method: keyDown
     keyDown (e) {
 
-        // Set the value to the current time
-        this.keysDown[e.keyCode] = window.performance.now();
+        if (!this.isDown(e.keyCode)) {
+
+            // Set the value to the current time
+            this.keysDown[e.keyCode] = window.performance.now();
+        }
     }
 
     // Method: isDown

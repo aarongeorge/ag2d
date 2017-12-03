@@ -7,46 +7,28 @@ class Scene {
 
     // Constructor
     constructor (name = 'Default') {
-
-        // Set `name`
-        this.name = name;
-
-        // Set `enteredCount` and `exitedCount`
         this.enterCount = 0;
         this.exitCount = 0;
-
-        console.log(`Init: ${this.name}`);
-    }
-
-    // Method: render
-    render () {
-        console.log(`Render: ${this.name}`);
+        this.name = name;
     }
 
     // Method: enter
-    enter () {
-        console.log(`Enter: ${this.name}`);
-    }
+    enter () {}
 
     // Method: exit
-    exit () {
-        console.log(`Exit: ${this.name}`);
-    }
+    exit () {}
 
     // Method: pause
-    pause () {
-        console.log(`Pause: ${this.name}`);
-    }
+    pause () {}
 
     // Method: play
-    play () {
-        console.log(`Play: ${this.name}`);
-    }
+    play () {}
+
+    // Method: render
+    render () {}
 
     // Method: update
-    update () {
-        console.log(`Update: ${this.name}`);
-    }
+    update () {}
 }
 
 // Export `Scene`

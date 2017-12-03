@@ -8,7 +8,7 @@
 import {createAudioContext, noOp} from './Utils';
 import EventHandler from './EventHandler';
 
-// Constructor: AudioManager
+// Class: AudioManager
 class AudioManager {
 
     // Constructor

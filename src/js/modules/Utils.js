@@ -3,7 +3,7 @@
  */
 
 // Create Audio Context
-const createAudioContext = (desiredSampleRate = 44100) => {
+export const createAudioContext = (desiredSampleRate = 44100) => {
 
     // Deal with browser prefixes
     const AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -71,7 +71,7 @@ const createAudioContext = (desiredSampleRate = 44100) => {
 };
 
 // Cyclic Array
-const cyclicArray = (arr, index) => {
+export const cyclicArray = (arr, index) => {
 
     const item = ((index % arr.length) + arr.length) % arr.length;
 
@@ -82,7 +82,7 @@ const cyclicArray = (arr, index) => {
 };
 
 // Get Supported Video Source
-const getSupportedVideoSource = (sources, callback) => {
+export const getSupportedVideoSource = (sources, callback) => {
 
     // Create `testVideo`
     const testVideo = document.createElement('video');
@@ -133,7 +133,7 @@ const getSupportedVideoSource = (sources, callback) => {
 };
 
 // Get Video Blob
-const getVideoBlob = (url, callback, progressCallback) => {
+export const getVideoBlob = (url, callback, progressCallback) => {
 
     // Create `request`
     const request = new XMLHttpRequest();
@@ -177,7 +177,7 @@ const getVideoBlob = (url, callback, progressCallback) => {
 };
 
 // Get Supported Audio Source
-const getSupportedAudioSource = (sources, callback) => {
+export const getSupportedAudioSource = (sources, callback) => {
 
     // Create `testAudio`
     const testAudio = document.createElement('audio');
@@ -228,7 +228,7 @@ const getSupportedAudioSource = (sources, callback) => {
 };
 
 // Get Audio Array Buffer
-const getAudioArrayBuffer = (url, callback, progressCallback) => {
+export const getAudioArrayBuffer = (url, callback, progressCallback) => {
 
     // Sort out prefix
     window.AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -289,7 +289,7 @@ const getAudioArrayBuffer = (url, callback, progressCallback) => {
 };
 
 // Get Filesize
-const getFilesize = (url, callback) => {
+export const getFilesize = (url, callback) => {
 
     // Create `request`
     const request = new XMLHttpRequest();
@@ -318,7 +318,4 @@ const getFilesize = (url, callback) => {
 };
 
 // No Op
-const noOp = () => {};
-
-// Export Utilities
-export {createAudioContext, cyclicArray, getAudioArrayBuffer, getFilesize, getSupportedAudioSource, getSupportedVideoSource, getVideoBlob, noOp};
+export const noOp = () => {};

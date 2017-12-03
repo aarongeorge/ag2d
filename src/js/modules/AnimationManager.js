@@ -4,7 +4,7 @@
  * @desc An animation manager
  */
 
-// Constructor: AnimationManager
+// Class: AnimationManager
 class AnimationManager {
 
     // Constructor
