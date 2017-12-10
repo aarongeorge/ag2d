@@ -19,13 +19,13 @@ class Animation {
         // Set options
         this.fps = options.fps;
         this.frames = options.frames;
-        this.loop = options.loop || true;
+        this.loop = typeof options.loop === 'boolean' ? options.loop : true;
         this.loopType = options.loopType || 'normal';
         this.name = options.name;
         this.pauseCb = options.pauseCb || noOp;
         this.resetCb = options.resetCb || noOp;
         this.restartCb = options.restartCb || noOp;
-        this.reverse = options.reverse || false;
+        this.reverse = typeof options.loop === 'boolean' ? options.reverse : false;
         this.spriteSheet = options.spriteSheet;
         this.startCb = options.startCb || noOp;
         this.stopCb = options.stopCb || noOp;
@@ -38,25 +38,60 @@ class Animation {
         this.lastUpdate = currentTime;
     }
 
+    // Method: getCurrentFrameIndex
+    getCurrentFrameIndex () {
+        return this.currentFrameIndex;
+    }
+
     // Method: getEndFrameIndex
     getEndFrameIndex () {
         return this.reverse ? 0 : this.frames.length - 1;
     }
 
-    // Method: nextFrameIndex
-    getNextFrameIndex () {
-        if (this.currentFrameIndex === this.getEndFrameIndex()) {
-            if (this.loop) {
-                if (this.loopType === 'wrap') {
-                    this.reverse = !this.reverse;
+    // Method: updateCurrentFrameIndex
+    updateCurrentFrameIndex () {
+
+        if (this.loop) {
+            switch (this.loopType) {
+                case 'yoyo': {
+                    if (this.getCurrentFrameIndex() === this.getEndFrameIndex()) {
+                        this.reverse = !this.reverse;
+                        if (!this.reverse) {
+                            this.restart();
+                        }
+                    }
+                    else {
+                        this.currentFrameIndex = this.reverse ? this.currentFrameIndex - 1 : this.currentFrameIndex + 1;
+                    }
+                    break;
                 }
 
-                this.restart();
-            }
+                case 'fastYoyo': {
+                    if (this.getCurrentFrameIndex() === this.getEndFrameIndex()) {
+                        this.reverse = !this.reverse;
+                        if (!this.reverse) {
+                            this.restart();
+                        }
+                    }
 
-            else {
-                this.stop();
+                    this.currentFrameIndex = this.reverse ? this.currentFrameIndex - 1 : this.currentFrameIndex + 1;
+                    break;
+                }
+
+                default: {
+                    if (this.getCurrentFrameIndex() === this.getEndFrameIndex()) {
+                        this.restart();
+                    }
+
+                    else {
+                        this.currentFrameIndex = this.reverse ? this.currentFrameIndex - 1 : this.currentFrameIndex + 1;
+                    }
+                }
             }
+        }
+
+        else if (this.getCurrentFrameIndex() === this.getEndFrameIndex()) {
+            this.stop();
         }
 
         else {
@@ -105,7 +140,6 @@ class Animation {
 
     // Method: stop
     stop () {
-        this.currentFrameIndex = this.getStartFrameIndex();
         this.animate = false;
         this.stopCb();
     }
@@ -117,8 +151,9 @@ class Animation {
         }
 
         const drawDeltaTime = this.lastUpdate - this.lastDraw;
+
         if (drawDeltaTime > this.interval) {
-            this.getNextFrameIndex();
+            this.updateCurrentFrameIndex();
             this.lastDraw = this.lastUpdate - drawDeltaTime % this.interval;
         }
 
