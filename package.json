@@ -8,15 +8,9 @@
     "license": "MIT",
     "browserify": {
         "transform": [
-            [
-                "babelify",
-                {
-                    "presets": [
-                        "env",
-                        "stage-2"
-                    ]
-                }
-            ]
+            ["babelify", {
+                "presets": ["env"]
+            }]
         ]
     }
 }
