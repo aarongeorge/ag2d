@@ -32,7 +32,9 @@ class AG2D {
         this.context = this.canvas.getContext('2d');
         this.isRunning = false;
         this.context.imageSmoothingEnabled = true;
-        this.interval = 1000 / 60;
+        this.updatesPerSecond = 120;
+        this.updateInterval = 1000 / this.updatesPerSecond;
+        this.updateAccumulator = 0;
         this.size = {
             'height': this.canvas.getBoundingClientRect().height,
             'width': this.canvas.getBoundingClientRect().width
@@ -55,10 +57,10 @@ class AG2D {
         // Clear canvas
         this.context.clearRect(0, 0, this.size.width, this.size.height);
 
-        // If `this.backgroundColour` is not `transparent`
+        // If `backgroundColour` is not `transparent`
         if (this.backgroundColour !== 'transparent') {
 
-            // Set backgroundColour
+            // Set `backgroundColour`
             this.context.fillStyle = this.backgroundColour;
             this.context.fillRect(0, 0, this.size.width, this.size.height);
         }
@@ -71,8 +73,8 @@ class AG2D {
             this.init(options.canvas);
         }
 
-        this.fps = options.fps;
-        this.interval = 1000 / this.fps;
+        this.updatesPerSecond = typeof options.updatesPerSecond === 'number' ? options.updatesPerSecond : 60;
+        this.updateInterval = 1000 / this.updatesPerSecond;
         this.backgroundColour = options.backgroundColour || 'transparent';
         this.imageSmoothing = typeof options.imageSmoothing === 'boolean' ? options.imageSmoothing : true;
 
@@ -98,16 +100,13 @@ class AG2D {
         // Save `context`
         this.context.save();
 
-        // Set imageSmoothing each render (see: https://bugs.chromium.org/p/chromium/issues/detail?id=791270)
-        this.context.imageSmoothingEnabled = this.imageSmoothing;
-
         // Scale `context` by `devicePixelRatio`
         this.context.scale(window.devicePixelRatio * this.ratio, window.devicePixelRatio * this.ratio);
 
         // Call `clearCanvas`
         this.clearCanvas();
 
-        // Call `render` on `hooks`
+        // Call `hooks.render`
         this.hooks.render();
 
         // Restore `context`
@@ -118,7 +117,7 @@ class AG2D {
     }
 
     // Method: renderLoop
-    renderLoop () {
+    renderLoop (currentTime = window.performance.now()) {
 
         // Render only if `isRunning`
         if (this.isRunning) {
@@ -127,22 +126,20 @@ class AG2D {
             window.requestAnimationFrame(this.renderLoop.bind(this));
         }
 
-        // Store reference to current time
-        const timeNow = window.performance.now();
+        // Update `updateAccumulator`
+        this.updateAccumulator += currentTime - this.lastUpdate;
 
-        // Calculate delta times
-        const updateDeltaTime = timeNow - this.lastUpdate;
-        const renderDeltaTime = timeNow - this.lastRender;
+        while (this.updateAccumulator > this.updateInterval) {
 
-        // Call `update` and pass `updateDeltaTime`
-        this.update(updateDeltaTime);
+            // Call `update` and pass `updateInterval`
+            this.update(this.updateInterval);
 
-        // If `deltaTime` is higher than `interval`
-        if (renderDeltaTime > this.interval) {
-
-            // Call `render`
-            this.render();
+            // Decrement `updateAccumulator`
+            this.updateAccumulator -= this.updateInterval;
         }
+
+        // Call `render`
+        this.render();
     }
 
     // Method: setUpHooks
@@ -173,7 +170,7 @@ class AG2D {
         this.lastUpdate = now;
         this.lastRender = now;
 
-        // Call `start` on `hooks`
+        // Call `hooks.start`
         this.hooks.start();
 
         // Call `renderLoop`
@@ -186,14 +183,14 @@ class AG2D {
         // Set `isRunning` to `false`
         this.isRunning = false;
 
-        // Call `stop` on `hooks`
+        // Call `hooks.stop`
         this.hooks.stop();
     }
 
     // Method: update
     update (deltaTime) {
 
-        // Call `update` on `hooks`
+        // Call `hooks.update`
         this.hooks.update(deltaTime);
 
         // Update `lastUpdate`
@@ -240,6 +237,9 @@ class AG2D {
         // Set styles `height` and `width`
         this.canvas.style.height = `${destHeight}px`;
         this.canvas.style.width = `${destWidth}px`;
+
+        // Set imageSmoothing (see: https://bugs.chromium.org/p/chromium/issues/detail?id=791270)
+        this.context.imageSmoothingEnabled = this.imageSmoothing;
     }
 }
 
