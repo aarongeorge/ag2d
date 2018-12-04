@@ -1,6 +1,6 @@
 {
     "name": "ag2d",
-    "version": "2.6.0",
+    "version": "2.6.1",
     "description": "A 2d renderer engine with multiple modules to help with common tasks",
     "main": "./src/js/index.js",
     "repository": "https://aarongeorge@github.com/aarongeorge/ag2d.git",
@@ -8,9 +8,14 @@
     "license": "MIT",
     "browserify": {
         "transform": [
-            ["babelify", {
-                "presets": ["@babel/preset-env"]
-            }]
+            [
+                "babelify",
+                {
+                    "presets": [
+                        "@babel/preset-env"
+                    ]
+                }
+            ]
         ]
     }
 }
