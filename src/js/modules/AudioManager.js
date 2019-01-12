@@ -5,7 +5,10 @@
  */
 
 // Dependencies
-import {createAudioContext, noOp} from './Utils';
+import {
+    createAudioContext,
+    noOp
+} from './Utils';
 import EventHandler from './EventHandler';
 
 // Class: AudioManager

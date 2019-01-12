@@ -5,7 +5,14 @@
  */
 
 // Depencencies
-import {getAudioArrayBuffer, getFilesize, getSupportedAudioSource, getSupportedVideoSource, getVideoBlob, noOp} from './Utils';
+import {
+    getAudioArrayBuffer,
+    getFilesize,
+    getSupportedAudioSource,
+    getSupportedVideoSource,
+    getVideoBlob,
+    noOp
+} from './Utils';
 
 // Class: AssetLoader
 class AssetLoader {

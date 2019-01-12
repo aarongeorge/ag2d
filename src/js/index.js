@@ -150,7 +150,12 @@ class AG2D {
             'stop': noOp,
             'update': noOp,
             'bind': (name, func) => {
-                this.hooks[name] = func;
+                if (typeof this.hooks[name] === 'undefined') {
+                    this.hooks[name] = func;
+                }
+                else {
+                    throw new Error(`Hook with a name of \`${name}\` already exists`);
+                }
             },
             'unbind': (name) => {
                 delete this.hooks[name];
