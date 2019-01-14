@@ -62,14 +62,16 @@ class AssetLoader {
                     if (!asset.sources) {
 
                         // Throw error
-                        throw new Error(`Asset does not have sources ${asset}`);
+                        console.log(asset);
+                        throw new Error('Asset does not have sources.');
                     }
 
                     // Asset doesn't have a name
                     if (!asset.name) {
 
                         // Throw error
-                        throw new Error(`Asset does not have a name ${asset}`);
+                        console.log(asset);
+                        throw new Error('Asset does not have a name.');
                     }
 
                     // Call `getSupportedAudioSource`
@@ -111,14 +113,16 @@ class AssetLoader {
                     if (!asset.sources) {
 
                         // Throw error
-                        throw new Error(`Asset does not have sources ${asset}`);
+                        console.log(asset);
+                        throw new Error('Asset does not have sources.');
                     }
 
                     // Asset doesn't have a name
                     if (!asset.name) {
 
                         // Throw error
-                        throw new Error(`Asset does not have a name ${asset}`);
+                        console.log(asset);
+                        throw new Error('Asset does not have a name.');
                     }
 
                     // Call `getSupportedVideoSource`
@@ -163,14 +167,16 @@ class AssetLoader {
                     if (!asset.path) {
 
                         // Throw error
-                        throw new Error(`Asset does not have a path ${asset}`);
+                        console.log(asset);
+                        throw new Error('Asset does not have a path.');
                     }
 
                     // Asset doesn't have a name
                     if (!asset.name) {
 
                         // Throw error
-                        throw new Error(`Asset does not have a name ${asset}`);
+                        console.log(asset);
+                        throw new Error('Asset does not have a name.');
                     }
 
                     // Add asset to `assetsToLoad`
@@ -197,7 +203,8 @@ class AssetLoader {
                     else {
 
                         // Throw error
-                        throw new Error('Asset is not a valid type');
+                        console.log(asset);
+                        throw new Error('Asset is not a valid type.');
                     }
                 }
             }
@@ -207,7 +214,8 @@ class AssetLoader {
         else {
 
             // Throw error
-            throw new Error('Asset does not have a type', asset);
+            console.log(asset);
+            throw new Error('Asset does not have a type.');
         }
     }
 
@@ -218,7 +226,8 @@ class AssetLoader {
         if (!Object.prototype.toString.call(assets) === '[object Array]') {
 
             // Throw error
-            throw new Error('`addAssets` must be passed an array');
+            console.log(assets);
+            throw new Error('`addAssets` must be passed an array.');
         }
 
         // `assets` is an array
@@ -248,7 +257,7 @@ class AssetLoader {
         else {
 
             // Throw error
-            throw new Error(`An asset type with the type of ${assetType} already exists`);
+            throw new Error(`An asset type with the type of ${assetType} already exists.`);
         }
     }
 
@@ -368,7 +377,8 @@ class AssetLoader {
                 else {
 
                     // Throw error
-                    throw new Error('Asset has no type');
+                    console.log(asset);
+                    throw new Error('Asset has no type.');
                 }
             }
         }

@@ -25,7 +25,8 @@ class AG2D {
 
         // `canvas` param was not a canvas
         if (canvas.tagName.toLowerCase() !== 'canvas') {
-            throw new Error(`${canvas} is not a canvas element`);
+            console.log(canvas);
+            throw new Error(`${canvas} is not a canvas element.`);
         }
 
         this.canvas = canvas;

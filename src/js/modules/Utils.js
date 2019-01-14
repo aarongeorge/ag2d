@@ -129,7 +129,7 @@ export const getSupportedVideoSource = (sources, callback) => {
     }
 
     // There is no supported video source, Throw error
-    throw new Error(`This browser does not support any of the sources provided in ${sources}`);
+    throw new Error(`This browser does not support any of the sources provided in ${JSON.stringify(sources)}`);
 };
 
 // Get Video Blob
@@ -224,7 +224,7 @@ export const getSupportedAudioSource = (sources, callback) => {
     }
 
     // There is no supported audio source. Throw error
-    throw new Error(`This browser does not support any of the sources provided in ${sources}`);
+    throw new Error(`This browser does not support any of the sources provided in ${JSON.stringify(sources)}`);
 };
 
 // Get Audio Array Buffer
