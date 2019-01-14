@@ -18,7 +18,7 @@ import {
 class AssetLoader {
 
     // Constructor
-    constructor () {
+    constructor() {
         this.assets = {};
         this.assetsToLoad = [];
         this.assetsLoaded = false;
@@ -34,7 +34,7 @@ class AssetLoader {
     }
 
     // Method: setUpHooks
-    setUpHooks () {
+    setUpHooks() {
         this.hooks = {
             'progress': noOp,
             'bind': (name, func) => {
@@ -47,7 +47,7 @@ class AssetLoader {
     }
 
     // Method: addAsset
-    addAsset (asset) {
+    addAsset(asset) {
 
         // Asset has a type
         if (asset.type) {
@@ -62,14 +62,16 @@ class AssetLoader {
                     if (!asset.sources) {
 
                         // Throw error
-                        throw new Error(`Asset does not have sources ${asset}`);
+                        console.log(asset);
+                        throw new Error('Provided Asset does not have sources');
                     }
 
                     // Asset doesn't have a name
                     if (!asset.name) {
 
                         // Throw error
-                        throw new Error(`Asset does not have a name ${asset}`);
+                        console.log(asset);
+                        throw new Error('Provided asset does not have a name');
                     }
 
                     // Call `getSupportedAudioSource`
@@ -111,14 +113,16 @@ class AssetLoader {
                     if (!asset.sources) {
 
                         // Throw error
-                        throw new Error(`Asset does not have sources ${asset}`);
+                        console.log(asset);
+                        throw new Error('Provided asset does not have sources');
                     }
 
                     // Asset doesn't have a name
                     if (!asset.name) {
 
                         // Throw error
-                        throw new Error(`Asset does not have a name ${asset}`);
+                        console.log(asset);
+                        throw new Error('Provided asset does not have a name');
                     }
 
                     // Call `getSupportedVideoSource`
@@ -163,14 +167,16 @@ class AssetLoader {
                     if (!asset.path) {
 
                         // Throw error
-                        throw new Error(`Asset does not have a path ${asset}`);
+                        console.log(asset);
+                        throw new Error('Provided asset does not have a path');
                     }
 
                     // Asset doesn't have a name
                     if (!asset.name) {
 
                         // Throw error
-                        throw new Error(`Asset does not have a name ${asset}`);
+                        console.log(asset);
+                        throw new Error('Provided asset does not have a name');
                     }
 
                     // Add asset to `assetsToLoad`
@@ -197,7 +203,8 @@ class AssetLoader {
                     else {
 
                         // Throw error
-                        throw new Error('Asset is not a valid type');
+                        console.log(asset);
+                        throw new Error('Provided asset is not a valid type');
                     }
                 }
             }
@@ -207,12 +214,13 @@ class AssetLoader {
         else {
 
             // Throw error
-            throw new Error('Asset does not have a type', asset);
+            console.log(asset);
+            throw new Error('Provided asset does not have a type');
         }
     }
 
     // Method: addAssets
-    addAssets (assets) {
+    addAssets(assets) {
 
         // `assets` is not an array
         if (!Object.prototype.toString.call(assets) === '[object Array]') {
@@ -234,7 +242,7 @@ class AssetLoader {
     }
 
     // Method: addAssetType
-    addAssetType (assetType, validationFn, loadFn) {
+    addAssetType(assetType, validationFn, loadFn) {
 
         // `assetType` doesn't exist in `customAssetTypes`
         if (assetType in this.customAssetTypes === false) {
@@ -253,7 +261,7 @@ class AssetLoader {
     }
 
     // Method: loadAssets
-    loadAssets (callback = noOp) {
+    loadAssets(callback = noOp) {
 
         // We're still waiting for filesizes to be obtained
         if (this.assetsWaitingForFilesize > 0) {
@@ -290,15 +298,15 @@ class AssetLoader {
                 this.loadAssets(callback);
             },
 
-            // Progress callback
-            (progress) => {
+                // Progress callback
+                (progress) => {
 
-                // Update `filesize.loaded`
-                this.filesize.loaded = filesizeLoaded + progress;
+                    // Update `filesize.loaded`
+                    this.filesize.loaded = filesizeLoaded + progress;
 
-                // Call `progress`
-                this.hooks.progress(this.filesize.loaded / this.filesize.toLoad);
-            });
+                    // Call `progress`
+                    this.hooks.progress(this.filesize.loaded / this.filesize.toLoad);
+                });
         }
 
         // There are no more assets
@@ -313,7 +321,7 @@ class AssetLoader {
     }
 
     // Method: loadAsset
-    loadAsset (asset, callback, progressCallback) {
+    loadAsset(asset, callback, progressCallback) {
 
         // Switch on `type`
         switch (asset.type) {
@@ -368,6 +376,7 @@ class AssetLoader {
                 else {
 
                     // Throw error
+                    console.log(asset);
                     throw new Error('Asset has no type');
                 }
             }
@@ -375,7 +384,7 @@ class AssetLoader {
     }
 
     // Method: loadAudio
-    loadAudio (asset, callback, progressCallback) {
+    loadAudio(asset, callback, progressCallback) {
 
         // Call `getAudioArrayBuffer`
         getAudioArrayBuffer(asset.source.path, (buffer) => {
@@ -390,7 +399,7 @@ class AssetLoader {
     }
 
     // Method: loadImage
-    loadImage (asset, callback, progressCallback) {
+    loadImage(asset, callback, progressCallback) {
 
         // Create new image
         const img = new Image();
@@ -431,7 +440,7 @@ class AssetLoader {
     }
 
     // Method: loadVideo
-    loadVideo (asset, callback, progressCallback) {
+    loadVideo(asset, callback, progressCallback) {
 
         // Create new video
         const video = document.createElement('video');
@@ -471,7 +480,7 @@ class AssetLoader {
     }
 
     // Method: loadFont
-    loadFont (asset, callback) {
+    loadFont(asset, callback) {
 
         // Load font and call `callback`
         document.fonts.load(`16px "${asset.name}"`).then(() => {

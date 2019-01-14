@@ -5,13 +5,13 @@
  */
 
 // Dependencies
-import {noOp} from './modules/Utils';
+import { noOp } from './modules/Utils';
 
 // Class: AG2D
 class AG2D {
 
     // Constructor
-    constructor () {
+    constructor() {
 
         // Set `hasInitialised`
         this.hasInitialised = false;
@@ -21,11 +21,12 @@ class AG2D {
     }
 
     // Method: init
-    init (canvas = document.createElement('CANVAS')) {
+    init(canvas = document.createElement('CANVAS')) {
 
         // `canvas` param was not a canvas
         if (canvas.tagName.toLowerCase() !== 'canvas') {
-            throw new Error(`${canvas} is not a canvas element`);
+            console.log(canvas);
+            throw new Error('Provided canvas is not a canvas element');
         }
 
         this.canvas = canvas;
@@ -52,7 +53,7 @@ class AG2D {
     }
 
     // Method: clearCanvas
-    clearCanvas () {
+    clearCanvas() {
 
         // Clear canvas
         this.context.clearRect(0, 0, this.size.width, this.size.height);
@@ -67,7 +68,7 @@ class AG2D {
     }
 
     // Method: configure
-    configure (options) {
+    configure(options) {
 
         if (!this.hasInitialised) {
             this.init(options.canvas);
@@ -95,7 +96,7 @@ class AG2D {
     }
 
     // Method: render
-    render () {
+    render() {
 
         // Save `context`
         this.context.save();
@@ -117,7 +118,7 @@ class AG2D {
     }
 
     // Method: renderLoop
-    renderLoop (currentTime = window.performance.now()) {
+    renderLoop(currentTime = window.performance.now()) {
 
         // Render only if `isRunning`
         if (this.isRunning) {
@@ -143,7 +144,7 @@ class AG2D {
     }
 
     // Method: setUpHooks
-    setUpHooks () {
+    setUpHooks() {
         this.hooks = {
             'render': noOp,
             'start': noOp,
@@ -164,7 +165,7 @@ class AG2D {
     }
 
     // Method: start
-    start () {
+    start() {
 
         // Set `isRunning` to `true`
         this.isRunning = true;
@@ -183,7 +184,7 @@ class AG2D {
     }
 
     // Method: stop
-    stop () {
+    stop() {
 
         // Set `isRunning` to `false`
         this.isRunning = false;
@@ -193,7 +194,7 @@ class AG2D {
     }
 
     // Method: update
-    update (deltaTime) {
+    update(deltaTime) {
 
         // Call `hooks.update`
         this.hooks.update(deltaTime);
@@ -203,7 +204,7 @@ class AG2D {
     }
 
     // Method: resizeCanvas
-    resizeCanvas (width, height) {
+    resizeCanvas(width, height) {
 
         // Calculate the ratios
         const ratio = this.size.width / this.size.height;
@@ -252,13 +253,13 @@ class AG2D {
 export default AG2D;
 
 // Export modules
-export {default as AnimationManager} from './modules/AnimationManager';
-export {default as Animation} from './modules/Animation';
-export {default as AssetLoader} from './modules/AssetLoader';
-export {default as AudioManager} from './modules/AudioManager';
-export {default as EventEmitter} from './modules/EventEmitter';
-export {default as EventHandler} from './modules/EventHandler';
-export {default as KeyManager} from './modules/KeyManager';
-export {default as SceneManager} from './modules/SceneManager';
-export {default as Scene} from './modules/Scene';
-export {default as SpriteSheet} from './modules/SpriteSheet';
+export { default as AnimationManager } from './modules/AnimationManager';
+export { default as Animation } from './modules/Animation';
+export { default as AssetLoader } from './modules/AssetLoader';
+export { default as AudioManager } from './modules/AudioManager';
+export { default as EventEmitter } from './modules/EventEmitter';
+export { default as EventHandler } from './modules/EventHandler';
+export { default as KeyManager } from './modules/KeyManager';
+export { default as SceneManager } from './modules/SceneManager';
+export { default as Scene } from './modules/Scene';
+export { default as SpriteSheet } from './modules/SpriteSheet';
