@@ -154,7 +154,6 @@ class AudioManager {
 
     // Method: stop
     stop (name) {
-
         if (this.audioClips[name].gainNode) {
             this.audioClips[name].gainNode.disconnect(this.context.destination);
             this.audioClips[name].gainNode.disconnect(this.streamDestination);
@@ -165,11 +164,14 @@ class AudioManager {
     }
 
     // Method: fadeout over X milliseconds then stop the audio
-    fadeOut (name, milli) {
+    fadeOut (name, milli, callback) {
         if (this.audioClips[name].element) {
             this.audioClips[name].gainNode.gain.linearRampToValueAtTime(0.01, this.context.currentTime + (milli / 1000));
             setTimeout(() => {
-                    this.stop(name)
+                    this.stop(name);
+                    if (callback) {
+                        callback();
+                    }
                 }, milli);
         }
     }
