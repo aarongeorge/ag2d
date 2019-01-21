@@ -16,6 +16,9 @@ class AG2D {
         // Set `hasInitialised`
         this.hasInitialised = false;
 
+        // Set default for autoClear
+        this.autoClear = true;
+
         // Call `setUpHooks`
         this.setUpHooks();
     }
@@ -78,7 +81,7 @@ class AG2D {
         this.updateInterval = 1000 / this.updatesPerSecond;
         this.backgroundColour = options.backgroundColour || 'transparent';
         this.imageSmoothing = typeof options.imageSmoothing === 'boolean' ? options.imageSmoothing : true;
-
+        this.autoClear = options.autoClear === undefined ? this.autoClear : options.autoClear;
         // Check if `size` was passed
         if (options.size) {
             this.size = {
@@ -105,7 +108,9 @@ class AG2D {
         this.context.scale(window.devicePixelRatio * this.ratio, window.devicePixelRatio * this.ratio);
 
         // Call `clearCanvas`
-        this.clearCanvas();
+        if (this.autoClear) {
+            this.clearCanvas();
+        }
 
         // Call `hooks.render`
         this.hooks.render();
@@ -151,7 +156,7 @@ class AG2D {
             'stop': noOp,
             'update': noOp,
             'bind': (name, func) => {
-                if (typeof this.hooks[name] === 'undefined') {
+                if (typeof this.hooks[name] === 'undefined' || this.hooks[name] === noOp) {
                     this.hooks[name] = func;
                 }
                 else {

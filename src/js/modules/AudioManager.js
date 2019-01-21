@@ -111,8 +111,10 @@ class AudioManager {
         if (!this.audioClips[name].element) {
             this.audioClips[name].element = this.context.createBufferSource();
             this.audioClips[name].element.buffer = this.audioClips[name].buffer;
-            this.audioClips[name].element.connect(this.context.destination);
-            this.audioClips[name].element.connect(this.streamDestination);
+            this.audioClips[name].gainNode = this.context.createGain();
+            this.audioClips[name].element.connect(this.audioClips[name].gainNode)
+            this.audioClips[name].gainNode.connect(this.context.destination);
+            this.audioClips[name].gainNode.connect(this.streamDestination);
         }
 
         this.audioClips[name].element.start(0);
@@ -152,11 +154,25 @@ class AudioManager {
 
     // Method: stop
     stop (name) {
-
-        if (this.audioClips[name].element) {
-            this.audioClips[name].element.disconnect(this.context.destination);
-            this.audioClips[name].element.disconnect(this.streamDestination);
+        if (this.audioClips[name].gainNode) {
+            this.audioClips[name].gainNode.disconnect(this.context.destination);
+            this.audioClips[name].gainNode.disconnect(this.streamDestination);
+            this.audioClips[name].element.disconnect(this.audioClips[name].gainNode);
+            delete this.audioClips[name].gainNode;
             delete this.audioClips[name].element;
+        }
+    }
+
+    // Method: fadeout over X milliseconds then stop the audio
+    fadeOut (name, milli, callback) {
+        if (this.audioClips[name].element) {
+            this.audioClips[name].gainNode.gain.linearRampToValueAtTime(0.01, this.context.currentTime + (milli / 1000));
+            setTimeout(() => {
+                    this.stop(name);
+                    if (callback) {
+                        callback();
+                    }
+                }, milli);
         }
     }
 
