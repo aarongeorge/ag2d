@@ -77,8 +77,11 @@ class KeyManager {
         // `keyMap` has a binding for ``${target}:${eventCode}`
         if (this.keyMap.has(`${target}:${event.code}`) === true) {
 
-            // `target` matches the `target` for ``${target}:${eventCode}``
-            if (this.keyMap.get(`${target}:${event.code}`).target === target) {
+            // Store reference to current key map
+            const currentKeyMapping = this.keyMap.get(`${target}:${event.code}`);
+
+            // `currentKeyMapping.target` matches `target`
+            if (currentKeyMapping.target === target) {
 
                 // Set `keyState` to `1` if key is pressed, or `0` if it is not
                 const keyState = event.type === 'keydown' ? 1 : 0;
@@ -89,8 +92,8 @@ class KeyManager {
                     // Update `keyState`
                     this.keyStates.set(`${target}:${event.code}`, keyState);
 
-                    // Call `callback` for the current key and pass `keyState`
-                    this.keyMap.get(`${target}:${event.code}`).callback(keyState);
+                    // Call `callback` for the current key and pass `keyState` and `${currentKeyMapping.target}:${event.code}`
+                    currentKeyMapping.callback(keyState, `${currentKeyMapping.target}:${event.code}`);
                 }
             }
         }
