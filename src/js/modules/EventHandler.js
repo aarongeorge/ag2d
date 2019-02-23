@@ -23,10 +23,10 @@ class EventHandler {
 
             // Create the object
             evt = {
-                name,
                 'element': el,
-                type,
-                'function': fn
+                'function': fn,
+                name,
+                type
             };
         }
 
@@ -85,7 +85,7 @@ class EventHandler {
         const eventNames = Object.keys(this.events);
 
         // Iterate over `eventNames`
-        eventNames.forEach((eventName) => {
+        eventNames.forEach(eventName => {
 
             // Store reference to `currentEvent`
             const customEvent = this.events[eventName];

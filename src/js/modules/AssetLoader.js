@@ -36,11 +36,11 @@ class AssetLoader {
     // Method: setUpHooks
     setUpHooks () {
         this.hooks = {
-            'progress': noOp,
             'bind': (name, func) => {
                 this.hooks[name] = func;
             },
-            'unbind': (name) => {
+            'progress': noOp,
+            'unbind': name => {
                 delete this.hooks[name];
             }
         };
@@ -75,13 +75,13 @@ class AssetLoader {
                     }
 
                     // Call `getSupportedAudioSource`
-                    getSupportedAudioSource(asset.sources, (supportedAudioSource) => {
+                    getSupportedAudioSource(asset.sources, supportedAudioSource => {
 
                         // Increment `assetsWaitingForFilesize`
                         this.assetsWaitingForFilesize += 1;
 
                         // Call `getFilesize`
-                        getFilesize(supportedAudioSource.path, (filesize) => {
+                        getFilesize(supportedAudioSource.path, filesize => {
 
                             // Decrement `assetsWaitingForFilesize`
                             this.assetsWaitingForFilesize -= 1;
@@ -126,13 +126,13 @@ class AssetLoader {
                     }
 
                     // Call `getSupportedVideoSource`
-                    getSupportedVideoSource(asset.sources, (supportedVideoSource) => {
+                    getSupportedVideoSource(asset.sources, supportedVideoSource => {
 
                         // Increment `assetsWaitingForFilesize`
                         this.assetsWaitingForFilesize += 1;
 
                         // Call `getFilesize`
-                        getFilesize(supportedVideoSource.path, (filesize) => {
+                        getFilesize(supportedVideoSource.path, filesize => {
 
                             // Decrement `assetsWaitingForFilesize`
                             this.assetsWaitingForFilesize -= 1;
@@ -234,7 +234,7 @@ class AssetLoader {
         else {
 
             // Iterate over `assets`
-            assets.forEach((asset) => {
+            assets.forEach(asset => {
 
                 // Call `addAsset`
                 this.addAsset(asset);
@@ -287,7 +287,7 @@ class AssetLoader {
             const filesizeLoaded = this.filesize.loaded;
 
             // Load the asset
-            this.loadAsset(this.assetsToLoad[0], (asset) => {
+            this.loadAsset(this.assetsToLoad[0], asset => {
 
                 // Add the asset to `assets`
                 this.assets[asset.name] = asset;
@@ -300,7 +300,7 @@ class AssetLoader {
             },
 
             // Progress callback
-            (progress) => {
+            progress => {
 
                 // Update `filesize.loaded`
                 this.filesize.loaded = filesizeLoaded + progress;
@@ -388,7 +388,7 @@ class AssetLoader {
     loadAudio (asset, callback, progressCallback) {
 
         // Call `getAudioArrayBuffer`
-        getAudioArrayBuffer(asset.source.path, (buffer) => {
+        getAudioArrayBuffer(asset.source.path, buffer => {
 
             // Set `buffer`
             asset.buffer = buffer;
@@ -416,7 +416,7 @@ class AssetLoader {
         });
 
         // On progress of image
-        img.addEventListener('progress', (e) => {
+        img.addEventListener('progress', e => {
 
             // Filesize can be determined
             if (e.lengthComputable) {
@@ -427,7 +427,7 @@ class AssetLoader {
         });
 
         // On error of image
-        img.addEventListener('error', (e) => {
+        img.addEventListener('error', e => {
 
             // Throw error
             throw new Error(e);
@@ -450,14 +450,14 @@ class AssetLoader {
         asset.element = video;
 
         // On error of video
-        video.addEventListener('error', (e) => {
+        video.addEventListener('error', e => {
 
             // Throw error
             throw new Error(e);
         });
 
         // Call `getVideoBlob`
-        getVideoBlob(asset.source.path, (blob) => {
+        getVideoBlob(asset.source.path, blob => {
 
             // Create source element
             const sourceEl = document.createElement('source');
@@ -484,11 +484,10 @@ class AssetLoader {
     loadFont (asset, callback) {
 
         // Load font and call `callback`
-        document.fonts.load(`16px "${asset.name}"`).then(() => {
+        document.fonts.load(`16px "${asset.name}"`).then(() =>
 
             // Call `callback`
-            return callback(asset);
-        });
+            callback(asset));
     }
 }
 

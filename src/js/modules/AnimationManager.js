@@ -63,7 +63,7 @@ class AnimationManager {
     update (deltaTime) {
 
         // Iterate over `animationNames`
-        this.animationNames.forEach((animation) => {
+        this.animationNames.forEach(animation => {
 
             // Call `update` on `animation`
             this.animations[animation].update(deltaTime);

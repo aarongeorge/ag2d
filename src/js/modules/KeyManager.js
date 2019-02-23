@@ -30,18 +30,28 @@ class KeyManager {
     }
 
     // Method: addMapping
-    addMapping (keyCode, callback) {
-        this.keyMap.set(keyCode, callback);
+    addMapping (keyCode, callback, target = window) {
+        this.keyMap.set(`${target}:${keyCode}`, {
+            callback,
+            target
+        });
     }
 
     // Method: disable
     disable (target = window) {
 
         // Iterate over `keyboardEventNames`
-        this.keyboardEventNames.forEach(() => {
+        this.keyboardEventNames.forEach(eventName => {
 
-            // Remove `eventName` handlers
-            this.eventHandler.removeEvent('handleEvent');
+            // Store reference to `element` and `name`
+            const {element, name} = this.eventHandler.events[`${target}:${eventName}`];
+
+            // `target` has a mapping for `${target}:${eventName}` in `this.eventHandler.events`
+            if (element === target && name === `${target}:${eventName}`) {
+
+                // Remove `${target}:${eventName}` handler
+                this.eventHandler.removeEvent(`${target}:${eventName}`);
+            }
         });
     }
 
@@ -54,45 +64,49 @@ class KeyManager {
             // Create event handler for `eventName`
             this.eventHandler.addEvent({
                 'element': target,
-                'function': this.handleEvent.bind(this),
-                'name': `handleEvent:${eventName}`,
+                'function': this.handleEvent.bind(this, target),
+                'name': `${target}:${eventName}`,
                 'type': eventName
             });
         });
     }
 
     // Method: handleEvent
-    handleEvent (event) {
+    handleEvent (target, event) {
 
-        // `keyMap` has a binding
-        if (this.keyMap.has(event.code) === true) {
+        // `keyMap` has a binding for ``${target}:${eventCode}`
+        if (this.keyMap.has(`${target}:${event.code}`) === true) {
 
-            // Set `keyState` to `1` if key is pressed, or `0` if it is not
-            const keyState = event.type === 'keydown' ? 1 : 0;
+            // `target` matches the `target` for ``${target}:${eventCode}``
+            if (this.keyMap.get(`${target}:${event.code}`).target === target) {
 
-            // `keyState`has changed
-            if (this.keyStates.get(event.code) !== keyState) {
+                // Set `keyState` to `1` if key is pressed, or `0` if it is not
+                const keyState = event.type === 'keydown' ? 1 : 0;
 
-                // Update `keyState`
-                this.keyStates.set(event.code, keyState);
+                // `keyState`has changed
+                if (this.keyStates.get(`${target}:${event.code}`) !== keyState) {
 
-                // Call the callback for the current key
-                this.keyMap.get(event.code)(keyState);
+                    // Update `keyState`
+                    this.keyStates.set(`${target}:${event.code}`, keyState);
+
+                    // Call `callback` for the current key and pass `keyState`
+                    this.keyMap.get(`${target}:${event.code}`).callback(keyState);
+                }
             }
         }
     }
 
     // Method: removeMapping
-    removeMapping (keyCode) {
+    removeMapping (keyCode, target = window) {
 
-        // Remove `keyCode` from the `keyStates` map
-        this.keyMap.delete(keyCode);
+        // Remove ``${target}:${keyCode}`` from the `keyStates` map
+        this.keyMap.delete(`${target}:${keyCode}`);
 
-        // `keyStates` map has `keyCode` in it
-        if (this.keyStates.has(keyCode)) {
+        // `keyStates` map has ``${target}:${keyCode}`` in it
+        if (this.keyStates.has(`${target}:${keyCode}`)) {
 
-            // Remove `keyCode` from the `keyStates` map
-            this.keyStates.delete(keyCode);
+            // Remove ``${target}:${keyCode}`` from the `keyStates` map
+            this.keyStates.delete(`${target}:${keyCode}`);
         }
     }
 }

@@ -151,10 +151,6 @@ class AG2D {
     // Method: setUpHooks
     setUpHooks () {
         this.hooks = {
-            'render': noOp,
-            'start': noOp,
-            'stop': noOp,
-            'update': noOp,
             'bind': (name, func) => {
                 if (typeof this.hooks[name] === 'undefined' || this.hooks[name] === noOp) {
                     this.hooks[name] = func;
@@ -163,9 +159,13 @@ class AG2D {
                     throw new Error(`Hook with a name of \`${name}\` already exists`);
                 }
             },
-            'unbind': (name) => {
+            'render': noOp,
+            'start': noOp,
+            'stop': noOp,
+            'unbind': name => {
                 delete this.hooks[name];
-            }
+            },
+            'update': noOp
         };
     }
 

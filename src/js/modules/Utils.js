@@ -107,9 +107,7 @@ export const getSupportedVideoSource = (sources, callback) => {
         if (testVideo.canPlayType(currentVideoType)) {
 
             // Check to see if `source.type` is `currentVideoType`
-            const matchedSource = sources.find((source) => {
-                return source.type === currentVideoType.match(/[^;]*/gi)[0];
-            });
+            const matchedSource = sources.find(source => source.type === currentVideoType.match(/[^;]*/gi)[0]);
 
             // `matchedSource` exists
             if (matchedSource) {
@@ -139,7 +137,7 @@ export const getVideoBlob = (url, callback, progressCallback) => {
     const request = new XMLHttpRequest();
 
     // Progress
-    request.onprogress = (e) => {
+    request.onprogress = e => {
 
         // Filesize can be determined
         if (e.lengthComputable) {
@@ -160,7 +158,7 @@ export const getVideoBlob = (url, callback, progressCallback) => {
     };
 
     // Error
-    request.onerror = (e) => {
+    request.onerror = e => {
 
         // Throw error
         throw new Error(e);
@@ -201,9 +199,7 @@ export const getSupportedAudioSource = (sources, callback) => {
         if (testAudio.canPlayType(currentAudioType)) {
 
             // Check to see if `source.type` is `currentAudioType`
-            const matchedSource = sources.find((source) => {
-                return source.type === currentAudioType.match(/[^;]*/gi)[0];
-            });
+            const matchedSource = sources.find(source => source.type === currentAudioType.match(/[^;]*/gi)[0]);
 
             // `matchedSource` exists
             if (matchedSource) {
@@ -249,7 +245,7 @@ export const getAudioArrayBuffer = (url, callback, progressCallback) => {
     request.responseType = 'arraybuffer';
 
     // Progress
-    request.onprogress = (e) => {
+    request.onprogress = e => {
 
         // Filesize can be determined
         if (e.lengthComputable) {
@@ -266,21 +262,20 @@ export const getAudioArrayBuffer = (url, callback, progressCallback) => {
         audioContext.decodeAudioData(request.response,
 
             // Decoded successfully
-            (buffer) => {
+            buffer => {
 
                 // Call `callback` and pass `buffer`
                 callback(buffer);
             },
 
             // Error decoding
-            (e) => {
+            e => {
                 throw new Error(e);
-            }
-        );
+            });
     };
 
     // Error
-    request.onerror = (e) => {
+    request.onerror = e => {
         throw new Error(e);
     };
 
@@ -309,7 +304,7 @@ export const getFilesize = (url, callback) => {
     };
 
     // Error
-    request.onerror = (e) => {
+    request.onerror = e => {
         throw new Error(e);
     };
 

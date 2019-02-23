@@ -5,10 +5,7 @@
  */
 
 // Dependencies
-import {
-    createAudioContext,
-    noOp
-} from './Utils';
+import {createAudioContext} from './Utils';
 import EventHandler from './EventHandler';
 
 // Class: AudioManager
@@ -49,60 +46,63 @@ class AudioManager {
     }
 
     // Method: init
-    init (cb = noOp) {
+    init () {
 
-        // Function to create an audio context
-        const createContext = () => {
+        return new Promise(resolve => {
 
-            // Create `context`
-            this.context = createAudioContext();
+            // Function to create an audio context
+            const createContext = () => {
 
-            // Create `streamDestination`
-            this.streamDestination = this.context.createMediaStreamDestination();
+                // Create `context`
+                this.context = createAudioContext();
 
-            // Remove event handlers
-            this.eventHandler.removeEvent('iOSTouchStartAudioContext');
-            this.eventHandler.removeEvent('iOSTouchEndAudioContext');
+                // Create `streamDestination`
+                this.streamDestination = this.context.createMediaStreamDestination();
 
-            // Call `cb`
-            return cb();
-        };
+                // Remove event handlers
+                this.eventHandler.removeEvent('iOSTouchStartAudioContext');
+                this.eventHandler.removeEvent('iOSTouchEndAudioContext');
 
-        // Regular expression that matches iOS devices
-        const iOSRegex = new RegExp('iPhone|iPad|iPod', 'i');
+                // Call `resolve`
+                resolve();
+            };
 
-        // Is iOS
-        if (iOSRegex.test(navigator.userAgent) && !window.MSStream) {
+            // Regular expression that matches iOS devices
+            const iOSRegex = new RegExp('iPhone|iPad|iPod', 'i');
 
-            // Handle audio context for iOS 6-8
-            this.eventHandler.addEvent({
-                'name': 'iOSTouchStartAudioContext',
-                'element': document,
-                'type': 'touchstart',
-                'function': createContext.bind(this)
-            });
+            // Is iOS
+            if (iOSRegex.test(navigator.userAgent) && !window.MSStream) {
 
-            // Handle audio context for iOS 9-10
-            this.eventHandler.addEvent({
-                'name': 'iOSTouchEndAudioContext',
-                'element': document,
-                'type': 'touchend',
-                'function': createContext.bind(this)
-            });
-        }
+                // Handle audio context for iOS 6-8
+                this.eventHandler.addEvent({
+                    'element': document,
+                    'function': createContext.bind(this),
+                    'name': 'iOSTouchStartAudioContext',
+                    'type': 'touchstart'
+                });
 
-        // Is not iOS
-        else {
+                // Handle audio context for iOS 9-10
+                this.eventHandler.addEvent({
+                    'element': document,
+                    'function': createContext.bind(this),
+                    'name': 'iOSTouchEndAudioContext',
+                    'type': 'touchend'
+                });
+            }
 
-            // Create `context`
-            this.context = createAudioContext();
+            // Is not iOS
+            else {
 
-            // Create `streamDestination`
-            this.streamDestination = this.context.createMediaStreamDestination();
+                // Create `context`
+                this.context = createAudioContext();
 
-            // Call `cb`
-            return cb();
-        }
+                // Create `streamDestination`
+                this.streamDestination = this.context.createMediaStreamDestination();
+
+                // Call `resolve`
+                resolve();
+            }
+        });
     }
 
     // Method: play
@@ -112,7 +112,7 @@ class AudioManager {
             this.audioClips[name].element = this.context.createBufferSource();
             this.audioClips[name].element.buffer = this.audioClips[name].buffer;
             this.audioClips[name].gainNode = this.context.createGain();
-            this.audioClips[name].element.connect(this.audioClips[name].gainNode)
+            this.audioClips[name].element.connect(this.audioClips[name].gainNode);
             this.audioClips[name].gainNode.connect(this.context.destination);
             this.audioClips[name].gainNode.connect(this.streamDestination);
         }
@@ -163,16 +163,16 @@ class AudioManager {
         }
     }
 
-    // Method: fadeout over X milliseconds then stop the audio
-    fadeOut (name, milli, callback) {
+    // Method: fadeOut
+    fadeOut (name, ms, cb) {
         if (this.audioClips[name].element) {
-            this.audioClips[name].gainNode.gain.linearRampToValueAtTime(0.01, this.context.currentTime + (milli / 1000));
+            this.audioClips[name].gainNode.gain.linearRampToValueAtTime(0.01, this.context.currentTime + (ms / 1000));
             setTimeout(() => {
-                    this.stop(name);
-                    if (callback) {
-                        callback();
-                    }
-                }, milli);
+                this.stop(name);
+                if (cb) {
+                    return cb();
+                }
+            }, ms);
         }
     }
 

@@ -26,9 +26,9 @@ class EventEmitter {
 
         // Create `reference`
         const reference = {
-            name,
             callback,
-            count
+            count,
+            name
         };
 
         // Push `reference` to `listeners[name]`
@@ -45,9 +45,7 @@ class EventEmitter {
         if (typeof this.listeners[reference.name] !== 'undefined') {
 
             // Remove `reference` from `listeners[reference.name]`
-            this.listeners[reference.name] = this.listeners[reference.name].filter((eventListener) => {
-                return reference !== eventListener;
-            });
+            this.listeners[reference.name] = this.listeners[reference.name].filter(eventListener => reference !== eventListener);
 
             // Remove `reference.name` if `length` is `0`
             if (this.listeners[reference.name].length === 0) {
@@ -63,7 +61,7 @@ class EventEmitter {
         if (Object.keys(this.listeners).includes(name)) {
 
             // Iterate over each `listener`
-            this.listeners[name].forEach((listener) => {
+            this.listeners[name].forEach(listener => {
 
                 // Call `callback`
                 listener.callback(...args);
@@ -75,9 +73,7 @@ class EventEmitter {
                 if (listener.count <= 0) {
 
                     // Remove `listener` from `listeners[name]`
-                    this.listeners[name] = this.listeners[name].filter((eventListener) => {
-                        return listener !== eventListener;
-                    });
+                    this.listeners[name] = this.listeners[name].filter(eventListener => listener !== eventListener);
                 }
             });
         }
