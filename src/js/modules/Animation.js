@@ -18,7 +18,7 @@ class Animation {
 
         // Set options
         this.fps = options.fps;
-        this.frames = options.frames;
+        this.frames = Object.prototype.toString.call(options.frames) === '[object Array]' ? options.frames : typeof options.frames === 'number' ? Array.from(Array(options.frames).keys()) : 0;
         this.loop = typeof options.loop === 'boolean' ? options.loop : true;
         this.loopType = options.loopType || 'normal';
         this.name = options.name;
@@ -54,19 +54,6 @@ class Animation {
         if (this.loop) {
             switch (this.loopType) {
                 case 'yoyo': {
-                    if (this.getCurrentFrameIndex() === this.getEndFrameIndex()) {
-                        this.reverse = !this.reverse;
-                        if (!this.reverse) {
-                            this.restart();
-                        }
-                    }
-                    else {
-                        this.currentFrameIndex = this.reverse ? this.currentFrameIndex - 1 : this.currentFrameIndex + 1;
-                    }
-                    break;
-                }
-
-                case 'fastYoyo': {
                     if (this.getCurrentFrameIndex() === this.getEndFrameIndex()) {
                         this.reverse = !this.reverse;
                         if (!this.reverse) {

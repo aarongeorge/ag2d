@@ -2,7 +2,7 @@
  * Modules: Event Handler
  */
 
-// Constructor: EventHandler
+// Class: EventHandler
 class EventHandler {
 
     // Constructor
@@ -37,7 +37,7 @@ class EventHandler {
             evt = name;
         }
 
-        // Create new `CustomEvent`
+        // Create new `customEvent`
         const customEvent = Object.assign({}, evt);
 
         // `name` already exists
@@ -87,11 +87,8 @@ class EventHandler {
         // Iterate over `eventNames`
         eventNames.forEach(eventName => {
 
-            // Store reference to `currentEvent`
-            const customEvent = this.events[eventName];
-
-            // Remove `customEvent` from `events`
-            this.removeEvent(customEvent.name);
+            // Remove event from `events`
+            this.removeEvent(this.events[eventName]);
         });
     }
 }
