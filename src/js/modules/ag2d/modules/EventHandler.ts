@@ -2,40 +2,23 @@
  * Modules: Event Handler
  */
 
-// Class: EventHandler
-class EventHandler {
+interface Event {
+    name: string;
+    type: string;
+    element: HTMLElement | Window;
+    callback: () => void;
+}
 
-    // Constructor
+export default class EventHandler {
+    events: {[name: string]: Event};
+
     constructor () {
 
         // Object to store `events`
         this.events = {};
     }
 
-    // Method: addEvent
-    addEvent (name, type, el, fn) {
-
-        // `evt` will hold the final object
-        let evt = void 0;
-
-        // Passed individual params and not an object
-        if (arguments.length > 1) {
-
-            // Create the object
-            evt = {
-                'element': el,
-                'function': fn,
-                name,
-                type
-            };
-        }
-
-        // Passed object as first param
-        else {
-
-            // Set `evt` to `name`
-            evt = name;
-        }
+    addEvent (evt: Event) {
 
         // Create new `customEvent`
         const customEvent = Object.assign({}, evt);
@@ -48,14 +31,13 @@ class EventHandler {
         }
 
         // Add the listener to the element
-        customEvent.element.addEventListener(customEvent.type, customEvent.function);
+        customEvent.element.addEventListener(customEvent.type, customEvent.callback);
 
         // Add `customEvent` to `events`
         this.events[customEvent.name] = customEvent;
     }
 
-    // Method: removeEvent
-    removeEvent (eventName) {
+    removeEvent (eventName: string) {
 
         // `eventName` is undefined
         if (typeof this.events[eventName] === 'undefined') {
@@ -71,14 +53,13 @@ class EventHandler {
             const customEvent = this.events[eventName];
 
             // Remove the listener from the element
-            customEvent.element.removeEventListener(customEvent.type, customEvent.function);
+            customEvent.element.removeEventListener(customEvent.type, customEvent.callback);
 
             // Remove `customEvent` from `events`
             delete this.events[customEvent.name];
         }
     }
 
-    // Method: removeEvents
     removeEvents () {
 
         // Get all event names from `events`
@@ -88,10 +69,7 @@ class EventHandler {
         eventNames.forEach(eventName => {
 
             // Remove event from `events`
-            this.removeEvent(this.events[eventName]);
+            this.removeEvent(eventName);
         });
     }
 }
-
-// Export `EventHandler`
-export default EventHandler;

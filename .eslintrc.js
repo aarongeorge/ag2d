@@ -1,7 +1,8 @@
 module.exports = {
     'env': {
         'browser': true,
-        'es6': true
+        'es6': true,
+        'node': true
     },
     'extends': [
         'eslint:recommended'
@@ -67,7 +68,10 @@ module.exports = {
         'capitalized-comments': [
             'error',
             'always',
-            {'ignoreInlineComments': true}
+            {
+                'ignoreConsecutiveComments': true,
+                'ignoreInlineComments': true
+            }
         ],
         'class-methods-use-this': 'off',
         'comma-dangle': [
@@ -85,10 +89,7 @@ module.exports = {
             'error',
             'last'
         ],
-        'complexity': [
-            'error',
-            {'max': 20}
-        ],
+        'complexity': 'off',
         'computed-property-spacing': [
             'error',
             'never'

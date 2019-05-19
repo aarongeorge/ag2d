@@ -6,9 +6,72 @@
 
 // Dependencies
 import {noOp} from './modules/Utils';
+import GameLoop from './modules/GameLoop';
+
+interface Hooks {
+    bind: (name: 'update' | 'render' | 'start' | 'stop', func: () => any) => void,
+    render: () => any,
+    start: () => any,
+    stop: () => any,
+    unbind: (name: 'update' | 'render' | 'start' | 'stop') => void,
+    update: (deltaTime: number) => any
+}
+
+interface Constraints {
+    height: number;
+    width: number;
+}
+
+interface Options {
+    autoClear?: boolean,
+    backgroundColor?: string,
+    canvas?: HTMLCanvasElement,
+    imageSmoothing?: boolean,
+    size?: {
+        height: number,
+        width: number
+    },
+    updatesPerSecond: number,
+    render: () => void,
+    update: (deltaTime: number) => void
+}
 
 // Class: AG2D
-class AG2D {
+export default class AG2D {
+    autoClear: boolean = true;
+    backgroundColor: string = 'transparent';
+    bounds: Constraints = {
+        height: 150,
+        width: 300
+    };
+    canvas: HTMLCanvasElement = document.createElement('canvas');
+    context: CanvasRenderingContext2D = this.canvas.getContext('2d')!;
+    gameLoop: GameLoop;
+    hasInitialised: boolean;
+    hooks: Hooks = {
+        'bind': (name, func) => {
+            if (typeof this.hooks[name] === 'undefined' || this.hooks[name] === noOp) {
+                this.hooks[name] = func;
+            }
+            else {
+                throw new Error(`Hook with a name of \`${name}\` already exists`);
+            }
+        },
+        'render': noOp,
+        'start': noOp,
+        'stop': noOp,
+        'unbind': name => {
+            delete this.hooks[name];
+        },
+        'update': noOp
+    };
+    imageSmoothing: boolean = false;
+    isRunning: boolean = false;
+    ratio: number = 1;
+    size: Constraints = {
+        height: 150,
+        width: 300
+    };
 
     // Constructor
     constructor () {
@@ -24,21 +87,17 @@ class AG2D {
     }
 
     // Method: init
-    init (canvas = document.createElement('CANVAS')) {
+    init (canvas: HTMLCanvasElement = document.createElement('canvas')) {
+        const context = canvas.getContext('2d');
 
-        // `canvas` param was not a canvas
-        if (canvas.tagName.toLowerCase() !== 'canvas') {
-            console.log(canvas);
-            throw new Error(`${canvas} is not a canvas element.`);
+        if (!context) {
+            throw new Error(`Couldn't create a context for ${canvas}`);
         }
 
         this.canvas = canvas;
-        this.context = this.canvas.getContext('2d');
         this.isRunning = false;
+        this.context = context;
         this.context.imageSmoothingEnabled = true;
-        this.updatesPerSecond = 120;
-        this.updateInterval = 1000 / this.updatesPerSecond;
-        this.updateAccumulator = 0;
         this.size = {
             'height': this.canvas.getBoundingClientRect().height,
             'width': this.canvas.getBoundingClientRect().width
@@ -61,27 +120,37 @@ class AG2D {
         // Clear canvas
         this.context.clearRect(0, 0, this.size.width, this.size.height);
 
-        // If `backgroundColour` is not `transparent`
-        if (this.backgroundColour !== 'transparent') {
+        // If `backgroundColor` is not `transparent`
+        if (this.backgroundColor !== 'transparent') {
 
-            // Set `backgroundColour`
-            this.context.fillStyle = this.backgroundColour;
+            // Set `backgroundColor`
+            this.context.fillStyle = this.backgroundColor;
             this.context.fillRect(0, 0, this.size.width, this.size.height);
         }
     }
 
     // Method: configure
-    configure (options) {
+    configure (options: Options) {
 
         if (!this.hasInitialised) {
             this.init(options.canvas);
         }
 
-        this.updatesPerSecond = typeof options.updatesPerSecond === 'number' ? options.updatesPerSecond : 60;
-        this.updateInterval = 1000 / this.updatesPerSecond;
-        this.backgroundColour = options.backgroundColour || 'transparent';
+        // Create `GameLoop`
+        this.gameLoop = new GameLoop({
+            'updatesPerSecond': options.updatesPerSecond,
+            'render': () => {
+                this.render();
+            },
+            'update': (deltaTime) => {
+                this.update(deltaTime);
+            }
+        });
+
+        this.backgroundColor = options.backgroundColor || 'transparent';
         this.imageSmoothing = typeof options.imageSmoothing === 'boolean' ? options.imageSmoothing : true;
         this.autoClear = options.autoClear === undefined ? this.autoClear : options.autoClear;
+
         // Check if `size` was passed
         if (options.size) {
             this.size = {
@@ -117,35 +186,6 @@ class AG2D {
 
         // Restore `context`
         this.context.restore();
-
-        // Update `lastRender`
-        this.lastRender = window.performance.now();
-    }
-
-    // Method: renderLoop
-    renderLoop (currentTime = window.performance.now()) {
-
-        // Render only if `isRunning`
-        if (this.isRunning) {
-
-            // Call `renderLoop` on next tick
-            window.requestAnimationFrame(this.renderLoop.bind(this));
-        }
-
-        // Update `updateAccumulator`
-        this.updateAccumulator += currentTime - this.lastUpdate;
-
-        while (this.updateAccumulator > this.updateInterval) {
-
-            // Call `update` and pass `updateInterval`
-            this.update(this.updateInterval);
-
-            // Decrement `updateAccumulator`
-            this.updateAccumulator -= this.updateInterval;
-        }
-
-        // Call `render`
-        this.render();
     }
 
     // Method: setUpHooks
@@ -175,17 +215,11 @@ class AG2D {
         // Set `isRunning` to `true`
         this.isRunning = true;
 
-        // Set `lastUpdate` and `lastRender`
-        const now = window.performance.now();
-
-        this.lastUpdate = now;
-        this.lastRender = now;
-
         // Call `hooks.start`
         this.hooks.start();
 
-        // Call `renderLoop`
-        this.renderLoop();
+        // Call `gameLoop`
+        this.gameLoop.start();
     }
 
     // Method: stop
@@ -199,17 +233,14 @@ class AG2D {
     }
 
     // Method: update
-    update (deltaTime) {
+    update (deltaTime: number) {
 
         // Call `hooks.update`
         this.hooks.update(deltaTime);
-
-        // Update `lastUpdate`
-        this.lastUpdate = window.performance.now();
     }
 
     // Method: resizeCanvas
-    resizeCanvas (width, height) {
+    resizeCanvas (width: number, height: number) {
 
         // Calculate the ratios
         const ratio = this.size.width / this.size.height;
@@ -242,8 +273,8 @@ class AG2D {
         this.ratio = destWidth / this.size.width;
 
         // Set attributes `height` and `width`
-        this.canvas.setAttribute('height', Math.round(destHeight * window.devicePixelRatio));
-        this.canvas.setAttribute('width', Math.round(destWidth * window.devicePixelRatio));
+        this.canvas.setAttribute('height', Math.round(destHeight * window.devicePixelRatio).toString());
+        this.canvas.setAttribute('width', Math.round(destWidth * window.devicePixelRatio).toString());
 
         // Set styles `height` and `width`
         this.canvas.style.height = `${destHeight}px`;
@@ -254,17 +285,19 @@ class AG2D {
     }
 }
 
-// Export `AG2D`
-export default AG2D;
-
 // Export modules
-export {default as AnimationManager} from './modules/AnimationManager';
 export {default as Animation} from './modules/Animation';
+export {default as AnimationManager} from './modules/AnimationManager';
 export {default as AssetLoader} from './modules/AssetLoader';
 export {default as AudioManager} from './modules/AudioManager';
+export {default as Entity} from './modules/Entity';
 export {default as EventEmitter} from './modules/EventEmitter';
 export {default as EventHandler} from './modules/EventHandler';
+export {default as GameLoop} from './modules/GameLoop';
 export {default as KeyManager} from './modules/KeyManager';
-export {default as SceneManager} from './modules/SceneManager';
 export {default as Scene} from './modules/Scene';
+export {default as SceneManager} from './modules/SceneManager';
 export {default as SpriteSheet} from './modules/SpriteSheet';
+export {default as TileCollider} from './modules/TileCollider';
+export {default as Trait} from './modules/Trait';
+export {Matrix, Vec2} from './modules/Math';

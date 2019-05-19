@@ -4,14 +4,11 @@
  * @desc An audio manager
  */
 
-// Dependencies
 import {createAudioContext} from './Utils';
 import EventHandler from './EventHandler';
 
-// Class: AudioManager
-class AudioManager {
+export default class AudioManager {
 
-    // Constructor
     constructor () {
 
         // Create `eventHandler`
@@ -24,7 +21,6 @@ class AudioManager {
         this.audioClipNames = [];
     }
 
-    // Method: add
     add (audioClip) {
 
         // `audioClip` doesn't already exist in `audioClips`
@@ -45,7 +41,6 @@ class AudioManager {
         }
     }
 
-    // Method: init
     init () {
 
         return new Promise(resolve => {
@@ -55,6 +50,9 @@ class AudioManager {
 
                 // Create `context`
                 this.context = createAudioContext();
+
+                console.log(this.context);
+                debugger;
 
                 // Create `streamDestination`
                 this.streamDestination = this.context.createMediaStreamDestination();
@@ -76,7 +74,7 @@ class AudioManager {
                 // Handle audio context for iOS 6-8
                 this.eventHandler.addEvent({
                     'element': document,
-                    'function': createContext.bind(this),
+                    'callback': createContext.bind(this),
                     'name': 'iOSTouchStartAudioContext',
                     'type': 'touchstart'
                 });
@@ -84,7 +82,7 @@ class AudioManager {
                 // Handle audio context for iOS 9-10
                 this.eventHandler.addEvent({
                     'element': document,
-                    'function': createContext.bind(this),
+                    'callback': createContext.bind(this),
                     'name': 'iOSTouchEndAudioContext',
                     'type': 'touchend'
                 });
@@ -105,7 +103,6 @@ class AudioManager {
         });
     }
 
-    // Method: play
     play (name) {
 
         if (!this.audioClips[name].element) {
@@ -120,7 +117,6 @@ class AudioManager {
         this.audioClips[name].element.start(0);
     }
 
-    // Method: remove
     remove (name) {
 
         // `name` does exist in `audioClips`
@@ -141,7 +137,6 @@ class AudioManager {
         }
     }
 
-    // Method: resume
     resume () {
 
         // `context` exists
@@ -152,7 +147,6 @@ class AudioManager {
         }
     }
 
-    // Method: stop
     stop (name) {
         if (this.audioClips[name].gainNode) {
             this.audioClips[name].gainNode.disconnect(this.context.destination);
@@ -163,7 +157,6 @@ class AudioManager {
         }
     }
 
-    // Method: fadeOut
     fadeOut (name, ms, cb) {
         if (this.audioClips[name].element) {
             this.audioClips[name].gainNode.gain.linearRampToValueAtTime(0.01, this.context.currentTime + (ms / 1000));
@@ -176,7 +169,6 @@ class AudioManager {
         }
     }
 
-    // Method: suspend
     suspend () {
 
         // `context` exists
@@ -187,6 +179,3 @@ class AudioManager {
         }
     }
 }
-
-// Export `AudioManager`
-export default AudioManager;

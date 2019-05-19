@@ -4,17 +4,14 @@
  * @desc An event emitter
  */
 
-// Class: EventEmitter
-class EventEmitter {
+export default class EventEmitter {
 
-    // Constructor
     constructor () {
 
         // Set `listenersMap`
         this.listeners = [];
     }
 
-    // Method: addListener
     addListener (name, callback, count = Infinity) {
 
         // `name` doesn't exist in `listeners`
@@ -38,7 +35,6 @@ class EventEmitter {
         return reference;
     }
 
-    // Method: removeListener
     removeListener (reference) {
 
         // `name` exists in `listeners`
@@ -54,7 +50,6 @@ class EventEmitter {
         }
     }
 
-    // Method: emit
     emit (name, ...args) {
 
         // `name` exists in `listeners`
@@ -79,6 +74,3 @@ class EventEmitter {
         }
     }
 }
-
-// Export `EventEmitter`
-export default EventEmitter;

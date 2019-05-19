@@ -4,7 +4,6 @@
  * @desc An asset loader
  */
 
-// Depencencies
 import {
     getAudioArrayBuffer,
     getFilesize,
@@ -14,10 +13,8 @@ import {
     noOp
 } from './Utils';
 
-// Class: AssetLoader
-class AssetLoader {
+export default class AssetLoader {
 
-    // Constructor
     constructor () {
         this.assets = {};
         this.assetsToLoad = [];
@@ -33,7 +30,6 @@ class AssetLoader {
         this.setUpHooks();
     }
 
-    // Method: setUpHooks
     setUpHooks () {
         this.hooks = {
             'bind': (name, func) => {
@@ -46,7 +42,6 @@ class AssetLoader {
         };
     }
 
-    // Method: addAsset
     addAsset (asset) {
 
         // Asset has a type
@@ -219,7 +214,6 @@ class AssetLoader {
         }
     }
 
-    // Method: addAssets
     addAssets (assets) {
 
         // `assets` is not an array
@@ -230,7 +224,6 @@ class AssetLoader {
             throw new Error('`addAssets` must be passed an array.');
         }
 
-        // `assets` is an array
         else {
 
             // Iterate over `assets`
@@ -242,7 +235,6 @@ class AssetLoader {
         }
     }
 
-    // Method: addAssetType
     addAssetType (assetType, validationFn, loadFn) {
 
         // `assetType` doesn't exist in `customAssetTypes`
@@ -261,7 +253,6 @@ class AssetLoader {
         }
     }
 
-    // Method: loadAssets
     loadAssets (callback = noOp) {
 
         // We're still waiting for filesizes to be obtained
@@ -321,7 +312,6 @@ class AssetLoader {
         }
     }
 
-    // Method: loadAsset
     loadAsset (asset, callback, progressCallback) {
 
         // Switch on `type`
@@ -384,7 +374,6 @@ class AssetLoader {
         }
     }
 
-    // Method: loadAudio
     loadAudio (asset, callback, progressCallback) {
 
         // Call `getAudioArrayBuffer`
@@ -399,7 +388,6 @@ class AssetLoader {
         }, progressCallback);
     }
 
-    // Method: loadImage
     loadImage (asset, callback, progressCallback) {
 
         // Create new image
@@ -440,7 +428,6 @@ class AssetLoader {
         img.src = asset.path;
     }
 
-    // Method: loadVideo
     loadVideo (asset, callback, progressCallback) {
 
         // Create new video
@@ -480,7 +467,6 @@ class AssetLoader {
         }, progressCallback);
     }
 
-    // Method: loadFont
     loadFont (asset, callback) {
 
         // Load font and call `callback`
@@ -490,6 +476,3 @@ class AssetLoader {
             callback(asset));
     }
 }
-
-// Export `AssetLoader`
-export default AssetLoader;

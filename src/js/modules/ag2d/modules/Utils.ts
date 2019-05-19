@@ -5,9 +5,6 @@
 // Create Audio Context
 export const createAudioContext = (desiredSampleRate = 44100) => {
 
-    // Deal with browser prefixes
-    const AudioContext = window.AudioContext || window.webkitAudioContext;
-
     // Create new audio context
     let audioContext = new AudioContext();
 
@@ -15,7 +12,7 @@ export const createAudioContext = (desiredSampleRate = 44100) => {
     const iOSRegex = new RegExp('iPhone|iPad|iPod', 'i');
 
     // Warm a `context`
-    const warmContext = (context, sampleRate) => {
+    const warmContext = (context: AudioContext, sampleRate: number) => {
 
         // Create buffer and warmer source
         const buffer = context.createBuffer(1, 1, sampleRate);
@@ -28,13 +25,7 @@ export const createAudioContext = (desiredSampleRate = 44100) => {
         warmer.connect(context.destination);
 
         // Play `warmer`
-        if (warmer.start) {
-            warmer.start(0);
-        }
-
-        else if (warmer.noteOn) {
-            warmer.noteOn(0);
-        }
+        warmer.start(0);
 
         // Disconnect `warmer`
         warmer.disconnect();
@@ -47,7 +38,7 @@ export const createAudioContext = (desiredSampleRate = 44100) => {
      */
 
     // Check if iOS
-    if (iOSRegex.test(navigator.userAgent) && !window.MSStream) {
+    if (iOSRegex.test(navigator.userAgent) && !MSStream) {
 
         // Warm the context
         warmContext(audioContext, desiredSampleRate);
@@ -71,7 +62,7 @@ export const createAudioContext = (desiredSampleRate = 44100) => {
 };
 
 // Cyclic Array
-export const cyclicArray = (arr, index) => {
+export const cyclicArray = (arr: Array<any>, index: number) => {
 
     const item = ((index % arr.length) + arr.length) % arr.length;
 
@@ -82,7 +73,7 @@ export const cyclicArray = (arr, index) => {
 };
 
 // Get Supported Video Source
-export const getSupportedVideoSource = (sources, callback) => {
+export const getSupportedVideoSource = (sources, callback: () => {}) => {
 
     // Create `testVideo`
     const testVideo = document.createElement('video');

@@ -4,13 +4,10 @@
  * @desc A scene manager
  */
 
-// Dependencies
 import {cyclicArray} from './Utils';
 
-// Class: SceneManager
-class SceneManager {
+export default class SceneManager {
 
-    // Constructor
     constructor () {
 
         // Object to hold scenes
@@ -20,7 +17,6 @@ class SceneManager {
         this.sceneNames = [];
     }
 
-    // Method: add
     add (scene) {
 
         // Add `name` to `scenes`
@@ -30,7 +26,6 @@ class SceneManager {
         this.sceneNames = Object.keys(this.scenes);
     }
 
-    // Method: goTo
     goTo (name) {
 
         // Check `scenes[name]` exists
@@ -67,17 +62,14 @@ class SceneManager {
         }
     }
 
-    // Method: next
     next () {
 
         // Go to next scene
         this.goTo(this.scenes[cyclicArray(this.sceneNames, this.sceneNames.indexOf(this.currentScene.name) + 1).value].name);
     }
 
-    // Method: pause
     pause () {
 
-        // Check `currentScene` exists
         if (this.currentScene) {
 
             // Call `pause`
@@ -85,10 +77,8 @@ class SceneManager {
         }
     }
 
-    // Method: play
     play () {
 
-        // Check `currentScene` exists
         if (this.currentScene) {
 
             // Call `play`
@@ -96,14 +86,12 @@ class SceneManager {
         }
     }
 
-    // Method: previous
     previous () {
 
         // Go to previous scene
         this.goTo(this.scenes[cyclicArray(this.sceneNames, this.sceneNames.indexOf(this.currentScene.name) - 1).value].name);
     }
 
-    // Method: remove
     remove (name) {
 
         // Remove `name` from `scenes`
@@ -113,7 +101,6 @@ class SceneManager {
         this.sceneNames = Object.keys(this.scenes);
     }
 
-    // Method: render
     render () {
 
         // Check `currentScene` exists
@@ -124,7 +111,6 @@ class SceneManager {
         }
     }
 
-    // Method: update
     update (deltaTime) {
 
         // Check `currentScene` exists
@@ -135,6 +121,3 @@ class SceneManager {
         }
     }
 }
-
-// Export `SceneManager`
-export default SceneManager;

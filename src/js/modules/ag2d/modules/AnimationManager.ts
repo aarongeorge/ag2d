@@ -4,10 +4,8 @@
  * @desc An animation manager
  */
 
-// Class: AnimationManager
-class AnimationManager {
+export default class AnimationManager {
 
-    // Constructor
     constructor () {
 
         // Object to hold animations
@@ -17,7 +15,6 @@ class AnimationManager {
         this.animationNames = [];
     }
 
-    // Method: add
     add (animation) {
 
         // `animation` doesn't already exist in `animations`
@@ -38,7 +35,6 @@ class AnimationManager {
         }
     }
 
-    // Method: remove
     remove (name) {
 
         // `name` does exist in `animations`
@@ -59,7 +55,6 @@ class AnimationManager {
         }
     }
 
-    // Method: update
     update (deltaTime) {
 
         // Iterate over `animationNames`
@@ -70,6 +65,3 @@ class AnimationManager {
         });
     }
 }
-
-// Export `AnimationManager`
-export default AnimationManager;

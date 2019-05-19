@@ -4,13 +4,9 @@
  * @desc Animation for AnimatorManager
  */
 
-// Dependencies
 import {noOp} from './Utils';
 
-// Class: Animation
-class Animation {
-
-    // Constructor
+export default class Animation {
     constructor (options) {
 
         // Store reference to current time
@@ -38,19 +34,15 @@ class Animation {
         this.lastUpdate = currentTime;
     }
 
-    // Method: getCurrentFrameIndex
     getCurrentFrameIndex () {
         return this.currentFrameIndex;
     }
 
-    // Method: getEndFrameIndex
     getEndFrameIndex () {
         return this.reverse ? 0 : this.frames.length - 1;
     }
 
-    // Method: updateCurrentFrameIndex
     updateCurrentFrameIndex () {
-
         if (this.loop) {
             switch (this.loopType) {
                 case 'yoyo': {
@@ -86,18 +78,15 @@ class Animation {
         }
     }
 
-    // Method: getStartFrameIndex
     getStartFrameIndex () {
         return this.reverse ? this.frames.length - 1 : 0;
     }
 
-    // Method: pause
     pause () {
         this.animate = false;
         this.pauseCb();
     }
 
-    // Method: render
     render (context, x, y, width = this.spriteSheet.frameWidth, height = this.spriteSheet.frameHeight, cropWidth = this.spriteSheet.frameWidth, cropHeight = this.spriteSheet.frameHeight) {
         const row = Math.floor(this.frames[this.currentFrameIndex] / this.spriteSheet.columns);
         const col = Math.floor(this.frames[this.currentFrameIndex] % this.spriteSheet.columns);
@@ -105,33 +94,28 @@ class Animation {
         context.drawImage(this.spriteSheet.image, col * this.spriteSheet.frameWidth, row * this.spriteSheet.frameHeight, cropWidth, cropHeight, x, y, width, height);
     }
 
-    // Method: reset
     reset () {
         this.currentFrameIndex = this.getStartFrameIndex();
         this.animate = false;
         this.resetCb();
     }
 
-    // Method: restart
     restart () {
         this.currentFrameIndex = this.getStartFrameIndex();
         this.animate = true;
         this.restartCb();
     }
 
-    // Method: start
     start () {
         this.animate = true;
         this.startCb();
     }
 
-    // Method: stop
     stop () {
         this.animate = false;
         this.stopCb();
     }
 
-    // Method: update
     update (deltaTime) {
         if (!this.animate) {
             return;
@@ -147,6 +131,3 @@ class Animation {
         this.lastUpdate += deltaTime;
     }
 }
-
-// Export `Animation`
-export default Animation;

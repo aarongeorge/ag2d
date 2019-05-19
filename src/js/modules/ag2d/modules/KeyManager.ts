@@ -4,13 +4,14 @@
  * @desc A key manager
  */
 
-// Dependencies
 import EventHandler from './EventHandler';
 
-// Constructor: AnimationManager
-class KeyManager {
+export default class KeyManager {
+    eventHandler: EventHandler;
+    keyboardEventNames: Array<string>;
+    keyMap: Map<string, {'callback': (keyState: 0 | 1, name: string) => void, 'target': HTMLElement | Window}>;
+    keyStates: Map<string, 0 | 1>;
 
-    // Constructor
     constructor () {
 
         // Create `eventHandler`
@@ -29,16 +30,14 @@ class KeyManager {
         ];
     }
 
-    // Method: addMapping
-    addMapping (keyCode, callback, target = window) {
+    addMapping (keyCode: string, callback: () => void, target = window) {
         this.keyMap.set(`${target}:${keyCode}`, {
             callback,
             target
         });
     }
 
-    // Method: disable
-    disable (target = window) {
+    disable (target: any = window) {
 
         // Iterate over `keyboardEventNames`
         this.keyboardEventNames.forEach(eventName => {
@@ -55,8 +54,7 @@ class KeyManager {
         });
     }
 
-    // Method: enable
-    enable (target = window) {
+    enable (target: any = window) {
 
         // Iterate over `keyboardEventNames`
         this.keyboardEventNames.forEach(eventName => {
@@ -64,15 +62,14 @@ class KeyManager {
             // Create event handler for `eventName`
             this.eventHandler.addEvent({
                 'element': target,
-                'function': this.handleEvent.bind(this, target),
+                'callback': this.handleEvent.bind(this, target),
                 'name': `${target}:${eventName}`,
                 'type': eventName
             });
         });
     }
 
-    // Method: handleEvent
-    handleEvent (target, event) {
+    handleEvent (target: HTMLElement | Window, event: KeyboardEvent) {
 
         // `keyMap` has a binding for ``${target}:${eventCode}`
         if (this.keyMap.has(`${target}:${event.code}`) === true) {
@@ -81,12 +78,12 @@ class KeyManager {
             const currentKeyMapping = this.keyMap.get(`${target}:${event.code}`);
 
             // `currentKeyMapping.target` matches `target`
-            if (currentKeyMapping.target === target) {
+            if (currentKeyMapping && currentKeyMapping.target === target) {
 
                 // Set `keyState` to `1` if key is pressed, or `0` if it is not
                 const keyState = event.type === 'keydown' ? 1 : 0;
 
-                // `keyState`has changed
+                // `keyState` has changed
                 if (this.keyStates.get(`${target}:${event.code}`) !== keyState) {
 
                     // Update `keyState`
@@ -99,8 +96,7 @@ class KeyManager {
         }
     }
 
-    // Method: removeMapping
-    removeMapping (keyCode, target = window) {
+    removeMapping (keyCode: string, target = window) {
 
         // Remove ``${target}:${keyCode}`` from the `keyStates` map
         this.keyMap.delete(`${target}:${keyCode}`);
@@ -113,6 +109,3 @@ class KeyManager {
         }
     }
 }
-
-// Export `KeyManager`
-export default KeyManager;
