@@ -161,8 +161,6 @@ export default class SceneTileCollider extends Scene {
         super('SceneTileCollider');
         this.spriteSheet = ExampleSpriteSheet;
         this.tileSize = 32;
-        this.entities = new Set();
-        this.entities.add(new Colliding({keyManager, eventHandler, 'canvas': experience.canvas}));
         this.collisions = [];
 
         this.tilesMatrix = new Matrix();
@@ -171,6 +169,11 @@ export default class SceneTileCollider extends Scene {
         });
 
         this.tileCollider = new TileCollider(this.tilesMatrix, this.tileSize);
+    }
+
+    enter () {
+        this.entities = new Set();
+        this.entities.add(new Colliding({keyManager, eventHandler, 'canvas': experience.canvas}));
     }
 
     render () {

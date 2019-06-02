@@ -1,0 +1,64 @@
+interface LGridElt {
+    // Stores the index to the next element in the cell using an indexed SLL.
+    next: number;
+    // Stores the ID of the element. This can be used to associate external data to the element.
+    id: number;
+    // Stores the center of the element.
+    mx: number;
+    my: number;
+    // Stores the half-size of the element relative to the upper-left corner of the grid.
+    hx: number;
+    hy: number;
+}
+
+interface LGridLooseCell {
+    // Stores the index to the first element using an indexed SLL.
+    head: number;
+    // Stores the extents of the grid cell relative to the upper-left corner of the grid which expands and shrinks with the elements inserted and removed.
+    l: number;
+    t: number;
+    r: number;
+    b: number;
+}
+
+interface LGridTightCell {
+    // Stores the index to the next loose cell in the grid cell.
+    next: number;
+    // Stores the position of the loose cell in the grid.
+    loose_x: number;
+    loose_y: number;
+}
+
+interface LGridRow {
+    // Stores all the elements in the row.
+    elts: LGridElt[];
+    // Stores all the loose cells in the row.
+    lcells: LGridLooseCell[];
+    // Stores the number of elements in the row.
+    num_elts: number;
+}
+
+interface LGrid {
+    // Stores all the tight cell nodes in the grid.
+    tcells: LGridTightCell[];
+    // Stores all the rows in the grid.
+    rows: LGridRow[];
+    // Stores the tight cell heads.
+    tcell_heads: number;
+    // Stores the number of columns in the grid.
+    num_cols: number;
+    // Stores the number of rows in the grid.
+    num_rows: number;
+    // Stores the size of a cell.
+    cell_w: number;
+    cell_h: number;
+    // Stores the inverse size of a cell.
+    inv_cell_w: number;
+    inv_cell_h: number;
+    // Stores the upper-left corner of the grid.
+    x: number;
+    y: number;
+    // Stores the size of the grid.
+    w: number;
+    h: number;
+}

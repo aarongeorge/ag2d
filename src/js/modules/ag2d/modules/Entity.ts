@@ -7,9 +7,17 @@ import Trait from './Trait';
 export default class Entity {
     [key:string]: any;
     traits: Array<Trait>;
+    pos: {
+        x: number;
+        y: number;
+    }
 
     constructor () {
         this.traits = [];
+        this.pos = {
+            'x': 0,
+            'y': 0
+        }
     }
 
     addTrait (trait: Trait) {

@@ -41,17 +41,19 @@ export default class SceneLoading extends Scene {
                     SceneFull,
                     SceneTile,
                     SceneFlashing,
-                    // SceneJumping,
+                    SceneJumping,
                     SceneAllTheSame,
-                    SceneTileCollider
+                    SceneTileCollider,
+                    SceneQuadTree
                 ] = await Promise.all([
                     import('./SceneStart'),
                     import('./SceneFull'),
                     import('./SceneTile'),
                     import('./SceneFlashing'),
-                    // import('./SceneJumping'),
+                    import('./SceneJumping'),
                     import('./SceneAllTheSame'),
-                    import('./SceneTileCollider')
+                    import('./SceneTileCollider'),
+                    import('./SceneQuadTree')
                 ]);
 
                 /**
@@ -59,12 +61,13 @@ export default class SceneLoading extends Scene {
                  */
 
                 sceneManager.add(new SceneStart.default())
-                // sceneManager.add(new SceneJumping.default());
-                sceneManager.add(new SceneTileCollider.default());
                 sceneManager.add(new SceneFull.default());
                 sceneManager.add(new SceneTile.default());
                 sceneManager.add(new SceneFlashing.default());
-                sceneManager.add(new SceneAllTheSame.default());
+                sceneManager.add(new SceneQuadTree.default())
+                sceneManager.add(new SceneTileCollider.default());
+                // sceneManager.add(new SceneJumping.default());
+                // sceneManager.add(new SceneAllTheSame.default());
                 sceneManager.goTo('SceneStart');
             }, 1);
 

@@ -12,7 +12,9 @@ export default class SceneJumping extends Scene {
     constructor () {
         super('SceneJumping');
         this.spriteSheet = ExampleSpriteSheet;
+    }
 
+    enter () {
         this.entities = new Set();
         this.entities.add(new Jumping({keyManager}));
     }

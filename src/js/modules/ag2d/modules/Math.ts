@@ -1,6 +1,6 @@
 export class Vec2 {
-    x: number;
-    y: number;
+    x!: number;
+    y!: number;
 
     constructor (x: number, y: number) {
         this.set(x, y);
@@ -12,13 +12,45 @@ export class Vec2 {
     }
 }
 
+export class Point {
+    x: number;
+    y: number;
+
+    constructor (x: number, y: number) {
+        this.x = x;
+        this.y = y;
+    }
+}
+
+export class Rect {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+
+    constructor (x: number, y: number, width: number, height: number) {
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+    }
+
+    contains (point: Point): boolean {
+        return (point.x >= this.x - this.width &&
+            point.x <= this.x + this.width &&
+            point.y >= this.y - this.height &&
+            point.y <= this.y + this.height);
+    }
+}
+
 export class Matrix {
+    grid: Array<[[any]?]>;
 
     constructor () {
         this.grid = [];
     }
 
-    forEach (callback) {
+    forEach (callback: (value: any, x: number, y: number) => any) {
         this.grid.forEach((column, x) => {
             column.forEach((value, y) => {
                 callback(value, x, y);
@@ -26,7 +58,7 @@ export class Matrix {
         })
     }
 
-    set (x, y, value) {
+    set (x: number, y: number, value: any) {
         if (!this.grid[x]) {
             this.grid[x] = [];
         }
@@ -34,7 +66,7 @@ export class Matrix {
         this.grid[x][y] = value;
     }
 
-    get (x, y) {
+    get (x: number, y: number) {
         return this.grid[x] ? this.grid[x][y] : undefined;
     }
 }

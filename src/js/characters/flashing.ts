@@ -14,8 +14,4 @@ export default class Flashing extends Entity {
         this.spriteSheet = ExampleSpriteSheet;
         this.addTrait(new TraitFlashing());
     }
-
-    update (deltaTime) {
-        this.pos.x += 0.1 * deltaTime;
-    }
 }

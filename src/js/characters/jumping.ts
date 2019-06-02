@@ -18,6 +18,6 @@ export default class Jumping extends Entity {
         this.gravity = new Vec2(0, 0.005);
 
         this.addTrait(new TraitNumberTile(options));
-        this.addTrait(new TraitJump(options);
+        this.addTrait(new TraitJump(options));
     }
 }

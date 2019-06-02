@@ -18,7 +18,7 @@ export default class SceneFlashing extends Scene {
         this.flashingCharacter.render(experience.context);
     }
 
-    update (deltaTime) {
+    update (deltaTime: number) {
         this.flashingCharacter.update(deltaTime);
     }
 }
