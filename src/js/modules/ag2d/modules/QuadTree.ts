@@ -55,12 +55,15 @@ export default class QuadTree {
             if (this.northEast!.insert(point)) {
                 return true;
             }
+
             else if (this.northWest!.insert(point)) {
                 return true;
             }
+
             else if (this.southEast!.insert(point)) {
                 return true;
             }
+
             else if (this.southWest!.insert(point)) {
                 return true;
             }

@@ -87,7 +87,3 @@ export default experience;
 
 // Export modules
 export {assetLoader, audioManager, eventEmitter, eventHandler, keyManager, sceneManager};
-
-window.sceneManager = sceneManager;
-window.keyManager = keyManager;
-window.experience = experience;

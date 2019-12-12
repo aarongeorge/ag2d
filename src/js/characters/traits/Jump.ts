@@ -38,5 +38,8 @@ export default class TraitJump extends Trait {
             entity.vel.y = -this.velocity * deltaTime;
             this.engageTime -= deltaTime;
         }
+
+        entity.pos.x += entity.vel.x * deltaTime;
+        entity.pos.y += entity.vel.y * deltaTime;
     }
 }

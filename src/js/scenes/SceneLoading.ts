@@ -34,7 +34,6 @@ export default class SceneLoading extends Scene {
 
     enter () {
         if (this.enterCount === 0) {
-
             eventEmitter.addListener('assetLoader:loaded', async () => {
                 const [
                     SceneStart,
@@ -66,8 +65,9 @@ export default class SceneLoading extends Scene {
                 sceneManager.add(new SceneFlashing.default());
                 sceneManager.add(new SceneQuadTree.default())
                 sceneManager.add(new SceneTileCollider.default());
-                // sceneManager.add(new SceneJumping.default());
-                // sceneManager.add(new SceneAllTheSame.default());
+                sceneManager.add(new SceneJumping.default());
+                sceneManager.add(new SceneAllTheSame.default());
+
                 sceneManager.goTo('SceneStart');
             }, 1);
 

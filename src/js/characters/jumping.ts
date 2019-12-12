@@ -7,6 +7,8 @@ import ExampleSpriteSheet from '../spritesheets/example';
 import {Vec2} from '../modules/ag2d/index';
 import TraitJump from './traits/Jump';
 import TraitNumberTile from './traits/NumberTile';
+import TraitFlashing from './traits/Flashing';
+import TraitWalk from './traits/Walk';
 
 export default class Jumping extends Entity {
 
@@ -19,5 +21,11 @@ export default class Jumping extends Entity {
 
         this.addTrait(new TraitNumberTile(options));
         this.addTrait(new TraitJump(options));
+        this.addTrait(new TraitFlashing(options));
+        this.addTrait(new TraitWalk(options));
+    }
+
+    update (deltaTime: number) {
+        super.update(deltaTime);
     }
 }

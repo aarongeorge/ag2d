@@ -34,3 +34,5 @@ sceneManager.goTo('SceneMobileInteraction');
 
 // Call `start`
 experience.start();
+
+window.sceneManager = sceneManager

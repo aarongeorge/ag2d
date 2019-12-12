@@ -2,10 +2,7 @@
  * SceneMobileInteraction
  */
 
-import experience, {
-    audioManager,
-    sceneManager
-} from '../experience';
+import experience, {audioManager, sceneManager} from '../experience';
 import {Scene} from '../modules/ag2d/index';
 
 export default class SceneMobileInteraction extends Scene {

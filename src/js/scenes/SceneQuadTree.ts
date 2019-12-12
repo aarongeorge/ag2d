@@ -9,11 +9,11 @@ export default class QuadTreeScene extends Scene {
     quadTree: QuadTree;
 
     constructor () {
-        super('QuadTree');
+        super('SceneQuadTree');
         const boundary = new Rect(0, 0, experience.size.width, experience.size.height);
         this.quadTree = new QuadTree(boundary, 5);
 
-        for (let i = 0; i < 500; i++) {
+        for (let i = 0; i < 100; i++) {
             let point = new Point(Math.random() * experience.size.width | 0, Math.random() * experience.size.height | 0);
             this.quadTree.insert(point);
         }
