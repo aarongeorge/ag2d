@@ -1,18 +1,10 @@
-import Entity from './Entity';
+import Entity from './Entity'
 
 export default class Trait {
-    name: string;
+    name: string
 
-    // Constructor
-    constructor (name: string) {
-        this.name = name;
-    }
+    constructor (name: string) { this.name = name}
 
-    // Method: render
-    public render (entity: Entity, context: CanvasRenderingContext2D) {
-    }
-
-    // Method: update
-    public update (entity: Entity, deltaTime: number) {
-    }
+    public render (context: CanvasRenderingContext2D, entity: Entity) {}
+    public update (deltaTime: number, entity: Entity) {}
 }

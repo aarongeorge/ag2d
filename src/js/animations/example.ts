@@ -2,26 +2,22 @@
  * Animations: Example
  */
 
-// Dependencies
-import {Animation} from '../modules/ag2d/index';
+import { SpriteSheetAnimation } from '../modules/ag2d/index'
+import ExampleSpriteSheet from '../spritesheets/example'
 
-// Class: Example Animation
-class ExampleAnimation extends Animation {
-    constructor (spriteSheet) {
+class ExampleAnimation extends SpriteSheetAnimation {
+    constructor () {
         super({
-            'fps': 5,
-            'frames': 25,
-            'loop': true,
-            'loopType': 'yoyo',
-            'name': 'example',
-            'restartCb': () => {
-                console.log('restart');
-            },
-            'reverse': true,
-            spriteSheet
-        });
+            fps: 5,
+            frames: ['1', '3', '3', '7'],
+            loop: true,
+            loopType: 'yoyo',
+            name: 'example',
+            restartCb: () => console.log('restart'),
+            reverse: true,
+            spriteSheet: ExampleSpriteSheet
+        })
     }
 }
 
-// Export `ExampleAnimation`
-export default ExampleAnimation;
+export default ExampleAnimation

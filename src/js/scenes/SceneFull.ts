@@ -2,19 +2,18 @@
  * Scenes: SceneFull
  */
 
-import experience from '../experience';
-import {Scene} from '../modules/ag2d/index';
-import ExampleSpriteSheet from '../spritesheets/example';
+import experience from '../experience'
+import { Scene, SpriteSheet } from '../modules/ag2d/index'
+import ExampleSpriteSheet from '../spritesheets/example'
 
 export default class SceneFull extends Scene {
+	spriteSheet: SpriteSheet
 
     constructor () {
-        super('SceneFull');
+		super('SceneFull')
 
-        this.spriteSheet = ExampleSpriteSheet;
+		this.spriteSheet = ExampleSpriteSheet
     }
 
-    render () {
-        this.spriteSheet.render('full', experience.context, 0, 0);
-    }
+    render () { this.spriteSheet.render(experience.context, 'full', 0, 0) }
 }

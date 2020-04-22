@@ -1,19 +1,17 @@
-import Trait from '../../modules/ag2d/modules/Trait';
-import Entity from '../../modules/ag2d/modules/Entity';
+import { SpriteSheetAnimation, Trait } from '../../modules/ag2d/index'
+import ExampleAnimation from '../../animations/example'
 
-export default class TraitFlashing extends Trait {
-    currentSprite: string;
+export default class Flashing extends Trait {
+	animation: SpriteSheetAnimation
 
     constructor () {
-        super('Flashing');
-        this.currentSprite = ((Math.random() * 8) | 0).toString();
+		super('Flashing')
+
+		this.animation = new ExampleAnimation()
+
+		this.animation.start()
     }
 
-    public render (entity: Entity, context: CanvasRenderingContext2D) {
-        entity.spriteSheet.render(this.currentSprite, context, entity.pos.x, entity.pos.y);
-    }
-
-    public update (entity: Entity, deltaTime: number) {
-        this.currentSprite = ((Math.random() * 8) | 0).toString();
-    }
+    render (context: CanvasRenderingContext2D) { this.animation.render(context, 0, 0) }
+	update (deltaTime: number) { this.animation.update(deltaTime) }
 }

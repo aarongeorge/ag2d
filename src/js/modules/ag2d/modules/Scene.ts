@@ -13,15 +13,10 @@ export default class Scene {
         this.name = name;
     }
 
-    enter () {}
-
-    exit () {}
-
+    enter () { this.enterCount++ }
+	exit () { this.exitCount ++ }
     pause () {}
-
     play () {}
-
     render () {}
-
     update (deltaTime: number) {}
 }
