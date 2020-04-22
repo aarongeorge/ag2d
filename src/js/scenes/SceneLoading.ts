@@ -32,7 +32,7 @@ export default class SceneLoading extends Scene {
     enter () {
 		super.enter()
 
-        if (this.enterCount === 0) {
+        if (this.enterCount === 1) {
             eventEmitter.addListener('assetLoader:loaded', async () => {
                 const [
                     SceneStart,
@@ -66,7 +66,7 @@ export default class SceneLoading extends Scene {
                 sceneManager.add(new SceneJumping.default())
                 sceneManager.add(new SceneAllTheSame.default())
                 sceneManager.goTo('SceneStart')
-            }, 1)
+			}, 1)
 
             assetLoader.loadAssets(() => { eventEmitter.emit('assetLoader:loaded') })
         }

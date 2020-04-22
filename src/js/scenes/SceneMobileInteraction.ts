@@ -31,6 +31,6 @@ export default class SceneMobileInteraction extends Scene {
     }
 	enter () {
 		super.enter()
-		this.enterCount === 0 ? audioManager.init().then(() => { sceneManager.goTo('SceneLoading') }) : sceneManager.goTo('SceneStart')
+		this.enterCount === 1 ? audioManager.init().then(() => { sceneManager.goTo('SceneLoading') }) : sceneManager.goTo('SceneStart')
 	}
 }
