@@ -146,7 +146,6 @@ export default class AG2D {
 }
 
 export {default as Animation} from './modules/SpriteSheetAnimation'
-export {default as AnimationManager} from './modules/AnimationManager'
 export {default as AssetLoader} from './modules/AssetLoader'
 export {default as AudioManager} from './modules/AudioManager'
 export {default as Entity} from './modules/Entity'

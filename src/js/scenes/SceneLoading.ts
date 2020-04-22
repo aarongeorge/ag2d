@@ -33,40 +33,44 @@ export default class SceneLoading extends Scene {
 		super.enter()
 
         if (this.enterCount === 1) {
-            eventEmitter.addListener('assetLoader:loaded', async () => {
-                const [
-                    SceneStart,
-                    SceneFull,
-                    SceneTile,
-                    SceneFlashing,
-                    SceneJumping,
-                    SceneAllTheSame,
-                    SceneTileCollider,
-                    SceneQuadTree
-                ] = await Promise.all([
-                    import('./SceneStart'),
-                    import('./SceneFull'),
-                    import('./SceneTile'),
-                    import('./SceneFlashing'),
-                    import('./SceneJumping'),
-                    import('./SceneAllTheSame'),
-                    import('./SceneTileCollider'),
-                    import('./SceneQuadTree')
-                ])
+            eventEmitter.addListener({
+				name: 'assetLoader:loaded',
+				callback: async () => {
+					const [
+						SceneStart,
+						SceneFull,
+						SceneTile,
+						SceneFlashing,
+						SceneJumping,
+						SceneAllTheSame,
+						SceneTileCollider,
+						SceneQuadTree
+					] = await Promise.all([
+						import('./SceneStart'),
+						import('./SceneFull'),
+						import('./SceneTile'),
+						import('./SceneFlashing'),
+						import('./SceneJumping'),
+						import('./SceneAllTheSame'),
+						import('./SceneTileCollider'),
+						import('./SceneQuadTree')
+					])
 
-                /**
-                 * Scene Manager setup
-                 */
-                sceneManager.add(new SceneStart.default())
-                sceneManager.add(new SceneFull.default())
-                sceneManager.add(new SceneTile.default())
-                sceneManager.add(new SceneFlashing.default())
-                sceneManager.add(new SceneQuadTree.default())
-                sceneManager.add(new SceneTileCollider.default())
-                sceneManager.add(new SceneJumping.default())
-                sceneManager.add(new SceneAllTheSame.default())
-                sceneManager.goTo('SceneStart')
-			}, 1)
+					/**
+					 * Scene Manager setup
+					 */
+					sceneManager.add(new SceneStart.default())
+					sceneManager.add(new SceneFull.default())
+					sceneManager.add(new SceneTile.default())
+					sceneManager.add(new SceneFlashing.default())
+					sceneManager.add(new SceneQuadTree.default())
+					sceneManager.add(new SceneTileCollider.default())
+					sceneManager.add(new SceneJumping.default())
+					sceneManager.add(new SceneAllTheSame.default())
+					sceneManager.goTo('SceneStart')
+				},
+				count: 1
+			})
 
             assetLoader.loadAssets(() => { eventEmitter.emit('assetLoader:loaded') })
         }

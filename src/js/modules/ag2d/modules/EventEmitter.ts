@@ -4,32 +4,32 @@
  * @desc An event emitter
  */
 
-interface Reference {
+interface Listener {
 	callback: (...args: any[]) => void
 	count: number
 	name: string
 }
 
 export default class EventEmitter {
-	listeners: { [x: string]: Reference[] }
+	listeners: { [x: string]: Listener[] }
 
     constructor () { this.listeners = {} }
 
-    addListener (name: Reference['name'], callback: Reference['callback'], count: Reference['count'] = Infinity) {
-		const reference = { callback, count, name } as Reference
+    addListener (listener: Listener) {
+		this.listeners[listener.name] = this.listeners[listener.name] || []
 
-        this.listeners[name] ? this.listeners[name] = [...this.listeners[name], reference] : this.listeners[name] = [reference]
+		this.listeners[listener.name].push(listener)
 
-        return reference
+        return listener
     }
-    removeListener (reference: Reference) {
-        if (typeof this.listeners[reference.name] !== 'undefined') {
-			this.listeners[reference.name] = this.listeners[reference.name].filter(eventListener => reference !== eventListener)
+    removeListener (listener: Listener) {
+        if (typeof this.listeners[listener.name] !== 'undefined') {
+			this.listeners[listener.name] = this.listeners[listener.name].filter(eventListener => listener !== eventListener)
 
-            if (this.listeners[reference.name].length === 0) delete this.listeners[reference.name]
+            if (this.listeners[listener.name].length === 0) delete this.listeners[listener.name]
         }
     }
-    emit (name: Reference['name'], ...args: any[]) {
+    emit (name: string, ...args: any[]) {
         if (Object.keys(this.listeners).includes(name)) {
             this.listeners[name].forEach(listener => {
 				listener.callback(...args)
