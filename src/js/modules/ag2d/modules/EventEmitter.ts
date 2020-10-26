@@ -11,27 +11,50 @@ interface Listener {
 }
 
 export default class EventEmitter {
-	listeners: {[x: string]: Listener[]}
+	listeners: Map<string, Listener[]> = new Map()
 
-	constructor () {this.listeners = {}}
 	addListener (listener: Listener) {
-		this.listeners[listener.name] = this.listeners[listener.name] || []
-		this.listeners[listener.name].push(listener)
-		return listener
+		// If `listener.name` is already registered, add the new listener to its list
+		if (this.listeners.has(listener.name)) this.listeners.set(listener.name, [...this.listeners.get(listener.name)!, listener])
+
+		// Otherwise register `listener.name` and then add the new listener to its list
+		else this.listeners.set(listener.name, [listener])
 	}
+
 	removeListener (listener: Listener) {
-		if (typeof this.listeners[listener.name] !== 'undefined') {
-			this.listeners[listener.name] = this.listeners[listener.name].filter(eventListener => listener !== eventListener)
-			if (this.listeners[listener.name].length === 0) delete this.listeners[listener.name]
-		}
+
+		// Exit if `listener.name` isn't registered
+		if (!this.listeners.has(listener.name)) return
+
+		// Store reference to listeners registered to `listener.name`
+		let listenerRef = this.listeners.get(listener.name)!
+
+		// Create a copy of `listener.name`'s registered listeners, with `listener` removed
+		let filteredListeners = listenerRef.filter(eventListener => listener !== eventListener)
+
+		// If there is atleast one listener still registered, update the list with filtered copy from above
+		if (filteredListeners.length) this.listeners.set(listener.name, filteredListeners)
+
+		// Otherwise de-register `listener.name`
+		else this.listeners.delete(listener.name)
 	}
+
 	emit (name: string, ...args: any[]) {
-		if (Object.keys(this.listeners).includes(name)) {
-			this.listeners[name].forEach(listener => {
-				listener.callback(...args)
-				listener.count -= 1
-				if (listener.count <= 0) this.listeners[name] = this.listeners[name].filter(eventListener => listener !== eventListener)
-			})
-		}
+
+		// Exit if `name` isn't registered
+		if (!this.listeners.has(name)) return
+
+		// Loop over all listeners registered to `name`
+		this.listeners.get(name)!.forEach(listener => {
+
+			// Call `callback` and pass through all arguments
+			listener.callback(...args)
+
+			// Decrement the `count`
+			listener.count -= 1
+
+			// If the count is `0`, then call `removeListener`
+			if (listener.count = 0) this.removeListener(listener)
+		})
 	}
 }
