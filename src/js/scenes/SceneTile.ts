@@ -2,18 +2,18 @@
  * Scenes: SceneTile
  */
 
-import experience from '../experience'
+import game from '../game'
 import {Scene, SpriteSheet} from '../modules/ag2d/index'
 import ExampleSpriteSheet from '../spritesheets/example'
 
 export default class SceneTile extends Scene {
 	spriteSheet: SpriteSheet
 
-    constructor () {
-        super('SceneTile')
+	constructor () {
+		super()
+		this.name = 'SceneTile'
+		this.spriteSheet = ExampleSpriteSheet
+	}
 
-        this.spriteSheet = ExampleSpriteSheet
-    }
-
-    render () { this.spriteSheet.render(experience.context, '0', 0, 0) }
+	render () { this.spriteSheet.render(game.context, '0', 0, 0) }
 }

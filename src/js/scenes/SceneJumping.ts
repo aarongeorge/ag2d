@@ -2,20 +2,24 @@
  * Scenes: SceneJumping
  */
 
-import { Scene, SpriteSheet } from '../modules/ag2d/index'
+import { Scene } from '../modules/ag2d/index'
 import Jumping from '../characters/jumping'
-import experience, { keyManager } from '../experience'
-import Flashing from '../characters/flashing'
+import game, { keyManager } from '../game'
 
 export default class SceneJumping extends Scene {
-	character: Flashing
+	character: Jumping
 
-    constructor () {
-		super('SceneJumping')
+	constructor () {
+		super()
+		this.name = 'SceneJumping'
+		this.character = new Jumping({keyManager})
+	}
 
-        this.character = new Flashing()
-    }
+	enter () {
+		super.enter()
+		console.log('Jumping')
+	}
 
-    render () { this.character.render(experience.context) }
-    update (deltaTime: number) { this.character.update(deltaTime) }
+	render () { this.character.render(game.context) }
+	update (deltaTime: number) { this.character.update(deltaTime) }
 }

@@ -5,26 +5,26 @@
   "author": "Aaron George <aaron.dean.george@gmail.com>",
   "license": "ISC",
   "scripts": {
-    "start": "parcel src/index.html"
+	"serve": "parcel src/index.html"
   },
   "devDependencies": {
-    "autoprefixer": "^9.5.1",
-    "parcel-bundler": "^1.12.4",
-    "parcel-plugin-static-files-copy": "^2.0.0",
-    "postcss-import": "^12.0.1",
-    "postcss-mixins": "^6.2.1",
-    "postcss-nested": "^4.1.2",
-    "postcss-nested-props": "^2.0.0",
-    "postcss-preset-env": "^6.6.0",
-    "typescript": "^3.4.5"
+	"autoprefixer": "^9.5.1",
+	"parcel-bundler": "^1.12.4",
+	"parcel-plugin-static-files-copy": "^2.0.0",
+	"postcss-import": "^12.0.1",
+	"postcss-mixins": "^6.2.1",
+	"postcss-nested": "^4.1.2",
+	"postcss-nested-props": "^2.0.0",
+	"postcss-preset-env": "^6.6.0",
+	"typescript": "^3.4.5"
   },
   "staticFiles": {
-    "staticPath": [
-      "src/img"
-    ],
-    "watcherGlob": "**"
+	"staticPath": [
+	  "src/img"
+	],
+	"watcherGlob": "**"
   },
   "dependencies": {
-    "pages": "^0.0.16"
+	"pages": "^0.0.16"
   }
 }

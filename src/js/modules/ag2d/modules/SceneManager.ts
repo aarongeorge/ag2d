@@ -4,120 +4,33 @@
  * @desc A scene manager
  */
 
-import {cyclicArray} from './Utils';
+import {cyclicArray} from './Utils'
+import Scene from './Scene'
 
 export default class SceneManager {
+	scenes: Map<string, any> = new Map()
+	currentScene: Scene | undefined = void 0
 
-    constructor () {
-
-        // Object to hold scenes
-        this.scenes = {};
-
-        // Array to hold the scene names
-        this.sceneNames = [];
-    }
-
-    add (scene) {
-
-        // Add `name` to `scenes`
-        this.scenes[scene.name] = scene;
-
-        // Update `sceneNames`
-        this.sceneNames = Object.keys(this.scenes);
-    }
-
-    goTo (name) {
-
-        // Check `scenes[name]` exists
-        if (this.scenes[name]) {
-
-            // Check `currentScene` exists
-            if (this.currentScene) {
-
-                // Call `exit`
-                this.currentScene.exit();
-
-                // Increment `exitCount`
-                this.currentScene.exitCount += 1;
-            }
-
-            // Set `currentScene`
-            this.currentScene = this.scenes[name];
-
-            // Update `currentScene.sceneEntered`
-            this.currentScene.sceneEntered = window.performance.now();
-
-            // Call `enter`
-            this.currentScene.enter();
-
-            // Increment `enterCount`
-            this.currentScene.enterCount += 1;
-        }
-
-        // `scenes[name]` does not exist
-        else {
-
-            // Log error
-            throw new Error(`Scene ${name} does not exist`);
-        }
-    }
-
-    next () {
-
-        // Go to next scene
-        this.goTo(this.scenes[cyclicArray(this.sceneNames, this.sceneNames.indexOf(this.currentScene.name) + 1).value].name);
-    }
-
-    pause () {
-
-        if (this.currentScene) {
-
-            // Call `pause`
-            this.currentScene.pause();
-        }
-    }
-
-    play () {
-
-        if (this.currentScene) {
-
-            // Call `play`
-            this.currentScene.play();
-        }
-    }
-
-    previous () {
-
-        // Go to previous scene
-        this.goTo(this.scenes[cyclicArray(this.sceneNames, this.sceneNames.indexOf(this.currentScene.name) - 1).value].name);
-    }
-
-    remove (name) {
-
-        // Remove `name` from `scenes`
-        delete this.scenes[name];
-
-        // Update `sceneNames`
-        this.sceneNames = Object.keys(this.scenes);
-    }
-
-    render () {
-
-        // Check `currentScene` exists
-        if (this.currentScene) {
-
-            // Call `render`
-            this.currentScene.render();
-        }
-    }
-
-    update (deltaTime) {
-
-        // Check `currentScene` exists
-        if (this.currentScene) {
-
-            // Call `update`
-            this.currentScene.update(deltaTime);
-        }
-    }
+	add (scene: Scene) {this.scenes.set(scene.name, scene)}
+	goTo (name: string) {
+		if (!this.scenes.has(name)) throw new Error(`Scene ${name} does not exist`)
+		if (this.currentScene) {
+			this.currentScene.exit()
+		}
+		this.currentScene = this.scenes.get(name)
+		this.currentScene!.enter()
+	}
+	next () {
+		const keys = [...this.scenes.keys()]
+		this.goTo(this.scenes.get(cyclicArray(keys, keys.indexOf(this.currentScene!.name) + 1).value).name)
+	}
+	pause () {if (this.currentScene) this.currentScene.pause()}
+	play () {if (this.currentScene) this.currentScene.play()}
+	previous () {
+		const keys = [...this.scenes.keys()]
+		this.goTo(this.scenes.get(cyclicArray(keys, keys.indexOf(this.currentScene!.name) - 1).value).name)
+	}
+	remove (name: string) {this.scenes.delete(name)}
+	render () {if (this.currentScene) {this.currentScene.render()}}
+	update (deltaTime: number) {if (this.currentScene) this.currentScene.update(deltaTime)}
 }

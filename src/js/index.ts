@@ -1,4 +1,4 @@
-import experience, { assetLoader, sceneManager, keyManager } from './experience'
+import game, { assetLoader, sceneManager } from './game'
 import SceneMobileInteraction from './scenes/SceneMobileInteraction'
 import SceneLoading from './scenes/SceneLoading'
 
@@ -16,10 +16,8 @@ assetLoader.addAssets([{
  */
 sceneManager.add(new SceneMobileInteraction())
 sceneManager.add(new SceneLoading())
-keyManager.enable(experience.canvas)
-keyManager.enable()
 sceneManager.goTo('SceneMobileInteraction')
-experience.start()
+game.start()
 
+// To make shit global
 window.sceneManager = sceneManager
-window.experience = experience

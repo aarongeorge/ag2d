@@ -2,35 +2,38 @@
  * SceneMobileInteraction
  */
 
-import experience, { audioManager, sceneManager } from '../experience'
-import { Scene } from '../modules/ag2d/index'
+import game, {audioManager, sceneManager} from '../game'
+import {Scene} from '../modules/ag2d/index'
 
 export default class SceneMobileInteraction extends Scene {
 
-    constructor () { super('SceneMobileInteraction') }
+	constructor () {
+		super()
+		this.name = 'SceneMobileInteraction'
+	}
 
-    render () {
+	render () {
 
-        // Red background
-		experience.context.fillStyle = '#FF0000'
+		// Red background
+		game.context.fillStyle = '#FF0000'
 
-        experience.context.fillRect(0, 0, experience.size.width, experience.size.height)
+		game.context.fillRect(0, 0, game.size.width, game.size.height)
 
-        // Scene name
-        experience.context.textAlign = 'center'
-        experience.context.textBaseline = 'middle'
-        experience.context.strokeStyle = 'black'
-        experience.context.lineWidth = 1
-		experience.context.lineJoin = 'round'
+		// Scene name
+		game.context.textAlign = 'center'
+		game.context.textBaseline = 'middle'
+		game.context.strokeStyle = 'black'
+		game.context.lineWidth = 1
+		game.context.lineJoin = 'round'
 
-		experience.context.strokeText('Tap to start', experience.size.width / 2, experience.size.height / 2)
+		game.context.strokeText('Tap to start', game.size.width / 2, game.size.height / 2)
 
-		experience.context.fillStyle = 'white'
+		game.context.fillStyle = 'white'
 
-        experience.context.fillText('Tap to start', experience.size.width / 2, experience.size.height / 2)
-    }
+		game.context.fillText('Tap to start', game.size.width / 2, game.size.height / 2)
+	}
 	enter () {
 		super.enter()
-		this.enterCount === 1 ? audioManager.init().then(() => { sceneManager.goTo('SceneLoading') }) : sceneManager.goTo('SceneStart')
+		this.enterCount === 1 ? audioManager.init().then(() => {sceneManager.goTo('SceneLoading')}) : sceneManager.goTo('SceneStart')
 	}
 }
