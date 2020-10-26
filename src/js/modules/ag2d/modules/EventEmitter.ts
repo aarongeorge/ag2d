@@ -14,6 +14,7 @@ export default class EventEmitter {
 	listeners: Map<string, Listener[]> = new Map()
 
 	addListener (listener: Listener) {
+
 		// If `listener.name` is already registered, add the new listener to its list
 		if (this.listeners.has(listener.name)) this.listeners.set(listener.name, [...this.listeners.get(listener.name)!, listener])
 
@@ -54,7 +55,7 @@ export default class EventEmitter {
 			listener.count -= 1
 
 			// If the count is `0`, then call `removeListener`
-			if (listener.count = 0) this.removeListener(listener)
+			if (listener.count === 0) this.removeListener(listener)
 		})
 	}
 }
