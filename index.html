@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang='en'>
+	<head>
+		<meta charset='UTF-8'>
+		<link rel='icon' type='image/svg+xml' href='favicon.svg' />
+		<meta http-equiv='X-UA-Compatible' content='IE=edge'>
+		<title>AG2D</title>
+		<meta name='description' content=''>
+		<meta name='viewport' content='width=device-width, initial-scale=1'>
+		<link rel='stylesheet' href='/src/css/index.styl'>
+	</head>
+	<body class='page-index'>
+		<canvas id='app' tabindex='1'></canvas>
+
+		<button type=button onClick='(() => window.sceneManager.previous())()'>Prev Scene</button>
+		<button type=button onClick='(() => window.sceneManager.next())()'>Next Scene</button>
+
+		<script type='module' src='/src/js/index.ts'></script>
+	</body>
+</html>

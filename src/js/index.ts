@@ -7,7 +7,7 @@ import SceneLoading from './scenes/SceneLoading'
  */
 assetLoader.addAssets([{
 	name: 'sprite-sheet-example',
-	path: '/sprite-sheet-example.png',
+	path: '/src/img/sprite-sheet-example.png',
 	type: 'image'
 }])
 
